@@ -60,4 +60,5 @@ typings/
 # Local development config file
 config/config.json
 package-lock.json
+public/*
 
