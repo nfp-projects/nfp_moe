@@ -7,7 +7,15 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "start": "node --experimental-modules index.mjs",
+    "build": "sass app/app.sass public/assets/app.css && browserify -d app/index.js -o public/assets/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch:api": "nodemon --experimental-modules index.mjs | bunyan",
+    "watch:app": "watchify app/index.js -o public/assets/app.js",
+    "watch:sass": "sass --watch app/app.sass public/assets/app.css",
+    "dev": "run-p watch:api watch:app watch:sass",
+    "prod": "npm run build && npm start"
   },
   "repository": {
     "type": "git",
@@ -20,7 +28,31 @@
   },
   "homepage": "https://github.com/nfp-projects/nfp_moe",
   "dependencies": {
+    "@koa/cors": "^2.2.3",
+    "bookshelf": "^0.14.2",
+    "bunyan-lite": "^1.0.1",
+    "format-link-header": "^2.1.0",
+    "http-errors": "^1.7.2",
+    "jsonwebtoken": "^8.4.0",
+    "knex": "^0.16.3",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-jwt": "^3.5.1",
+    "koa-router": "^7.4.0",
+    "koa-send": "^5.0.0",
+    "lodash": "^4.17.11",
+    "multer": "^1.4.1",
+    "nconf": "^0.10.0",
+    "pg": "^7.8.0",
+    "sharp": "^0.21.3"
   },
   "devDependencies": {
+    "browserify": "^16.2.3",
+    "eslint": "^5.14.1",
+    "mithril": "^2.0.0-rc.4",
+    "nodemon": "^1.18.10",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.17.0",
+    "watchify": "^3.11.0"
   }
 }

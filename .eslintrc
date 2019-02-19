@@ -1,0 +1,83 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "impliedStrict": true
+    }
+  },
+  "extends": "eslint:recommended",
+  "plugins": [
+    "mocha"
+  ],
+  "env": {
+    "mocha": true,
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "mocha/no-exclusive-tests": 2,
+    "require-await": 0,
+    "array-callback-return": 2,
+    "block-scoped-var": 2,
+    "complexity": ["error", 20],
+    "eqeqeq": [2, "smart"],
+    "no-else-return": ["error", { "allowElseIf": false }],
+    "no-extra-bind": 2,
+    "no-implicit-coercion": 2,
+    "no-invalid-this": 2,
+    "no-loop-func": 2,
+    "no-multi-spaces": 2,
+    "no-multi-str": 2,
+    "no-new": 2,
+    "no-param-reassign": [2, {"props": false}],
+    "no-return-assign": 2,
+    "no-return-await": 2,
+    "no-self-compare": 2,
+    "no-sequences": 2,
+    "no-throw-literal": 2,
+    "no-unmodified-loop-condition": 2,
+    "no-useless-call": 2,
+    "no-useless-concat": 2,
+    "no-useless-return": 2,
+    "no-void": 2,
+    "no-warning-comments": 2,
+    "prefer-promise-reject-errors": 2,
+    "no-catch-shadow": 2,
+    "no-shadow": 2,
+    "no-undef-init": 2,
+    "no-undefined": 0,
+    "no-use-before-define": 2,
+    "no-new-require": 2,
+    "no-sync": 2,
+    "array-bracket-newline": [2, "consistent"],
+    "block-spacing": [2, "always"],
+    "brace-style": [2, "1tbs"],
+    "comma-dangle": [2, "always-multiline"],
+    "comma-spacing": 2,
+    "comma-style": 2,
+    "computed-property-spacing": 2,
+    "eol-last": 2,
+    "func-call-spacing": 2,
+    "key-spacing": 2,
+    "keyword-spacing": 2,
+
+    "semi": [2, "never"],
+    "max-len": [1, 120],
+    "prefer-const": 0,
+    "consistent-return": 0,
+    "no-unused-vars": [
+      2,
+      {
+        "args": "after-used",
+        "argsIgnorePattern": "next|res|req"
+      }
+    ],
+    "generator-star-spacing": 0,
+    "global-require": 0,
+    "import/prefer-default-export": 0,
+    "no-underscore-dangle": 0,
+    "strict": 0,
+    "require-yield": 0
+  }
+}

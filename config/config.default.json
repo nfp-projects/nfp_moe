@@ -1,0 +1,42 @@
+{
+  "NODE_ENV": "development",
+  "server": {
+    "port": 4030,
+    "host": "0.0.0.0"
+  },
+  "knex": {
+    "client": "pg",
+    "connection": {
+      "host"     : "127.0.0.1",
+      "user"     : "postgres",
+      "password" : "postgres",
+      "database" : "nfpmoe"
+    },
+    "migrations": {
+    }
+  },
+  "bunyan": {
+    "name": "nfpmoe",
+    "streams": [{
+        "stream": "process.stdout",
+        "level": "debug"
+      }
+    ]
+  },
+  "frontend": {
+    "url": "http://localhost:8080"
+  },
+  "jwt": {
+    "secret": "this-is-my-secret",
+    "options": {
+      "expiresIn": 604800
+    }
+  },
+  "sessionsecret": "this-is-session-secret-lol",
+  "bcrypt": 5,
+  "fileSize": 524288000,
+  "upload": {
+    "name": "nfpmoe-dev",
+    "secret": "TJlAbWgpQy0zMGu01XoW"
+  }
+}

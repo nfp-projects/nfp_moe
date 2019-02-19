@@ -1,0 +1,66 @@
+import _ from 'lodash'
+import jwt from 'jsonwebtoken'
+import koaJwt from 'koa-jwt'
+import Staff from './staff/model'
+import config from './config'
+
+export default class Jwt {
+  constructor(opts = {}) {
+    Object.assign(this, {
+      Staff: opts.Staff || Staff,
+      jwt: opts.jwt || jwt,
+    })
+  }
+
+  sign(value, appendSecret = '', opts) {
+    let secret = config.get('jwt:secret') + appendSecret
+    let options = _.defaults(opts, config.get('jwt:options'))
+
+    if (options.expiresIn === null) {
+      delete options.expiresIn
+    }
+
+    return this.jwt.sign(value, secret, options)
+  }
+
+  signDirect(value, secret) {
+    return this.jwt.sign(value, secret)
+  }
+
+  verify(token, appendSecret = '') {
+    let secret = config.get('jwt:secret') + appendSecret
+
+    return new Promise((resolve, reject) =>
+      this.jwt.verify(token, secret, (err, res) => {
+        if (err) return reject(err)
+
+        resolve(res)
+      })
+    )
+  }
+
+  decode(token) {
+    return this.jwt.decode(token)
+  }
+
+  createStaffToken(staff, opts) {
+    return this.sign({
+      id: staff.id,
+      level: staff.get('level'),
+    }, staff.get('password'), opts)
+  }
+
+  async getUserSecret(header, payload) {
+    let staff = await this.Staff.getSingle(payload.id)
+    return staff.id
+  }
+
+  static jwtMiddleware() {
+    return koaJwt({
+      secret: (header, payload) =>
+        Staff.getSingle(payload.id)
+          .then(staff => `${config.get('jwt:secret')}${staff.get('password')}`),
+      passthrough: true,
+    })
+  }
+}
