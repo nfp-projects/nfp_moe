@@ -1,0 +1,41 @@
+
+.admin-wrapper {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  background: $primary-bg;
+  padding: 20px;
+}
+
+article.editcat {
+  text-align: center;
+  background: white;
+  padding: 0 0 20px;
+
+  header {
+    padding: 10px;
+    background: $secondary-bg;
+
+    h1 {
+      color: $secondary-fg;
+    }
+  }
+
+  form {
+    align-items: center;
+    align-self: center;
+    padding: 20px 40px;
+  }
+
+  h5 {
+    margin-bottom: 20px;
+  }
+
+  .loading-spinner {
+    width: 240px;
+    height: 50px;
+    position: relative;
+  }
+}
+
+@import 'editcat'

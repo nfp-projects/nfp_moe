@@ -1,0 +1,65 @@
+@import '../_common';
+
+#nav {
+  display: flex;
+  flex-direction: column;
+
+  .top {
+    background: url('./img/logo.png') 25px center no-repeat $primary-dark-bg;
+    color: $primary-dark-fg;
+    padding: 0 10px 0 120px;
+    height: 100px;
+    display: flex;
+
+    h2 {
+      flex-grow: 2;
+      align-self: center;
+      font-size: 30px;
+    }
+
+    aside {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0;
+
+      p {
+        font-size: 0.8em;
+        color: $meta-fg;
+        padding-bottom: 5px;
+      }
+
+      a, a:visited {
+        font-weight: bold;
+        text-align: center;
+        color: $secondary-light-bg;
+        font-size: 0.8em;
+        line-height: 1.4em;
+        text-decoration: none;
+      }
+    }
+  }
+
+  nav {
+    display: flex;
+    background: $primary-light-bg;
+    color: $primary-light-fg;
+
+    a, a:visited {
+      flex-grow: 2;
+      flex-basis: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: $primary-light-fg;
+      padding: 10px;
+      font-size: 0.9em;
+      text-decoration: none;
+
+      &.active {
+        border-bottom: 3px solid $secondary-bg;
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+@import '../_common';
+
+.login-wrapper {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: $border;
+}
+
+article.login {
+  text-align: center;
+  flex-grow: 0;
+  border: 1px solid $title-fg;
+  background: white;
+  align-self: center;
+
+  .content {
+    align-items: center;
+    align-self: center;
+    padding: 20px 40px;
+  }
+
+  h5 {
+    margin-bottom: 20px;
+  }
+
+  .loading-spinner {
+    width: 240px;
+    height: 50px;
+    position: relative;
+  }
+}

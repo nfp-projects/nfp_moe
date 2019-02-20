@@ -9,11 +9,11 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node --experimental-modules index.mjs",
-    "build": "sass app/app.sass public/assets/app.css && browserify -d app/index.js -o public/assets/app.js",
+    "build": "sass app/app.scss public/assets/app.css && browserify -d app/index.js -o public/assets/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch:api": "nodemon --experimental-modules index.mjs | bunyan",
-    "watch:app": "watchify app/index.js -o public/assets/app.js",
-    "watch:sass": "sass --watch app/app.sass public/assets/app.css",
+    "watch:app": "watchify -d app/index.js -o public/assets/app.js",
+    "watch:sass": "sass --watch app/app.scss public/assets/app.css",
     "dev": "run-p watch:api watch:app watch:sass",
     "prod": "npm run build && npm start"
   },
@@ -32,6 +32,7 @@
     "bookshelf": "^0.14.2",
     "bunyan-lite": "^1.0.1",
     "format-link-header": "^2.1.0",
+    "googleapis": "^37.2.0",
     "http-errors": "^1.7.2",
     "jsonwebtoken": "^8.4.0",
     "knex": "^0.16.3",

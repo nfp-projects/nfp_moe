@@ -43,16 +43,11 @@ export default class Jwt {
     return this.jwt.decode(token)
   }
 
-  createStaffToken(staff, opts) {
+  createToken(email, level, opts) {
     return this.sign({
-      id: staff.id,
-      level: staff.get('level'),
-    }, staff.get('password'), opts)
-  }
-
-  async getUserSecret(header, payload) {
-    let staff = await this.Staff.getSingle(payload.id)
-    return staff.id
+      email: email,
+      level: level,
+    }, email, opts)
   }
 
   static jwtMiddleware() {
