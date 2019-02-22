@@ -4,6 +4,7 @@ const Authentication = require('../authentication')
 const Login = {
   loadedGoogle: false,
   loading: false,
+  redirect: '',
   error: '',
 
   initGoogleButton: function() {
@@ -29,7 +30,7 @@ const Login = {
     })
     .then(function(result) {
       Authentication.updateToken(result.token)
-      m.route.set('/')
+      m.route.set(Login.redirect || '/')
     })
     .catch(function(error) {
       Login.error = 'Error while logging into NFP! ' + error.code + ': ' + error.response.message
@@ -48,7 +49,8 @@ const Login = {
     Authentication.createGoogleScript()
   },
 
-  oninit: function() {
+  oninit: function(vnode) {
+    Login.redirect = vnode.attrs.redirect || ''
     if (Authentication.currentUser) return m.route.set('/')
     Login.error = ''
   },

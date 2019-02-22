@@ -18,7 +18,7 @@ export function restrict(level = orgAccess.Normal) {
       return ctx.throw(403, 'Authentication token was not found (did you forget to login?)')
     }
 
-    if (!ctx.state.user || !ctx.state.user.id || !ctx.state.user.level) {
+    if (!ctx.state.user || !ctx.state.user.email || !ctx.state.user.level) {
       return ctx.throw(403, 'You must be authenticated to access this resource')
     }
 

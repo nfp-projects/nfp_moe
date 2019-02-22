@@ -1,6 +1,7 @@
 import http from 'http'
 import path from 'path'
 import fs from 'fs'
+import Agent from 'socks5-http-client/lib/Agent'
 
 let stub
 
@@ -37,6 +38,11 @@ export function uploadFile(token, file) {
         headers: {
           'Content-Type': 'multipart/form-data; boundary=' + boundary,
           'Content-Length': multipartBody.length,
+        },
+        agentClass: Agent,
+        agentOptions: {
+          socksHost: '127.0.0.1',
+          socksPort: 5555,
         },
       }
 

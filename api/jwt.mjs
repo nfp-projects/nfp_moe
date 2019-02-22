@@ -53,8 +53,7 @@ export default class Jwt {
   static jwtMiddleware() {
     return koaJwt({
       secret: (header, payload) =>
-        Staff.getSingle(payload.id)
-          .then(staff => `${config.get('jwt:secret')}${staff.get('password')}`),
+        `${config.get('jwt:secret')}${payload.email}`,
       passthrough: true,
     })
   }

@@ -44,13 +44,13 @@ const Authentication = {
       gscript.src = 'https://apis.google.com/js/platform.js?onload=googleLoaded'
       document.body.appendChild(gscript)
     })
-  }
+  },
+
+  getToken: function() {
+    return localStorage.getItem(storageName)
+  },
 }
 
 Authentication.updateToken(localStorage.getItem(storageName))
-
-if (Authentication.currentUser) {
-  // Authentication.createGoogleScript()
-}
 
 module.exports = Authentication
