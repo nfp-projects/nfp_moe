@@ -13,7 +13,10 @@ export default class Resizer {
     let output = this.Media.getSubUrl(input, 'small')
 
     return this.sharp(input)
-            .resize(300, 300)
+            .resize(360, 360, {
+              fit: sharp.fit.inside,
+              withoutEnlargement: true
+            })
             .toFile(output)
             .then(() => output)
   }
@@ -22,7 +25,10 @@ export default class Resizer {
     let output = this.Media.getSubUrl(input, 'medium')
 
     return this.sharp(input)
-            .resize(700, 700)
+            .resize(700, 700, {
+              fit: sharp.fit.inside,
+              withoutEnlargement: true
+            })
             .toFile(output)
             .then(() => output)
   }

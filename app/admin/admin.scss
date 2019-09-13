@@ -4,43 +4,36 @@
   display: flex;
   flex-direction: column;
   background: $primary-bg;
-  padding: 20px;
+  padding: 0 20px 20px;
 }
 
-article.editcat {
-  text-align: center;
-  background: white;
-  padding: 0 0 20px;
+.admin-actions {
+  background: $primary-bg;
+  display: flex;
+  justify-content: center;
+  min-height: 37px;
 
-  header {
+  span {
+    color: $primary-fg;
     padding: 10px;
-    background: $secondary-bg;
-
-    h1 {
-      color: $secondary-fg;
-    }
+    font-size: 14px;
+    font-weight: bold;
   }
 
-  fileupload {
-    margin: 0 20px 20px;
-    min-height: 100px;
-  }
-
-  form {
-    align-items: center;
-    align-self: center;
-    padding: 20px 40px;
-  }
-
-  h5 {
-    margin-bottom: 20px;
-  }
-
-  & > .loading-spinner {
-    width: 240px;
-    height: 50px;
-    position: relative;
+  a {
+    padding: 10px;
+    text-decoration: none;
+    color: $secondary-light-bg;
+    font-size: 14px;
+    font-weight: bold;
   }
 }
 
-@import 'editcat'
+.fr-box,
+.fr-toolbar,
+.fr-box .second-toolbar {
+  border-radius: 0 !important;
+}
+
+@import 'pages';
+@import 'articles';

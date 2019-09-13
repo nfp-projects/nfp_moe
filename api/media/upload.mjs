@@ -1,7 +1,7 @@
 import http from 'http'
 import path from 'path'
 import fs from 'fs'
-import Agent from 'socks5-http-client/lib/Agent'
+import config from '../config'
 
 let stub
 
@@ -31,18 +31,13 @@ export function uploadFile(token, file) {
       ])
 
       const options = {
-        port: 2111,
-        hostname: 'storage01.nfp.is',
+        port: config.get('upload:port'),
+        hostname: config.get('upload:host'),
         method: 'POST',
         path: '/media?token=' + token,
         headers: {
           'Content-Type': 'multipart/form-data; boundary=' + boundary,
           'Content-Length': multipartBody.length,
-        },
-        agentClass: Agent,
-        agentOptions: {
-          socksHost: '127.0.0.1',
-          socksPort: 5555,
         },
       }
 
@@ -65,7 +60,10 @@ export function uploadFile(token, file) {
           try {
             output = JSON.parse(output)
           } catch (e) {
-            // Do nothing
+            return reject(e)
+          }
+          if (output.status) {
+            return reject(new Error(`Unable to upload! [${output.status}]: ${output.message}`))
           }
           resolve(output)
         })

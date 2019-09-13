@@ -7,6 +7,7 @@ import router from './api/router'
 import Jwt from './api/jwt'
 import log from './api/log'
 import { serve } from './api/serve'
+import { mask } from './api/middlewares/mask'
 import { errorHandler } from './api/error/middleware'
 import { accessChecks } from './api/access/middleware'
 import ParserMiddleware from './api/parser/middleware'
@@ -14,12 +15,13 @@ import ParserMiddleware from './api/parser/middleware'
 const app = new Koa()
 const parser = new ParserMiddleware()
 
+app.use(log.logMiddleware())
 app.use(errorHandler())
+app.use(mask())
 app.use(bodyParser())
 app.use(parser.contextParser())
 app.use(accessChecks())
 app.use(parser.generateLinks())
-app.use(log.logMiddleware())
 app.use(Jwt.jwtMiddleware())
 app.use(cors({
   exposeHeaders: ['link', 'pagination_total'],

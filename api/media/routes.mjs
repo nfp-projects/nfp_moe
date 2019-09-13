@@ -1,6 +1,6 @@
 import config from '../config'
 import Media from './model'
-import * as multer from './multer'
+import * as multer from '../multer'
 import Resizer from './resize'
 import { uploadFile } from './upload'
 import Jwt from '../jwt'
@@ -39,5 +39,21 @@ export default class MediaRoutes {
       size: result.size,
       staff_id: ctx.state.user.id,
     })
+  }
+
+  async getAllMedia(ctx) {
+    ctx.body = await this.Media.getAll(ctx)
+  }
+
+  async removeMedia(ctx) {
+    let media = await this.Media.getSingle(ctx.params.id)
+    
+    media.set({
+      is_deleted: true,
+    })
+
+    await media.save()
+
+    ctx.status = 200
   }
 }

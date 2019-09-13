@@ -12,8 +12,10 @@
       "password" : "postgres",
       "database" : "nfpmoe"
     },
+    "connectionslave": null,
     "migrations": {
-    }
+    },
+    "acquireConnectionTimeout": 10000
   },
   "bunyan": {
     "name": "nfpmoe",
@@ -37,6 +39,8 @@
   "bcrypt": 5,
   "fileSize": 524288000,
   "upload": {
+    "port": "2111",
+    "host": "storage01.nfp.is",
     "name": "nfpmoe-dev",
     "secret": "nfpmoe-dev"
   }

@@ -1,18 +1,36 @@
 const m = require('mithril')
 const Authentication = require('../authentication')
+const { getAllPages, Tree, getTree } = require('../api/page')
 
 const Menu = {
   currentActive: 'home',
+  error: '',
+  loading: false,
 
   onbeforeupdate: function() {
     let currentPath = m.route.get()
     if (currentPath === '/') Menu.currentActive = 'home'
     else if (currentPath === '/login') Menu.currentActive = 'login'
-    else Menu.currentActive = 'none'
+    else Menu.currentActive = currentPath
   },
 
-  oninit: function() {
+  oninit: function(vnode) {
     Menu.onbeforeupdate()
+
+    Menu.loading = true
+
+    getTree()
+    .then(function(results) {
+      Tree.splice(0, Tree.Length)
+      Tree.push.apply(Tree, results)
+    })
+    .catch(function(err) {
+      Menu.error = err.message
+    })
+    .then(function() {
+      Menu.loading = false
+      m.redraw()
+    })
   },
 
   view: function() {
@@ -21,25 +39,39 @@ const Menu = {
         m('h2', 'NFP Moe'),
         m('aside', Authentication.currentUser ? [
           m('p', 'Welcome ' + Authentication.currentUser.email),
-          (Authentication.currentUser.level >= 100 ?
-            m('a[href=/admin/addcat]', { oncreate: m.route.link }, 'Create category')
+          (Authentication.currentUser.level >= 100
+            ? [
+              m(m.route.Link, { href: '/admin/pages' }, 'Pages'),
+              m(m.route.Link, { href: '/admin/articles' }, 'Articles'),
+            ]
             : null
           ),
-          m('a[href=/logout]', { oncreate: m.route.link }, 'Logout')
+          m(m.route.Link, { href: '/logout' }, 'Logout')
         ] : [
-          m('a[href=/login]', { oncreate: m.route.link }, 'Login')
+          m(m.route.Link, { href: '/login' }, 'Login')
         ])
       ]),
       m('nav', [
-        m('a[href=/]', {
-          class: Menu.currentActive === 'home' ? 'active' : '', 
-          oncreate: m.route.link
+        m(m.route.Link, {
+          href: '/',
+          class: Menu.currentActive === 'home' ? 'active' : '',
         }, 'Home'),
-        m('a[href=/articles]', {
-          class: Menu.currentActive === 'articles' ? 'active' : '', 
-          oncreate: m.route.link
-        }, 'Articles'),
+        Menu.loading ? m('div.loading-spinner') : Tree.map(function(page) {
+          if (page.children.length) {
+            return m('div.hassubmenu', [
+                m(m.route.Link, {
+                  href: '/page/' + page.path,
+                  class: Menu.currentActive === ('/page/' + page.path) ? 'active' : '',
+                }, page.name)
+              ])
+          }
+          return m(m.route.Link, {
+            href: '/page/' + page.path,
+            class: Menu.currentActive === ('/page/' + page.path) ? 'active' : '',
+          }, page.name)
+        }),
       ]),
+      Menu.error ? m('div.menuerror', Menu.error) : null,
     ]
   }
 }

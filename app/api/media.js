@@ -8,6 +8,6 @@ exports.uploadMedia = function(file) {
   return sendRequest({
     method: 'POST',
     url: '/api/media',
-    data: formData,
+    body: formData,
   })
 }

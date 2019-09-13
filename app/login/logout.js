@@ -17,6 +17,8 @@ const Logout = {
       .then(function() {
         Authentication.clearToken()
         m.route.set('/')
+      }, function(err) {
+        console.log('unable to logout:', err)
       })
   },
 

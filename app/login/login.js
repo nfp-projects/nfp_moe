@@ -16,7 +16,7 @@ const Login = {
       'theme': 'dark',
       'onsuccess': Login.onGoogleSuccess,
       'onfailure': Login.onGoogleFailure,
-    });
+    })
   },
 
   onGoogleSuccess: function(googleUser) {
@@ -26,15 +26,15 @@ const Login = {
     m.request({
       method: 'POST',
       url: '/api/login',
-      data: { token: googleUser.Zi.access_token },
+      body: { token: googleUser.Zi.access_token },
     })
     .then(function(result) {
       Authentication.updateToken(result.token)
       m.route.set(Login.redirect || '/')
     })
     .catch(function(error) {
-      Login.error = 'Error while logging into NFP! ' + error.code + ': ' + error.response.message
-      let auth2 = gapi.auth2.getAuthInstance();
+      Login.error = 'Error while logging into NFP! ' + error.status + ': ' + error.message
+      let auth2 = gapi.auth2.getAuthInstance()
       return auth2.signOut()
     })
     .then(function () {
@@ -44,9 +44,11 @@ const Login = {
   },
 
   onGoogleFailure: function(error) {
-    Login.error = 'Error while logging into Google: ' + error
-    m.redraw()
-    Authentication.createGoogleScript()
+    if (error.error !== 'popup_closed_by_user' && error.error !== 'popup_blocked_by_browser') {
+      console.error(error)
+      Login.error = 'Error while logging into Google: ' + error.error
+      m.redraw()
+    }
   },
 
   oninit: function(vnode) {
@@ -75,11 +77,11 @@ const Login = {
             Login.error ? m('div.error', Login.error) : null,
             Login.loading ? m('div.loading-spinner') : null,
             m('div#googlesignin', { hidden: Login.loading }, m('div.loading-spinner')),
-          ])
+          ]),
         ]),
       ]),
     ]
-  }
+  },
 }
 
 module.exports = Login

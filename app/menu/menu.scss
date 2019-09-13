@@ -25,7 +25,7 @@
 
       p {
         font-size: 0.8em;
-        color: $meta-fg;
+        color: $meta-light-fg;
         padding-bottom: 5px;
       }
 
@@ -45,6 +45,12 @@
     background: $primary-light-bg;
     color: $primary-light-fg;
 
+    .hassubmenu {
+      flex-grow: 2;
+      flex-basis: 0;
+      display: flex;
+    }
+
     a, a:visited {
       flex-grow: 2;
       flex-basis: 0;
@@ -61,5 +67,19 @@
         border-bottom: 3px solid $secondary-bg;
       }
     }
+  }
+
+  .loading-spinner {
+    position: relative;
+    flex-grow: 2;
+    flex-basis: 0;
+  }
+
+  .menuerror {
+    background: $primary-bg;
+    text-align: center;
+    padding: 10px;
+    color: #FFC7C7;
+    font-weight: bold;
   }
 }

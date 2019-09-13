@@ -6,11 +6,230 @@ import config from './config'
 import defaults from './defaults'
 import log from './log'
 
-let host = config.get('knex:connection')
+let connections = [config.get('knex:connection')]
 
-log.info(host, 'Connecting to DB')
+if (config.get('knex:connectionslave')) {
+  connections.push(config.get('knex:connectionslave'))
+}
 
-const client = knex(config.get('knex'))
+let isRecovering = false
+let isUrgent = false
+let currentIndex = 0
+let nextIndex = currentIndex + 1
+let client
+let secondaryClient
+
+/**
+ * Semi-gracefully shift the current active client connection from the
+ * current connected client and switch to the selected index server.
+ */
+async function shiftConnection(index) {
+  // Update our variables
+  isUrgent = false
+  currentIndex = index
+
+  log.warn('DB: Destroying current pool')
+  await client.destroy()
+
+  // Update connection settings to the new server and re-initialize the pool.
+  log.warn(connections[currentIndex], 'DB: Connecting to next server')
+  client.client.connectionSettings = connections[currentIndex]
+  client.initialize()
+}
+
+/**
+ * Start a graceful server migration. Creates a secondary database connection
+ * and checks other available servers we have if they're up and can be used.
+ */
+async function gracefulServerMigrate() {
+  // Check if we're already recovering and exit then.
+  if (isRecovering) return
+
+  // Urgent means we don't have ANY active database connectiong and need one quickly.
+  if (isUrgent) {
+    log.error(connections[currentIndex], `DB: Server connected to is offline.`)
+  } else {
+    log.warn(connections[currentIndex], `DB: Successfully connected to a server but its status was recovering (slave).`)
+  }
+  log.warn('DB: Attempting to gracefully connecting to different server')
+  isRecovering = true
+
+  // Load up next server into a new knex connection and start connecting.
+  if (nextIndex === connections.length) {
+    nextIndex = 0
+  }
+  secondaryClient = knex(getConfig(nextIndex, false))
+
+  // Keep on trying :)
+  while (true) {
+    // Make multiple attempts when we're connecting to downed or timed out databases.
+    let attempts = 0
+
+    while (attempts++ < 5) {
+      try {
+        log.warn(connections[nextIndex], `DB: Gracefully attempting to connect to server (attempt ${attempts}/5).`)
+
+        // Connect to the database (this creates a new pool connection) and check if it's in recovery mode
+        let data = await secondaryClient.raw('select pg_is_in_recovery()')
+
+        // If we reach here, we got data which means the database is up and running.
+        // As such, there's no need to make more attempts to same server
+        attempts = 6
+
+        // Check if it's master or if we are desperate
+        if (!data.rows[0].pg_is_in_recovery || isUrgent) {
+          // Found a viable server to connect to. Shift our active client to it.
+          log.info(connections[nextIndex], 'DB: Found available server, connecting to it')
+          await shiftConnection(nextIndex)
+
+          // Check if we're connected to master or just a slave.
+          if (!data.rows[0].pg_is_in_recovery) {
+            // We found a master, stop recovering
+            log.info(connections[nextIndex], 'DB: Connection established with master.')
+            isRecovering = false
+            break
+          }
+        }
+      } catch (err) {
+        // We only care to log weird errors like postgresql errors or such.
+        if (err.code !== 'ECONNREFUSED' && err.code !== 'ETIMEDOUT') {
+          log.error({ code: err.code, message: err.message }, `DB: Unknown error while gracefully connecting to ${connections[nextIndex].host}`)
+        }
+
+        // Make a next attempt after 10 seconds
+        await new Promise(res => setTimeout(res, 10000))
+      }
+    }
+
+    // Check if we found a master and break if we did.
+    if (isRecovering === false) break
+
+    // Didn't find a master :( wait 60 seconds before running another attempt
+    log.warn(connections[nextIndex], 'DB: Connected server was deemeed unable to fit master role')
+    log.warn('DB: waiting 60 seconds before attempting next server')
+
+    await new Promise(res => setTimeout(res, 60000))
+
+    // Move to next server
+    nextIndex++
+    if (nextIndex === connections.length) {
+      nextIndex = 0
+    }
+
+    // Time to destroy our active pool on our current server and update
+    // the connection settings to the next server and re-initialise.
+    await secondaryClient.destroy()
+    secondaryClient.client.connectionSettings = connections[nextIndex]
+    secondaryClient.initialize()
+  }
+
+  // We got here means we have stopped recovery process.
+  // Shut down the secondary knex client and destroy it and
+  // remove reference to it so GC can collect it eventually, hopefully.
+  await secondaryClient.destroy()
+  nextIndex = currentIndex + 1
+  secondaryClient = null
+}
+
+/**
+ * Event handler after our pool is created and we are creating a connection.
+ * Here  we check if the database is in recovery mode (a.k.a. slave) and if so
+ * start the graceful migration to migrate back to master once it's up and running.
+ */
+function afterCreate(conn, done) {
+  conn.query('select pg_is_in_recovery()', (e, res) => {
+    if (e) return done(e, conn)
+    if (res.rows[0].pg_is_in_recovery) gracefulServerMigrate().then()
+    done(null, conn)
+  })
+}
+
+/**
+ * Event handler for when the pool gets destroyed. Here we check
+ * if the connection has been marked with _ending = true.
+ * There are some checks available we can use to check if current
+ * connection was abrubtly disconnected. Among those from my testing
+ * are as follows:
+ *
+ * conn.__knex__disposed = 'Connection ended unexpectedly'
+ * conn.connection._ending = true
+ *
+ * I went with connection._ending one as I feel that one's the safest.
+ * 
+ */
+function beforeDestroy(conn) {
+  if (conn.connection._ending) {
+    checkActiveConnection()
+  }
+}
+
+/**
+ * Return a valid confic for knex based on specific connection index.
+ * Note that we don't wanna hook into afterCreate or beforeDestroy
+ * in our secondary knex connection doing the recovery checking.
+ */
+function getConfig(index = 0, addEvents = true) {
+  return {
+    'client': 'pg',
+    'connection': connections[index],
+    'migrations': {
+    },
+    pool: {
+      afterCreate: addEvents && afterCreate || null,
+      min: 2,
+      max: 10,
+      beforeDestroy: addEvents && beforeDestroy || null,
+    },
+    acquireConnectionTimeout: 10000,
+  }
+}
+
+client = knex(getConfig(currentIndex))
+
+/**
+ * Make sure no update or delete queries are run while we're recovering.
+ * This allows knex to connect to a slave and only process select queries.
+ *
+ * Note: Probably does not support complicated select queries that cause
+ *       updates on trigger or other such things.
+ */
+client.on('query', data => {
+  if (isRecovering && data.method !== 'select') {
+    throw new Error('Database is in read-only mode')
+  }
+})
+
+function checkActiveConnection(attempt = 1) {
+  if (attempt > 5) {
+    isUrgent = true
+    return gracefulServerMigrate().then()
+  }
+  // log.info(`DB: (Attempt ${attempt}/5) Checking connection is active.`)
+  client.raw('select 1').catch(err => {
+    if (err.code === 'ECONNREFUSED') { // err.code === 'ETIMEDOUT'
+      isUrgent = true
+      return gracefulServerMigrate().then()
+    }
+    if (err) {
+      let wait = 3000 // err.code like '57P03' and such.
+      if (err.code === 'ETIMEDOUT') {
+        wait = 10000
+      }
+
+      log.error({ code: err.code, message: err.message }, `DB: (Attempt ${attempt}/5) Error while checking connection status`)
+      if (attempt < 5) {
+        log.warn(`DB: (Attempt ${attempt}/5) Attempting again in ${wait / 1000} seconds.`)
+        setTimeout(() => checkActiveConnection(attempt + 1), wait)
+      } else {
+        checkActiveConnection(attempt + 1)
+      }
+    }
+  })
+}
+
+// Only way to check startup connection errors
+log.info(getConfig(currentIndex).connection, 'DB: Connecting to server')
+setTimeout(() => checkActiveConnection(), 100)
 
 // Check if we're running tests while connected to
 // potential production environment.
@@ -122,6 +341,7 @@ shelf.createModel = (attr, opts) => {
           !options.query._statements[0].column.indexOf ||
           options.query._statements[0].column.indexOf('is_deleted') === -1) {
         // First override that is_deleted always gets filtered out.
+
         options.query.where(`${collection.tableName()}.is_deleted`, false)
       }
 

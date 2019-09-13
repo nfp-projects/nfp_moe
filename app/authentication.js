@@ -1,5 +1,4 @@
 const m = require('mithril')
-const jwt = require('jsonwebtoken')
 
 const storageName = 'logintoken'
 const loadingListeners = []
@@ -20,7 +19,7 @@ const Authentication = {
   updateToken: function(token) {
     if (!token) return Authentication.clearToken()
     localStorage.setItem(storageName, token)
-    Authentication.currentUser = jwt.decode(token)
+    Authentication.currentUser = JSON.parse(atob(token.split('.')[1]))
   },
 
   clearToken: function() {

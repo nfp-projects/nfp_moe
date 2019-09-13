@@ -4,15 +4,17 @@ const { uploadMedia } = require('../api/media')
 const FileUpload = {
   uploadFile(vnode, event) {
     if (!event.target.files[0]) return
+    vnode.state.updateError(vnode, '')
     vnode.state.loading = true
 
     uploadMedia(event.target.files[0])
     .then(function(res) {
-      vnode.state.media = res
-      console.log(vnode.state.media)
+      if (vnode.attrs.onupload) {
+        vnode.attrs.onupload(res)
+      }
     })
     .catch(function(err) {
-      console.log(err)
+      vnode.state.updateError(vnode, err.message)
     })
     .then(function() {
       vnode.state.loading = false
@@ -20,29 +22,43 @@ const FileUpload = {
     })
   },
 
+  updateError: function(vnode, error) {
+    if (vnode.attrs.onerror) {
+      vnode.attrs.onerror(error)
+    } else {
+      vnode.state.error = error
+    }
+  },
+
   oninit: function(vnode) {
     vnode.state.loading = false
-    vnode.state.media = null
     vnode.state.error = ''
   },
 
   view: function(vnode) {
-    let media = vnode.state.media
+    let media = vnode.attrs.media
 
-    return m('fileupload', [
-      (media ?
-        m('a.display', {
-            href: media.large_url,
-            style: {
-              'background-image': 'url(' + media.medium_url + ')',
-            }
-          }) :
-        m('div.showicon')
+    return m('fileupload', {
+      class: vnode.attrs.class || null,
+    }, [
+      m('div.error', {
+        hidden: !vnode.state.error,
+      }, vnode.state.error),
+      (media
+        ? vnode.attrs.useimg
+          ? [ m('img', { src: media.large_url }), m('div.showicon')]
+          : m('a.display.inside', {
+              href: media.large_url,
+              style: {
+                'background-image': 'url(' + media.medium_url + ')',
+              },
+            }, m('div.showicon'))
+        : m('div.inside.showbordericon')
       ),
       m('input', {
         accept: 'image/*',
         type: 'file',
-        onchange: FileUpload.uploadFile.bind(this, vnode),
+        onchange: this.uploadFile.bind(this, vnode),
       }),
       (vnode.state.loading ? m('div.loading-spinner') : null),
     ])

@@ -37,9 +37,21 @@ const Media = bookshelf.createModel({
     large_url() {
       return `${Media.baseUrl}${this.get('large_image')}`
     },
+
+    link() {
+      return `${Media.baseUrl}${this.get('large_image')}`
+    },
+
+    url() {
+      return `${Media.baseUrl}${this.get('large_image')}`
+    },
+
+    thumb() {
+      return `${Media.baseUrl}${this.get('small_image')}`
+    },
   },
 }, {
-  baseUrl: 'https://cdn-nfp.global.ssl.fastly.net',
+  baseUrl: 'http://192.168.42.14',
 
   getSubUrl(input, size) {
     if (!input) return input
