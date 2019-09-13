@@ -7,16 +7,12 @@
     }
   },
   "extends": "eslint:recommended",
-  "plugins": [
-    "mocha"
-  ],
   "env": {
     "mocha": true,
     "node": true,
     "es6": true
   },
   "rules": {
-    "mocha/no-exclusive-tests": 2,
     "require-await": 0,
     "array-callback-return": 2,
     "block-scoped-var": 2,
@@ -46,7 +42,7 @@
     "no-catch-shadow": 2,
     "no-shadow": 2,
     "no-undef-init": 2,
-    "no-undefined": 0,
+    "no-undefined": 2,
     "no-use-before-define": 2,
     "no-new-require": 2,
     "no-sync": 2,

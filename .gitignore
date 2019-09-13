@@ -60,5 +60,7 @@ typings/
 # Local development config file
 config/config.json
 package-lock.json
-public/*
+public/assets/app.js
+public/assets/app.css
+public/assets/app.css.map
 
