@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-import config from './config'
-import log from './log'
+import config from './config.mjs'
+import log from './log.mjs'
 import knex from 'knex'
 
 // This is important for setup to run cleanly.

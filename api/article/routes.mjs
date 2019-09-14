@@ -13,12 +13,14 @@ export default class ArticleRoutes {
   async getAllArticles(ctx) {
     await this.security.ensureIncludes(ctx)
 
-    let filter = {}
-    if (ctx.query.tree && ctx.query.tree === 'true') {
-      filter.parent_id = null
-    }
+    ctx.body = await this.Article.getAll(ctx, { }, ctx.state.filter.includes)
+  }
 
-    ctx.body = await this.Article.getAll(ctx, filter, ctx.state.filter.includes)
+  /** GET: /api/pages/:pageId/articles */
+  async getAllPageArticles(ctx) {
+    await this.security.ensureIncludes(ctx)
+
+    ctx.body = await this.Article.getAllFromPage(ctx, ctx.params.pageId, ctx.state.filter.includes, ctx.query.sort || '-id')
   }
 
   /** GET: /api/articles/:id */

@@ -1,6 +1,6 @@
 const m = require('mithril')
 const Authentication = require('../authentication')
-const { getAllPages, Tree, getTree } = require('../api/page')
+const { Tree, getTree } = require('../api/page')
 
 const Menu = {
   currentActive: 'home',
@@ -36,20 +36,26 @@ const Menu = {
   view: function() {
     return [
       m('div.top', [
-        m('h2', 'NFP Moe'),
+        m(m.route.Link,
+          { href: '/', class: 'logo' },
+          m('h2', 'NFP Moe')
+        ),
         m('aside', Authentication.currentUser ? [
-          m('p', 'Welcome ' + Authentication.currentUser.email),
+          m('p', [
+            'Welcome ' + Authentication.currentUser.email,
+            m(m.route.Link, { href: '/logout' }, 'Logout'),
+          ]),
           (Authentication.currentUser.level >= 100
             ? [
               m(m.route.Link, { href: '/admin/pages' }, 'Pages'),
               m(m.route.Link, { href: '/admin/articles' }, 'Articles'),
+              m(m.route.Link, { href: '/admin/articles/add' }, 'Create article'),
             ]
             : null
           ),
-          m(m.route.Link, { href: '/logout' }, 'Logout')
         ] : [
-          m(m.route.Link, { href: '/login' }, 'Login')
-        ])
+          m(m.route.Link, { href: '/login' }, 'Login'),
+        ]),
       ]),
       m('nav', [
         m(m.route.Link, {
@@ -62,7 +68,7 @@ const Menu = {
                 m(m.route.Link, {
                   href: '/page/' + page.path,
                   class: Menu.currentActive === ('/page/' + page.path) ? 'active' : '',
-                }, page.name)
+                }, page.name),
               ])
           }
           return m(m.route.Link, {
@@ -73,7 +79,7 @@ const Menu = {
       ]),
       Menu.error ? m('div.menuerror', Menu.error) : null,
     ]
-  }
+  },
 }
 
 module.exports = Menu

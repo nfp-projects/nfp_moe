@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { format } from 'url'
-import config from '../config'
+import config from '../config.mjs'
 
 function limit(value, min, max, fallback) {
   let out = parseInt(value, 10)

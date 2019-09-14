@@ -39,6 +39,7 @@
   "bcrypt": 5,
   "fileSize": 524288000,
   "upload": {
+    "baseurl": "http://192.168.42.14",
     "port": "2111",
     "host": "storage01.nfp.is",
     "name": "nfpmoe-dev",

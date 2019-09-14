@@ -1,0 +1,44 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:latest
+    environment:
+      - di: "nfpis/nfpmoe"
+      - dtag: "latest"
+      - service_name: "nfpmoe"
+      - target_port: "7030" # The public port
+      - service_port: "4030" # Container port
+    working_directory: ~/nfpmoe
+    steps:
+      - run:
+          name: Update and install SSH & Git
+          command: apk update && apk upgrade && apk add --no-cache bash git openssh
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build docker image
+          command: docker build -t ${di}:build_${CIRCLE_BUILD_NUM} -t ${di}:${CIRCLE_SHA1} -t ${di}:${dtag} .
+      - run:
+          name: Push to docker
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push ${di}
+      - deploy:
+          name: Deploy to production
+          command: |
+            if [ "${CIRCLE_BRANCH}" != "master" ]; then
+              echo Not running on master. Exiting.
+              exit 0
+            fi
+            echo "$MASTER_HOST" | base64 -d > ~/.ssh/master_host
+            echo "$MASTER_KEY" | base64 -d > ~/.ssh/master_key
+            chmod 600 ~/.ssh/master_key
+            ssh -p 51120 -i ~/.ssh/master_key -o "UserKnownHostsFile ~/.ssh/master_host" root@82.221.107.21 "docker ${service_name} ${di}:${CIRCLE_SHA1} ${target_port} ${service_port}"
+
+workflows:
+  version: 2
+  build_deploy:
+    jobs:
+      - build:
+          context: org-global

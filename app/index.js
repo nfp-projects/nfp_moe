@@ -2,7 +2,6 @@ const m = require('mithril')
 
 m.route.prefix = ''
 
-const Authentication = require('./authentication')
 const Menu = require('./menu/menu')
 const Frontpage = require('./frontpage/frontpage')
 const Login = require('./login/login')
@@ -20,10 +19,10 @@ m.route(mainRoot, '/', {
   '/': Frontpage,
   '/login': Login,
   '/logout': Logout,
-  '/page/:key': Page,
+  '/page/:id': Page,
   '/admin/pages': AdminPages,
   '/admin/pages/:key': EditPage,
   '/admin/articles': AdminArticles,
-  '/admin/articles/:key': EditArticle,
+  '/admin/articles/:id': EditArticle,
 })
 m.mount(menuRoot, Menu)

@@ -1,6 +1,5 @@
-import google from 'googleapis'
 import googleauth from 'google-auth-library'
-import config from '../config'
+import config from '../config.mjs'
 
 const oauth2Client = new googleauth.OAuth2Client(config.get('googleid'))
 
@@ -11,4 +10,3 @@ const oauth2Client = new googleauth.OAuth2Client(config.get('googleid'))
 export function getProfile(token) {
   return oauth2Client.getTokenInfo(token)
 }
- 

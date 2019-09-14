@@ -1,12 +1,23 @@
 const m = require('mithril')
 const { getPage } = require('../api/page')
+const { getAllPageArticlesPagination } = require('../api/article')
+const { fetchPage } = require('../api/pagination')
 const Authentication = require('../authentication')
 const Newsentry = require('../widgets/newsentry')
+const Pages = require('../widgets/pages')
 
 const Page = {
   oninit: function(vnode) {
-    this.path = m.route.param('key')
     this.error = ''
+    this.lastpage = m.route.param('page') || '1'
+    this.loadingnews = false
+    this.fetchPage(vnode)
+  },
+
+  fetchPage: function(vnode) {
+    this.path = m.route.param('id')
+    this.news = []
+    this.newslinks = null
     this.page = {
       id: 0,
       name: '',
@@ -14,7 +25,6 @@ const Page = {
       description: '',
       media: null,
     }
-
     this.loading = true
 
     getPage(this.path)
@@ -25,7 +35,37 @@ const Page = {
       vnode.state.error = err.message
     })
     .then(function() {
-      vnode.state.loading = false
+      return vnode.state.fetchArticles(vnode)
+    })
+  },
+
+  onupdate: function(vnode) {
+    if (this.path !== m.route.param('id')) {
+      this.fetchPage(vnode)
+    } else if (m.route.param('page') && m.route.param('page') !== this.lastpage) {
+      this.fetchArticles(vnode)
+    }
+  },
+
+  fetchArticles: function(vnode) {
+    this.loadingnews = true
+    this.newslinks = null
+    this.lastpage = m.route.param('page') || '1'
+
+    return fetchPage(getAllPageArticlesPagination(this.page.id, {
+      per_page: 10,
+      page: this.lastpage,
+      includes: ['files', 'media'],
+    }))
+    .then(function(result) {
+      vnode.state.news = result.data
+      vnode.state.newslinks = result.links
+    })
+    .catch(function(err) {
+      vnode.state.error = err.message
+    })
+    .then(function() {
+      vnode.state.loading = vnode.state.loadingnews = false
       m.redraw()
     })
   },
@@ -35,7 +75,7 @@ const Page = {
       this.loading ?
         m('div.loading-spinner')
       : m('article.page', [
-          this.page.banner ? m('.div.page-banner', { style: { 'background-image': 'url(' + this.page.banner.url + ')' } } ) : null,
+          this.page.banner ? m('.div.page-banner', { style: { 'background-image': 'url("' + this.page.banner.url + '")' } } ) : null,
           m('header', m('h1', this.page.name)),
           m('.container', {
               class: this.page.children.length ? 'multi' : '',
@@ -44,7 +84,7 @@ const Page = {
               ? m('aside.sidebar', [
                   m('h4', 'View ' + this.page.name + ':'),
                   this.page.children.map(function(page) {
-                    return m(m.route.Link, { href: '/page/' + page.path, }, page.name)
+                    return m(m.route.Link, { href: '/page/' + page.path }, page.name)
                   }),
                 ])
               : null,
@@ -52,27 +92,35 @@ const Page = {
               ? m('.fr-view', [
                   this.page.media ? m('img.page-cover', { src: this.page.media.url } ) : null,
                   m.trust(this.page.description),
-                  this.page.news.length && this.page.description
+                  this.news.length && this.page.description
                     ? m('aside.news', [
-                        m('h4', 'Latest updates under ' + this.page.name + ':'),
-                        this.page.news.map(function(article) {
+                        m('h4', 'Latest posts under ' + this.page.name + ':'),
+                        this.loadingnews ? m('div.loading-spinner') : this.news.map(function(article) {
                           return m(Newsentry, article)
                         }),
+                        m(Pages, {
+                          base: '/page/' + this.page.path,
+                          links: this.newslinks,
+                        }),
                       ])
-                    : null
+                    : null,
                 ])
-              : null,
+              : this.news.length
+                ? m('aside.news.single', [
+                    this.page.media ? m('img.page-cover', { src: this.page.media.url } ) : null,
+                    m('h4', 'Latest posts under ' + this.page.name + ':'),
+                    this.loadingnews ? m('div.loading-spinner') : this.news.map(function(article) {
+                      return m(Newsentry, article)
+                    }),
+                    m(Pages, {
+                      base: '/page/' + this.page.path,
+                      links: this.newslinks,
+                    }),
+                  ])
+                : this.page.media
+                  ? m('img.page-cover.single', { src: this.page.media.url } )
+                  : null,
           ]),
-          this.page.news.length && !this.page.description
-            ? m('aside.news', {
-                class: this.page.description ? '' : 'single'
-              }, [
-                m('h4', 'Latest updates under ' + this.page.name + ':'),
-                this.page.news.map(function(article) {
-                  return m(Newsentry, article)
-                }),
-              ])
-            : null,
           Authentication.currentUser
             ? m('div.admin-actions', [
               m('span', 'Admin controls:'),

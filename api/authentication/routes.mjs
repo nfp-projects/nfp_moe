@@ -1,6 +1,6 @@
-import Staff from '../staff/model'
-import Jwt from '../jwt'
-import * as google from './google'
+import Staff from '../staff/model.mjs'
+import Jwt from '../jwt.mjs'
+import * as google from './google.mjs'
 
 export default class AuthRoutes {
   constructor(opts = {}) {

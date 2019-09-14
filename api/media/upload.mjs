@@ -1,7 +1,7 @@
 import http from 'http'
 import path from 'path'
 import fs from 'fs'
-import config from '../config'
+import config from '../config.mjs'
 
 let stub
 

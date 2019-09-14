@@ -1,19 +1,39 @@
 const m = require('mithril')
 
-const Authentication = require('../authentication')
-const { getAllArticles, removeArticle } = require('../api/article')
+const { getAllArticlesPagination, removeArticle } = require('../api/article')
+const { fetchPage } = require('../api/pagination')
 const Dialogue = require('../widgets/dialogue')
+const Pages = require('../widgets/pages')
 
 const AdminArticles = {
   oninit: function(vnode) {
-    this.loading = true
     this.error = ''
+    this.lastpage = m.route.param('page') || '1'
     this.articles = []
     this.removeArticle = null
 
-    getAllArticles()
+    this.fetchArticles(vnode)
+  },
+
+  onupdate: function(vnode) {
+    if (m.route.param('page') && m.route.param('page') !== this.lastpage) {
+      this.fetchArticles(vnode)
+    }
+  },
+
+  fetchArticles: function(vnode) {
+    this.loading = true
+    this.links = null
+    this.lastpage = m.route.param('page') || '1'
+
+    return fetchPage(getAllArticlesPagination({
+      per_page: 10,
+      page: this.lastpage,
+      includes: ['parent'],
+    }))
     .then(function(result) {
-      vnode.state.articles = result
+      vnode.state.articles = result.data
+      vnode.state.links = result.links
     })
     .catch(function(err) {
       vnode.state.error = err.message
@@ -57,26 +77,26 @@ const AdminArticles = {
         m('td', m(m.route.Link, { href: '/article/' + article.path }, '/article/' + article.path)),
         m('td.right', article.updated_at.replace('T', ' ').split('.')[0]),
         m('td.right', m('button', { onclick: function() { vnode.state.removeArticle = article } }, 'Remove')),
-      ])
+      ]),
     ]
   },
 
   view: function(vnode) {
     return [
-      (this.loading ?
-        m('div.loading-spinner')
-      : m('div.admin-wrapper', [
-          m('div.admin-actions', [
-              m('span', 'Actions:'),
-              m(m.route.Link, { href: '/admin/articles/add' }, 'Create new article'),
-            ]),
-          m('article.editarticle', [
-            m('header', m('h1', 'All articles')),
-            m('div.error', {
-              hidden: !this.error,
-              onclick: function() { vnode.state.error = '' }
-            }, this.error),
-            m('table', [
+      m('div.admin-wrapper', [
+        m('div.admin-actions', [
+            m('span', 'Actions:'),
+            m(m.route.Link, { href: '/admin/articles/add' }, 'Create new article'),
+          ]),
+        m('article.editarticle', [
+          m('header', m('h1', 'All articles')),
+          m('div.error', {
+            hidden: !this.error,
+            onclick: function() { vnode.state.error = '' },
+          }, this.error),
+          (this.loading
+            ? m('div.loading-spinner.full')
+            : m('table', [
               m('thead', 
                 m('tr', [
                   m('th', 'Title'),
@@ -87,10 +107,14 @@ const AdminArticles = {
                 ])
               ),
               m('tbody', this.articles.map(AdminArticles.drawArticle.bind(this, vnode))),
-            ]),
-          ]),
-        ])
-      ),
+            ])
+          ),
+          m(Pages, {
+            base: '/admin/articles',
+            links: this.links,
+          }),
+        ]),
+      ]),
       m(Dialogue, {
         hidden: vnode.state.removeArticle === null,
         title: 'Delete ' + (vnode.state.removeArticle ? vnode.state.removeArticle.name : ''),

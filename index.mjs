@@ -1,7 +1,7 @@
-import log from './api/log'
+import log from './api/log.mjs'
 
 // Run the database script automatically.
-import setup from './api/setup'
+import setup from './api/setup.mjs'
 
 setup().catch(async (error) => {
   log.error({ code: error.code, message: error.message }, 'Error while preparing database')
@@ -13,7 +13,7 @@ setup().catch(async (error) => {
   //   process.exit(1)
   // })
 }).then(() =>
-  import('./server')
+  import('./server.mjs')
 ).catch(error => {
   log.error(error, 'Unknown error starting server')
 })

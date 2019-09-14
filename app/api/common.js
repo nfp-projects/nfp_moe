@@ -1,12 +1,36 @@
 const m = require('mithril')
 const Authentication = require('../authentication')
 
-exports.sendRequest = function(options) {
+exports.sendRequest = function(options, isPagination) {
   let token = Authentication.getToken()
+  let pagination = isPagination
 
   if (token) {
     options.headers = options.headers || {}
     options.headers['Authorization'] = 'Bearer ' + token
+  }
+
+  options.extract = function(xhr) {
+    let out = null
+    if (pagination && xhr.status < 300) {
+      let headers = {}
+
+      xhr.getAllResponseHeaders().split('\r\n').forEach(function(item) {
+        var splitted = item.split(': ')
+        headers[splitted[0]] = splitted[1]
+      })
+
+      out = {
+        headers: headers || {},
+        data: JSON.parse(xhr.responseText),
+      }
+    } else {
+      out = JSON.parse(xhr.responseText)
+    }
+    if (xhr.status >= 300) {
+      throw out
+    }
+    return out
   }
 
   return m.request(options)

@@ -63,7 +63,7 @@ const AdminPages = {
         m('td', m(m.route.Link, { href: '/page/' + page.path }, '/page/' + page.path)),
         m('td.right', page.updated_at.replace('T', ' ').split('.')[0]),
         m('td.right', m('button', { onclick: function() { vnode.state.removePage = page } }, 'Remove')),
-      ])
+      ]),
     ].concat(page.children.map(AdminPages.drawPage.bind(this, vnode)))
   },
 
@@ -80,7 +80,7 @@ const AdminPages = {
             m('header', m('h1', 'All pages')),
             m('div.error', {
               hidden: !this.error,
-              onclick: function() { vnode.state.error = '' }
+              onclick: function() { vnode.state.error = '' },
             }, this.error),
             m('table', [
               m('thead', 

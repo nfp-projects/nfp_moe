@@ -1,6 +1,6 @@
 import format from 'format-link-header'
 
-import * as pagination from './pagination'
+import * as pagination from './pagination.mjs'
 
 export default class ParserMiddleware {
   constructor(opts = {}) {

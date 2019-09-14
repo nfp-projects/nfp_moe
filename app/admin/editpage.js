@@ -84,6 +84,10 @@ const EditPage = {
     this.page[type] = media
   },
 
+  fileRemoved: function(type) {
+    this.page[type] = null
+  },
+
   save: function(vnode, e) {
     e.preventDefault()
     if (!this.page.name) {
@@ -105,8 +109,8 @@ const EditPage = {
         path: this.page.path,
         parent_id: this.page.parent_id,
         description: this.page.description,
-        banner_id: this.page.banner && this.page.banner.id,
-        media_id: this.page.media && this.page.media.id,
+        banner_id: this.page.banner && this.page.banner.id || null,
+        media_id: this.page.media && this.page.media.id || null,
       })
     } else {
       promise = createPage({
@@ -114,8 +118,8 @@ const EditPage = {
         path: this.page.path,
         parent_id: this.page.parent_id,
         description: this.page.description,
-        banner_id: this.page.banner && this.page.banner.id,
-        media_id: this.page.media && this.page.media.id,
+        banner_id: this.page.banner && this.page.banner.id || null,
+        media_id: this.page.media && this.page.media.id || null,
       })
     }
 
@@ -135,6 +139,8 @@ const EditPage = {
       vnode.state.loading = false
       m.redraw()
     })
+
+    return false
   },
 
   view: function(vnode) {
@@ -147,16 +153,18 @@ const EditPage = {
             ? [
               m('span', 'Actions:'),
               m(m.route.Link, { href: '/page/' + this.page.path }, 'View page'),
+              m(m.route.Link, { href: '/admin/pages/add' }, 'Create new page'),
             ]
             : null),
           m('article.editpage', [
             m('header', m('h1', this.creating ? 'Create Page' : 'Edit ' + (this.page.name || '(untitled)'))),
             m('div.error', {
               hidden: !this.error,
-              onclick: function() { vnode.state.error = '' }
+              onclick: function() { vnode.state.error = '' },
             }, this.error),
             m(FileUpload, {
               onupload: this.fileUploaded.bind(this, 'banner'),
+              ondelete: this.fileRemoved.bind(this, 'banner'),
               onerror: function(e) { vnode.state.error = e },
               media: this.page && this.page.banner,
             }),
@@ -164,6 +172,7 @@ const EditPage = {
               class: 'cover',
               useimg: true,
               onupload: this.fileUploaded.bind(this, 'media'),
+              ondelete: this.fileRemoved.bind(this, 'media'),
               onerror: function(e) { vnode.state.error = e },
               media: this.page && this.page.media,
             }),
@@ -173,7 +182,9 @@ const EditPage = {
               m('label', 'Parent'),
               m('select', {
                 onchange: this.updateParent.bind(this),
-              }, parents.map(function(item) { return m('option', { value: item.id || -1, selected: item.id === vnode.state.page.parent_id }, item.name) })),
+              }, parents.map(function(item) {
+                return m('option', { value: item.id || -1, selected: item.id === vnode.state.page.parent_id }, item.name)
+              })),
               m('label', 'Name'),
               m('input', {
                 type: 'text',

@@ -1,13 +1,13 @@
 /* eslint max-len: 0 */
 import Router from 'koa-router'
 
-import access from './access'
-import AuthRoutes from './authentication/routes'
-import MediaRoutes from './media/routes'
-import FileRoutes from './file/routes'
-import PageRoutes from './page/routes'
-import ArticleRoutes from './article/routes'
-import { restrict } from './access/middleware'
+import access from './access/index.mjs'
+import AuthRoutes from './authentication/routes.mjs'
+import MediaRoutes from './media/routes.mjs'
+import FileRoutes from './file/routes.mjs'
+import PageRoutes from './page/routes.mjs'
+import ArticleRoutes from './article/routes.mjs'
+import { restrict } from './access/middleware.mjs'
 
 const router = new Router()
 
@@ -36,6 +36,7 @@ router.del('/api/pages/:id', restrict(access.Manager), page.removePage.bind(page
 
 const article = new ArticleRoutes()
 router.get('/api/articles', article.getAllArticles.bind(article))
+router.get('/api/pages/:pageId/articles', article.getAllPageArticles.bind(article))
 router.get('/api/articles/:id', article.getSingleArticle.bind(article))
 router.post('/api/articles', restrict(access.Manager), article.createArticle.bind(article))
 router.put('/api/articles/:id', restrict(access.Manager), article.updateArticle.bind(article))

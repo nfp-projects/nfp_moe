@@ -17,7 +17,7 @@ body, h1, h2, h3, h4, h5, h6, p {
 }
 
 body {
-  height: 100%;
+  min-height: 100%;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -50,9 +50,15 @@ img {
   animation: spinner-loader .6s linear infinite;
 }
 
+.maincontainer {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .container {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -186,37 +192,38 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
   font-size: 0.8em;
-}
-table thead th {
-  background-color: $headcolor;
-  border: solid 1px $bordercolor;
-  color: $headtext;
-  padding: 10px;
-  text-align: left;
-}
-table tbody td {
-  text-align: left;
-  border: solid 1px $bordercolor;
-  color: #333;
-  padding: 10px;
-}
-table a,
-table a:visited,
-table a:hover {
-  text-decoration: none;
-  color: $secondary-bg;
-  font-weight: bold;
-}
 
-table button {
-  color: $secondary-bg;
-  background: transparent;
-  border: 1px solid $secondary-bg;
-}
+  thead th {
+    background-color: $headcolor;
+    border: solid 1px $bordercolor;
+    color: $headtext;
+    padding: 10px;
+    text-align: left;
+  }
+  tbody td {
+    text-align: left;
+    border: solid 1px $bordercolor;
+    color: #333;
+    padding: 10px;
+  }
+  a,
+  a:visited,
+  a:hover {
+    text-decoration: none;
+    color: $secondary-dark-bg;
+    font-weight: bold;
+  }
 
-table td.right,
-table th.right {
-  text-align: right;
+  button {
+    color: $secondary-dark-bg;
+    background: transparent;
+    border: 1px solid $secondary-dark-bg;
+  }
+
+  td.right,
+  th.right {
+    text-align: right;
+  }
 }
 
 .floating-container {
@@ -237,3 +244,4 @@ table th.right {
 @import 'admin/admin';
 @import 'widgets/common';
 @import 'pages/page';
+@import 'frontpage/frontpage'

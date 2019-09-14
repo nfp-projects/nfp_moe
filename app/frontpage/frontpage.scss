@@ -1,0 +1,32 @@
+.frontpage-banner {
+  background-color: #999999;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 150px;
+  width: 100%;
+  max-width: 1920px;
+  align-self: center;
+  flex: 0 0 150px;
+  margin-bottom: 20px;
+  color: white;
+  text-shadow: 0 0 0.3em #000000;
+  text-align: right;
+  font-size: 1.6em;
+  padding: 10px 20px;
+}
+
+frontpage {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  margin: 0 20px;
+  padding: 0 20px;
+  width: calc(100% - 40px);
+  max-width: 1000px;
+  flex: 2 0 0;
+
+  .loading-spinner {
+    height: 100px;
+  }  
+}

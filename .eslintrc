@@ -6,11 +6,15 @@
       "impliedStrict": true
     }
   },
+  "globals": {
+    "FroalaEditor": "readonly"
+  },
   "extends": "eslint:recommended",
   "env": {
     "mocha": true,
     "node": true,
-    "es6": true
+    "es6": true,
+    "browser": true
   },
   "rules": {
     "require-await": 0,
@@ -48,7 +52,7 @@
     "no-sync": 2,
     "array-bracket-newline": [2, "consistent"],
     "block-spacing": [2, "always"],
-    "brace-style": [2, "1tbs"],
+    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
     "comma-dangle": [2, "always-multiline"],
     "comma-spacing": 2,
     "comma-style": 2,
@@ -66,7 +70,7 @@
       2,
       {
         "args": "after-used",
-        "argsIgnorePattern": "next|res|req"
+        "argsIgnorePattern": "next|res|req|vnode"
       }
     ],
     "generator-star-spacing": 0,

@@ -1,5 +1,5 @@
 import sharp from 'sharp'
-import Media from './model'
+import Media from './model.mjs'
 
 export default class Resizer {
   constructor(opts = {}) {
@@ -15,7 +15,7 @@ export default class Resizer {
     return this.sharp(input)
             .resize(360, 360, {
               fit: sharp.fit.inside,
-              withoutEnlargement: true
+              withoutEnlargement: true,
             })
             .toFile(output)
             .then(() => output)
@@ -27,7 +27,7 @@ export default class Resizer {
     return this.sharp(input)
             .resize(700, 700, {
               fit: sharp.fit.inside,
-              withoutEnlargement: true
+              withoutEnlargement: true,
             })
             .toFile(output)
             .then(() => output)

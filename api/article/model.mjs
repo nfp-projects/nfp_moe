@@ -1,5 +1,6 @@
 import bookshelf from '../bookshelf.mjs'
 import Media from '../media/model.mjs'
+import File from '../file/model.mjs'
 import Staff from '../staff/model.mjs'
 import Page from '../page/model.mjs'
 
@@ -38,6 +39,13 @@ const Article = bookshelf.createModel({
   staff() {
     return this.belongsTo(Staff, 'staff_id')
   },
+
+  files() {
+    return this.hasManyFiltered(File, 'file', 'article_id')
+      .query(qb => {
+        qb.orderBy('id', 'asc')
+      })
+  },
 }, {
   getSingle(id, withRelated = [], require = true, ctx = null) {
     return this.query(qb => {
@@ -45,6 +53,28 @@ const Article = bookshelf.createModel({
           .orWhere({ path: id })
       })
       .fetch({ require, withRelated, ctx })
+  },
+
+  getAllFromPage(ctx, pageId, withRelated = [], orderBy = 'id') {
+    return this.query(qb => {
+        this.baseQueryAll(ctx, qb, {}, orderBy)
+        qb.leftOuterJoin('pages', 'articles.parent_id', 'pages.id')
+        qb.where(subq => {
+          subq.where('pages.id', pageId)
+              .orWhere('pages.parent_id', pageId)
+        })
+        qb.select('articles.*')
+      })
+      .fetchPage({
+        pageSize: ctx.state.pagination.perPage,
+        page: ctx.state.pagination.page,
+        withRelated,
+        ctx: ctx,
+      })
+      .then(result => {
+        ctx.state.pagination.total = result.pagination.rowCount
+        return result
+      })
   },
 })
 

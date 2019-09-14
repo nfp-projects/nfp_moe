@@ -36,18 +36,6 @@ exports.up = function up(knex, Promise) {
         .default(false)
       table.timestamps()
     }),
-    knex.schema.createTable('files', function(table) {
-      table.increments()
-      table.text('filename')
-      table.text('filetype')
-      table.integer('size')
-      table.integer('staff_id')
-        .references('staff.id')
-      table.boolean('is_deleted')
-        .notNullable()
-        .default(false)
-      table.timestamps()
-    }),
     knex.schema.createTable('pages', function(table) {
       table.increments()
       table.integer('staff_id')
@@ -90,13 +78,15 @@ exports.up = function up(knex, Promise) {
     }),
     knex.schema.createTable('files', function(table) {
       table.increments()
-      table.integer('file_id')
-        .references('files.id')
+      table.integer('articdle_id')
+        .references('articles.id')
       table.text('filename')
       table.text('filetype')
+      table.text('path')
       table.integer('size')
       table.integer('staff_id')
         .references('staff.id')
+      table.jsonb('meta')
       table.boolean('is_deleted')
         .notNullable()
         .default(false)

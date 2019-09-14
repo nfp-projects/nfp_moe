@@ -4,6 +4,8 @@ const Authentication = require('../authentication')
 const FileUpload = require('../widgets/fileupload')
 const Froala = require('./froala')
 const { Tree } = require('../api/page')
+const { uploadFile } = require('../api/file')
+const Fileinfo = require('../widgets/fileinfo')
 const { createArticle, updateArticle, getArticle } = require('../api/article')
 
 const EditArticle = {
@@ -28,8 +30,30 @@ const EditArticle = {
   },
 
   oninit: function(vnode) {
-    this.loading = m.route.param('key') !== 'add'
-    this.creating = m.route.param('key') === 'add'
+    this.froala = null
+    this.loadedFroala = Froala.loadedFroala
+
+    if (!this.loadedFroala) {
+      Froala.createFroalaScript()
+      .then(function() {
+        vnode.state.loadedFroala = true
+        m.redraw()
+      })
+    }
+
+    this.fetchArticle(vnode)
+  },
+
+  onupdate: function(vnode) {
+    if (this.lastid !== m.route.param('id')) {
+      this.fetchArticle(vnode)
+    }
+  },
+
+  fetchArticle: function(vnode) {
+    this.lastid = m.route.param('id')
+    this.loading = this.lastid !== 'add'
+    this.creating = this.lastid === 'add'
     this.loadingFile = false
     this.error = ''
     this.article = {
@@ -38,13 +62,14 @@ const EditArticle = {
       description: '',
       media: null,
       banner: null,
+      files: [],
     }
     this.editedPath = false
     this.froala = null
     this.loadedFroala = Froala.loadedFroala
 
-    if (m.route.param('key') !== 'add') {
-      getArticle(m.route.param('key'))
+    if (this.lastid !== 'add') {
+      getArticle(this.lastid)
       .then(function(result) {
         vnode.state.editedPath = true
         vnode.state.article = result
@@ -54,14 +79,6 @@ const EditArticle = {
       })
       .then(function() {
         vnode.state.loading = false
-        m.redraw()
-      })
-    }
-
-    if (!this.loadedFroala) {
-      Froala.createFroalaScript()
-      .then(function() {
-        vnode.state.loadedFroala = true
         m.redraw()
       })
     }
@@ -83,8 +100,12 @@ const EditArticle = {
     }
   },
 
-  fileUploaded: function(type, media) {
+  mediaUploaded: function(type, media) {
     this.article[type] = media
+  },
+
+  mediaRemoved: function(type) {
+    this.article[type] = null
   },
 
   save: function(vnode, e) {
@@ -93,6 +114,8 @@ const EditArticle = {
       this.error = 'Name is missing'
     } else if (!this.article.path) {
       this.error = 'Path is missing'
+    } else {
+      this.error = ''
     }
     if (this.error) return
 
@@ -126,6 +149,7 @@ const EditArticle = {
       if (vnode.state.article.id) {
         res.media = vnode.state.article.media
         res.banner = vnode.state.article.banner
+        res.files = vnode.state.article.files
         vnode.state.article = res
       } else {
         m.route.set('/admin/articles/' + res.id)
@@ -144,6 +168,19 @@ const EditArticle = {
     if (!event.target.files[0]) return
     vnode.state.error = ''
     vnode.state.loadingFile = true
+
+    uploadFile(this.article.id, event.target.files[0])
+    .then(function(res) {
+      vnode.state.article.files.push(res)
+    })
+    .catch(function(err) {
+      vnode.state.error = err.message
+    })
+    .then(function() {
+      event.target.value = null
+      vnode.state.loadingFile = false
+      m.redraw()
+    })
   },
 
   getFlatTree: function() {
@@ -175,17 +212,19 @@ const EditArticle = {
             m('header', m('h1', this.creating ? 'Create Article' : 'Edit ' + (this.article.name || '(untitled)'))),
             m('div.error', {
               hidden: !this.error,
-              onclick: function() { vnode.state.error = '' }
+              onclick: function() { vnode.state.error = '' },
             }, this.error),
             m(FileUpload, {
-              onupload: this.fileUploaded.bind(this, 'banner'),
+              onupload: this.mediaUploaded.bind(this, 'banner'),
               onerror: function(e) { vnode.state.error = e },
+              ondelete: this.mediaRemoved.bind(this, 'banner'),
               media: this.article && this.article.banner,
             }),
             m(FileUpload, {
               class: 'cover',
               useimg: true,
-              onupload: this.fileUploaded.bind(this, 'media'),
+              onupload: this.mediaUploaded.bind(this, 'media'),
+              ondelete: this.mediaRemoved.bind(this, 'media'),
               onerror: function(e) { vnode.state.error = e },
               media: this.article && this.article.media,
             }),
@@ -226,15 +265,23 @@ const EditArticle = {
                 value: 'Save',
               }),
             ]),
-            m('div.fileupload', [
-              'Add file',
-              m('input', {
-                accept: '*',
-                type: 'file',
-                onchange: this.uploadFile.bind(this, vnode),
-              }),
-              (vnode.state.loading ? m('div.loading-spinner') : null),
-            ]),
+            this.article.files.length
+              ? m('files', [
+                  m('h4', 'Files'),
+                  this.article.files.map(function(item) { return m(Fileinfo, { file: item }) }),
+                ])
+              : null,
+            this.article.id
+              ? m('div.fileupload', [
+                'Add file',
+                m('input', {
+                  accept: '*',
+                  type: 'file',
+                  onchange: this.uploadFile.bind(this, vnode),
+                }),
+                (vnode.state.loadingFile ? m('div.loading-spinner') : null),
+              ])
+              : null,
           ]),
         ])
     )

@@ -1,5 +1,6 @@
 import path from 'path'
-import bookshelf from '../bookshelf'
+import bookshelf from '../bookshelf.mjs'
+import config from '../config.mjs'
 
 /*
 
@@ -51,7 +52,7 @@ const Media = bookshelf.createModel({
     },
   },
 }, {
-  baseUrl: 'http://192.168.42.14',
+  baseUrl: config.get('upload:baseurl'),
 
   getSubUrl(input, size) {
     if (!input) return input

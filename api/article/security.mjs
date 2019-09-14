@@ -15,7 +15,7 @@ const validFields = [
 ]
 
 export async function ensureIncludes(ctx) {
-  let out = filter(ctx.state.filter.includes, ['staff', 'media', 'parent', 'banner'])
+  let out = filter(ctx.state.filter.includes, ['staff', 'media', 'parent', 'banner', 'files'])
 
   if (out.length > 0) {
     ctx.throw(422, `Includes had following invalid values: ${out.join(', ')}`)

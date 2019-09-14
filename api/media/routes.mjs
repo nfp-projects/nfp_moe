@@ -1,9 +1,9 @@
-import config from '../config'
-import Media from './model'
-import * as multer from '../multer'
-import Resizer from './resize'
-import { uploadFile } from './upload'
-import Jwt from '../jwt'
+import config from '../config.mjs'
+import Media from './model.mjs'
+import * as multer from '../multer.mjs'
+import Resizer from './resize.mjs'
+import { uploadFile } from './upload.mjs'
+import Jwt from '../jwt.mjs'
 
 export default class MediaRoutes {
   constructor(opts = {}) {

@@ -1,4 +1,4 @@
-import orgAccess from './index'
+import orgAccess from './index.mjs'
 
 export function accessChecks(opts = { }) {
   const access = opts.access || orgAccess

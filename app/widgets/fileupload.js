@@ -17,6 +17,7 @@ const FileUpload = {
       vnode.state.updateError(vnode, err.message)
     })
     .then(function() {
+      event.target.value = null
       vnode.state.loading = false
       m.redraw()
     })
@@ -50,7 +51,7 @@ const FileUpload = {
           : m('a.display.inside', {
               href: media.large_url,
               style: {
-                'background-image': 'url(' + media.medium_url + ')',
+                'background-image': 'url("' + media.large_url + '")',
               },
             }, m('div.showicon'))
         : m('div.inside.showbordericon')
@@ -60,9 +61,10 @@ const FileUpload = {
         type: 'file',
         onchange: this.uploadFile.bind(this, vnode),
       }),
+      (media && vnode.attrs.ondelete ? m('button.remove', { onclick: vnode.attrs.ondelete }) : null),
       (vnode.state.loading ? m('div.loading-spinner') : null),
     ])
-  }
+  },
 }
 
 module.exports = FileUpload

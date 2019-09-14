@@ -6,17 +6,31 @@
   "directories": {
     "test": "test"
   },
+  "watch": {
+    "test": {
+      "patterns": [
+        "{api,test}/*"
+      ],
+      "extensions": "js,mjs",
+      "quiet": false,
+      "inherit": true
+    }
+  },
   "scripts": {
     "lint": "eslint .",
     "start": "node --experimental-modules index.mjs",
-    "build": "sass -s compressed app/app.scss public/assets/app.css && browserify -p tinyify --bare --no-browser-field -o public/assets/app.js app/index.js",
-    "build:check": "browserify -t uglifyify --bare --no-browser-field --list app/index.js",
+    "build": "sass -s compressed app/app.scss public/assets/app.css && browserify -p tinyify --no-commondir -o public/assets/app.js app/index.js",
+    "build:check": "browserify -o public/assets/app.js app/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch:api": "nodemon --experimental-modules index.mjs | bunyan",
     "watch:app": "watchify -g envify -d app/index.js -o public/assets/app.js",
     "watch:sass": "sass --watch app/app.scss public/assets/app.css",
     "dev": "run-p watch:api watch:app watch:sass",
-    "prod": "npm run build && npm start"
+    "prod": "npm run build && npm start",
+    "docker": "docker run -it --rm --name nfp_moe -e knex__connection__host -e NODE_ENV -p 4030:4030 -v \"$PWD\":/usr/src/app -w /usr/src/app node",
+    "docker:install": "npm run docker -- npm install",
+    "docker:dev": "npm run docker -- npm run dev",
+    "docker:prod": "npm run docker -- npm run prod"
   },
   "repository": {
     "type": "git",
@@ -32,7 +46,6 @@
     "@koa/cors": "^2.2.3",
     "bookshelf": "^0.15.1",
     "bunyan-lite": "^1.0.1",
-    "dot": "^1.1.2",
     "format-link-header": "^2.1.0",
     "googleapis": "^42.0.0",
     "http-errors": "^1.7.2",
@@ -49,7 +62,7 @@
     "nconf": "^0.10.0",
     "parse-torrent": "^7.0.1",
     "pg": "^7.8.0",
-    "sharp": "^0.21.3"
+    "sharp": "^0.22.1"
   },
   "devDependencies": {
     "browserify": "^16.2.3",
@@ -57,6 +70,7 @@
     "mithril": "^2.0.3",
     "nodemon": "^1.18.10",
     "npm-run-all": "^4.1.5",
+    "parse-link-header": "^1.0.1",
     "sass": "^1.17.0",
     "tinyify": "^2.5.1",
     "watchify": "^3.11.0"

@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import jwt from 'jsonwebtoken'
 import koaJwt from 'koa-jwt'
-import Staff from './staff/model'
-import config from './config'
+import Staff from './staff/model.mjs'
+import config from './config.mjs'
 
 export default class Jwt {
   constructor(opts = {}) {

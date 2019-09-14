@@ -24,7 +24,7 @@ article.editarticle {
     margin: 0 0 20px;
 
     .inside {
-      height: 100px;
+      height: 150px;
     }
   }
 
@@ -54,11 +54,15 @@ article.editarticle {
     width: 240px;
     height: 50px;
     position: relative;
+
+    &.full {
+      width: 100%;
+    }
   }
 
   .fileupload {
     align-self: center;
-    padding: 10.5em;
+    padding: 0.5em;
     margin: 0.5em 0;
     min-width: 250px;
     border: none;
@@ -78,6 +82,23 @@ article.editarticle {
       cursor: pointer;
       text-indent: -9999px;
       z-index: 2;
+    }
+  }
+
+  files {
+    align-items: stretch;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 40px 0;
+    text-align: left;
+
+    h4 {
+      font-size: 1.1em;
+      font-weight: bold;
+      padding: 0 5px 5px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid $border;
     }
   }
 }

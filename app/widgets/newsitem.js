@@ -1,0 +1,33 @@
+const m = require('mithril')
+const Fileinfo = require('./fileinfo')
+
+const Newsitem = {
+  view: function(vnode) {
+    return m('newsitem', [
+      m(m.route.Link,
+        { href: '/article/' + vnode.attrs.path, class: 'title' },
+        m('h3', [vnode.attrs.name])
+      ),
+      m('div.newsitemcontent', [
+        vnode.attrs.media
+          ? m('a.cover', {
+              href: vnode.attrs.media.large_url,
+            }, m('img', { src: vnode.attrs.media.small_url }))
+          : m('a.cover.nobg'),
+        m('div.entrycontent', [
+          (vnode.attrs.description
+              ? m('.fr-view', m.trust(vnode.attrs.description))
+              : null),
+          (vnode.attrs.files && vnode.attrs.files.length
+            ? vnode.attrs.files.map(function(file) {
+                return m(Fileinfo, { file: file })
+              })
+            : null),
+          m('span.entrymeta', 'Posted ' + vnode.attrs.created_at.replace('T', ' ').split('.')[0]),
+        ]),
+      ]),
+    ])
+  },
+}
+
+module.exports = Newsitem

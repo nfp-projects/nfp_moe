@@ -1,6 +1,6 @@
 import bunyan from 'bunyan-lite'
-import config from './config'
-import * as defaults from './defaults'
+import config from './config.mjs'
+import * as defaults from './defaults.mjs'
 
 // Clone the settings as we will be touching
 // on them slightly.

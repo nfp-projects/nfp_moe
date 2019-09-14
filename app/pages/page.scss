@@ -17,18 +17,26 @@ article.page {
   }
 
   .page-banner {
-    background-size: auto 100%;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    height: 100px;
+    height: 150px;
     width: 100%;
     max-width: 1920px;
     align-self: center;
-    flex: 0 0 100px;
+    flex: 0 0 150px;
   }
 
   .page-cover {
     margin: 0 -10px 20px;
+
+    &.single {
+      margin: 0 20px 20px;
+      padding: 0 20px;
+      width: calc(100% - 40px);
+      max-width: 800px;
+      flex: 2 0 0;
+    }
   }
 
   .admin-actions {
@@ -49,14 +57,14 @@ article.page {
       margin: 0 0 10px;
     }
 
-    a {
-      display: inline-block;
-      padding-top: 5px;
-      text-decoration: none;
-      color: $secondary-bg;
-      font-size: 14px;
-      font-weight: bold;
-    }
+    // a {
+    //   display: inline-block;
+    //   padding-top: 5px;
+    //   text-decoration: none;
+    //   color: $secondary-dark-bg;
+    //   font-size: 14px;
+    //   font-weight: bold;
+    // }
   }
 
   .container {
@@ -88,6 +96,10 @@ article.page {
     a {
       padding: 5px 5px 0px;
       display: block;
+      text-decoration: none;
+      color: $secondary-dark-bg;
+      font-size: 14px;
+      font-weight: bold;
     }
   }
 
@@ -112,6 +124,11 @@ aside.news {
   width: 100%;
   align-self: center;
 
+  .loading-spinner {
+    position: relative;
+    height: 133px;
+  }
+
   newsentry {
     margin: 0 0 10px;
   }
@@ -119,16 +136,26 @@ aside.news {
   &.single {
     max-width: 800px;
     flex: 2 0 0;
+    padding: 0 20px 10px;
     border-top: none;
     margin-top: 0;
+    align-self: flex-start;
 
     & > h4 {
-      display: none;
+      padding: 0 5px 5px;
+      border-bottom: 1px solid $border;
     }
   }
 }
 
-@media screen and (max-device-width: 639px){
+@media screen and (max-width: 800px){
+  article.page aside.sidebar {
+    width: 200px;
+    flex: 0 0 200px;
+  }
+}
+
+@media screen and (max-width: 639px){
   article.page .container {
     flex-direction: column !important;
   }
@@ -142,7 +169,7 @@ aside.news {
   }
 }
 
-@media screen and (max-device-width: 360px){
+@media screen and (max-width: 360px){
   article.page {
     .container {
       flex-direction: column;

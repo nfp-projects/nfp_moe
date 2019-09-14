@@ -2,9 +2,9 @@ import _ from 'lodash'
 import knex from 'knex'
 import bookshelf from 'bookshelf'
 
-import config from './config'
-import defaults from './defaults'
-import log from './log'
+import config from './config.mjs'
+import defaults from './defaults.mjs'
+import log from './log.mjs'
 
 let connections = [config.get('knex:connection')]
 
