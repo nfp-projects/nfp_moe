@@ -45,12 +45,13 @@ const Menu = {
             'Welcome ' + Authentication.currentUser.email,
             m(m.route.Link, { href: '/logout' }, 'Logout'),
           ]),
-          (Authentication.currentUser.level >= 100
-            ? [
-              m(m.route.Link, { href: '/admin/pages' }, 'Pages'),
-              m(m.route.Link, { href: '/admin/articles' }, 'Articles'),
-              m(m.route.Link, { href: '/admin/articles/add' }, 'Create article'),
-            ]
+          (Authentication.currentUser.level >= 10
+            ? m('div.adminlinks', [
+                m(m.route.Link, { href: '/admin/articles/add' }, 'Create article'),
+                m(m.route.Link, { href: '/admin/articles' }, 'Articles'),
+                m(m.route.Link, { href: '/admin/pages' }, 'Pages'),
+                m(m.route.Link, { hidden: Authentication.currentUser.level < 100, href: '/admin/staff' }, 'Staff'),
+              ])
             : null
           ),
         ] : [

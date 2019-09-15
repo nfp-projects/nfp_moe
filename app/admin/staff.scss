@@ -1,0 +1,49 @@
+
+article.editstaff {
+  text-align: center;
+  background: white;
+  padding: 0 0 20px;
+
+  header {
+    padding: 10px;
+    background: $secondary-bg;
+
+    h1 {
+      color: $secondary-fg;
+    }
+
+    a {
+      font-size: 14px;
+      text-decoration: none;
+      margin-left: 10px;
+      color: $secondary-light-fg;
+    }
+  }
+
+  form {
+    padding: 0 40px 20px;
+
+    textarea {
+      height: 300px;
+    }
+
+    .loading-spinner {
+      height: 300px;
+      position: relative;
+    }
+  }
+
+  h5 {
+    margin-bottom: 20px;
+  }
+
+  & > .loading-spinner {
+    width: 240px;
+    height: 50px;
+    position: relative;
+
+    &.full {
+      width: 100%;
+    }
+  }
+}

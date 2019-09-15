@@ -4,7 +4,7 @@
   background-repeat: no-repeat;
   background-position: center;
   height: 150px;
-  width: 100%;
+  width: calc(100% - 40px);
   max-width: 1920px;
   align-self: center;
   flex: 0 0 150px;
@@ -14,6 +14,8 @@
   text-align: right;
   font-size: 1.6em;
   padding: 10px 20px;
+  text-decoration: none;
+  margin: 20px 0;
 }
 
 frontpage {
@@ -29,4 +31,20 @@ frontpage {
   .loading-spinner {
     height: 100px;
   }  
+
+  newsitem {
+    margin-bottom: 30px;
+  }
+}
+
+@media screen and (max-width: 480px){
+  .frontpage-banner {
+    width: 100%;
+  }
+
+  frontpage {
+    padding: 0 10px;
+    margin: 0;
+    width: 100%;
+  }
 }

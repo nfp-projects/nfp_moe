@@ -1,0 +1,43 @@
+article.article {
+  background: white;
+  padding: 0 0 20px;
+
+  header {
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+    background: $secondary-bg;
+    width: 100%;
+    max-width: 1920px;
+    align-self: center;
+
+    h1 {
+      color: $secondary-fg;
+    }
+  }
+
+  .cover {
+    margin: 0 -10px 20px;
+  }
+
+  .admin-actions {
+    margin-bottom: 20px;
+  }
+
+  .fr-view {
+    margin: 0 20px;
+    padding: 0 20px;
+    width: calc(100% - 40px);
+    max-width: 800px;
+    flex: 2 0 0;
+    align-self: center;
+
+    a.cover img {
+      margin-bottom: 30px;
+    }
+
+    main {
+      padding: 0 5px;
+    }
+  }
+}

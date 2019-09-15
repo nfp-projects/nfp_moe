@@ -13,7 +13,7 @@ export default class ArticleRoutes {
   async getAllArticles(ctx) {
     await this.security.ensureIncludes(ctx)
 
-    ctx.body = await this.Article.getAll(ctx, { }, ctx.state.filter.includes)
+    ctx.body = await this.Article.getAll(ctx, { }, ctx.state.filter.includes, ctx.query.sort || '-id')
   }
 
   /** GET: /api/pages/:pageId/articles */

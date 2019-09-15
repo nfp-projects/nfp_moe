@@ -25,7 +25,11 @@ exports.sendRequest = function(options, isPagination) {
         data: JSON.parse(xhr.responseText),
       }
     } else {
-      out = JSON.parse(xhr.responseText)
+      if (xhr.responseText) {
+        out = JSON.parse(xhr.responseText)
+      } else {
+        out = {}
+      }
     }
     if (xhr.status >= 300) {
       throw out

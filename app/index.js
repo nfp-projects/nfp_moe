@@ -8,9 +8,12 @@ const Login = require('./login/login')
 const Logout = require('./login/logout')
 const EditPage = require('./admin/editpage')
 const Page = require('./pages/page')
+const Article = require('./article/article')
 const AdminPages = require('./admin/pages')
 const AdminArticles = require('./admin/articles')
 const EditArticle = require('./admin/editarticle')
+const AdminStaffList = require('./admin/stafflist')
+const EditStaff = require('./admin/editstaff')
 
 const menuRoot = document.getElementById('nav')
 const mainRoot = document.getElementById('main')
@@ -20,9 +23,12 @@ m.route(mainRoot, '/', {
   '/login': Login,
   '/logout': Logout,
   '/page/:id': Page,
+  '/article/:id': Article,
   '/admin/pages': AdminPages,
   '/admin/pages/:key': EditPage,
   '/admin/articles': AdminArticles,
   '/admin/articles/:id': EditArticle,
+  '/admin/staff': AdminStaffList,
+  '/admin/staff/:id': EditStaff,
 })
 m.mount(menuRoot, Menu)

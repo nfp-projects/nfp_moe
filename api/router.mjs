@@ -7,6 +7,7 @@ import MediaRoutes from './media/routes.mjs'
 import FileRoutes from './file/routes.mjs'
 import PageRoutes from './page/routes.mjs'
 import ArticleRoutes from './article/routes.mjs'
+import StaffRoutes from './staff/routes.mjs'
 import { restrict } from './access/middleware.mjs'
 
 const router = new Router()
@@ -14,6 +15,7 @@ const router = new Router()
 // API Authentication
 const authentication = new AuthRoutes()
 router.post('/api/login', authentication.login.bind(authentication))
+router.post('/api/login/user', authentication.loginUser.bind(authentication))
 
 // API Media
 const media = new MediaRoutes()
@@ -41,5 +43,12 @@ router.get('/api/articles/:id', article.getSingleArticle.bind(article))
 router.post('/api/articles', restrict(access.Manager), article.createArticle.bind(article))
 router.put('/api/articles/:id', restrict(access.Manager), article.updateArticle.bind(article))
 router.del('/api/articles/:id', restrict(access.Manager), article.removeArticle.bind(article))
+
+const staff = new StaffRoutes()
+router.get('/api/staff', restrict(access.Admin), staff.getAllStaff.bind(staff))
+router.get('/api/staff/:id', restrict(access.Admin), staff.getSingleStaff.bind(staff))
+router.post('/api/staff', restrict(access.Admin), staff.createStaff.bind(staff))
+router.put('/api/staff/:id', restrict(access.Admin), staff.updateStaff.bind(staff))
+router.del('/api/staff/:id', restrict(access.Admin), staff.removeStaff.bind(staff))
 
 export default router

@@ -49,6 +49,18 @@
         line-height: 1.4em;
         text-decoration: none;
       }
+
+      .adminlinks {
+        display: flex;
+        justify-content: center;
+        max-width: 200px;
+        flex-wrap: wrap;
+
+        a {
+          padding: 3px 5px;
+          min-width: 100px;
+        }
+      }
     }
   }
 

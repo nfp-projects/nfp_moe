@@ -6,6 +6,7 @@ exports.up = function up(knex, Promise) {
       table.increments()
       table.text('email')
       table.text('fullname')
+      table.text('password')
       table.boolean('is_deleted')
         .notNullable()
         .default(false)

@@ -319,3 +319,26 @@ pages {
     cursor: pointer;
   }
 }
+
+@media screen and (max-width: 1000px){
+  newsitem a.cover {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 639px){
+  newsitem {
+    a.cover {
+      width: 100%;
+      margin-bottom: 20px;
+
+      img {
+        max-height: max-content;
+      }
+    }
+
+    .newsitemcontent {
+      flex-direction: column;
+    }
+  }
+}

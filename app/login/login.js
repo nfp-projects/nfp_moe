@@ -1,5 +1,6 @@
 const m = require('mithril')
 const Authentication = require('../authentication')
+const { sendRequest } = require('../api/common')
 
 const Login = {
   loadedGoogle: false,
@@ -45,7 +46,6 @@ const Login = {
 
   onGoogleFailure: function(error) {
     if (error.error !== 'popup_closed_by_user' && error.error !== 'popup_blocked_by_browser') {
-      console.error(error)
       Login.error = 'Error while logging into Google: ' + error.error
       m.redraw()
     }
@@ -55,6 +55,9 @@ const Login = {
     Login.redirect = vnode.attrs.redirect || ''
     if (Authentication.currentUser) return m.route.set('/')
     Login.error = ''
+
+    this.username = ''
+    this.password = ''
   },
 
   oncreate: function() {
@@ -65,7 +68,42 @@ const Login = {
       })
   },
 
-  view: function() {
+  loginuser: function(vnode, e) {
+    e.preventDefault()
+    if (!this.username) {
+      Login.error = 'Email is missing'
+    } else if (!this.password) {
+      Login.error = 'Password is missing'
+    } else {
+      Login.error = ''
+    }
+    if (Login.error) return
+
+    Login.loading = true
+
+    sendRequest({
+      method: 'POST',
+      url: '/api/login/user',
+      body: {
+        username: this.username,
+        password: this.password,
+      },
+    })
+    .then(function(result) {
+      Authentication.updateToken(result.token)
+      m.route.set(Login.redirect || '/')
+    })
+    .catch(function(error) {
+      Login.error = 'Error while logging into NFP! ' + error.message
+      vnode.state.password = ''
+    })
+    .then(function () {
+      Login.loading = false
+      m.redraw()
+    })
+  },
+
+  view: function(vnode) {
     return [
       m('div.login-wrapper', [
         m('article.login', [
@@ -73,9 +111,31 @@ const Login = {
             m('h1', 'NFP.moe login'),
           ]),
           m('div.content', [
-            m('h5', 'Please login using google to access restricted area'),
+            m('h5', 'Please login to access restricted area'),
             Login.error ? m('div.error', Login.error) : null,
             Login.loading ? m('div.loading-spinner') : null,
+            m('form', {
+              hidden: Login.loading,
+              onsubmit: this.loginuser.bind(this, vnode),
+            }, [
+              m('label', 'Email'),
+              m('input', {
+                type: 'text',
+                value: this.username,
+                oninput: function(e) { vnode.state.username = e.currentTarget.value },
+              }),
+              m('label', 'Password'),
+              m('input', {
+                type: 'password',
+                value: this.password,
+                oninput: function(e) { vnode.state.password = e.currentTarget.value },
+              }),
+              m('input', {
+                type: 'submit',
+                value: 'Login',
+              }),
+            ]),
+            m('h5', { hidden: Login.loading }, 'Alternative login'),
             m('div#googlesignin', { hidden: Login.loading }, m('div.loading-spinner')),
           ]),
         ]),
