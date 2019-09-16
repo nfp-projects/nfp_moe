@@ -90,7 +90,7 @@ const Page = {
               : null,
             this.page.description
               ? m('.fr-view', [
-                  this.page.media ? m('img.page-cover', { src: this.page.media.url } ) : null,
+                  this.page.media ? m('img.page-cover', { src: this.page.media.url, alt: 'Cover image for ' + this.page.name } ) : null,
                   m.trust(this.page.description),
                   this.news.length && this.page.description
                     ? m('aside.news', [
@@ -107,7 +107,7 @@ const Page = {
                 ])
               : this.news.length
                 ? m('aside.news.single', [
-                    this.page.media ? m('img.page-cover', { src: this.page.media.url } ) : null,
+                    this.page.media ? m('img.page-cover', { src: this.page.media.url, alt: 'Cover image for ' + this.page.name } ) : null,
                     m('h4', 'Latest posts under ' + this.page.name + ':'),
                     this.loadingnews ? m('div.loading-spinner') : this.news.map(function(article) {
                       return m(Newsentry, article)
@@ -118,7 +118,7 @@ const Page = {
                     }),
                   ])
                 : this.page.media
-                  ? m('img.page-cover.single', { src: this.page.media.url } )
+                  ? m('img.page-cover.single', { src: this.page.media.url, alt: 'Cover image for ' + this.page.name } )
                   : null,
           ]),
           Authentication.currentUser

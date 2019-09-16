@@ -3,6 +3,7 @@ const m = require('mithril')
 m.route.prefix = ''
 
 const Menu = require('./menu/menu')
+const Footer = require('./footer/footer')
 const Frontpage = require('./frontpage/frontpage')
 const Login = require('./login/login')
 const Logout = require('./login/logout')
@@ -17,6 +18,7 @@ const EditStaff = require('./admin/editstaff')
 
 const menuRoot = document.getElementById('nav')
 const mainRoot = document.getElementById('main')
+const footerRoot = document.getElementById('footer')
 
 m.route(mainRoot, '/', {
   '/': Frontpage,
@@ -32,3 +34,4 @@ m.route(mainRoot, '/', {
   '/admin/staff/:id': EditStaff,
 })
 m.mount(menuRoot, Menu)
+m.mount(footerRoot, Footer)

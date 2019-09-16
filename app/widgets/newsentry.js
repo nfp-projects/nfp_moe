@@ -17,7 +17,7 @@ const Newsentry = {
       vnode.attrs.media
         ? m('a.cover', {
             href: '/article/' + vnode.attrs.path,
-          }, m('img', { src: vnode.attrs.media.small_url }))
+          }, m('img', { src: vnode.attrs.media.small_url, alt: 'Article image for ' + vnode.attrs.name }))
         : m('a.cover.nobg'),
       m('div.entrycontent', [
         m('div.title', [

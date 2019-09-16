@@ -1,0 +1,60 @@
+
+footer {
+  margin-top: 0px;
+  border-top: 1px solid $border;
+  display: flex;
+  padding: 20px;
+  background: $border;
+
+  .sitemap {
+    display: flex;
+    flex: 2 1 auto;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    font-size: 11px;
+    font-weight: bold;
+
+    a {
+      text-decoration: none;
+      color: #8f3c00;
+    }
+
+    a.root {
+      display: block;
+      margin: 2px;
+      padding: 2px 0 0;
+    }
+
+    ul {
+      margin: 2px 0 0;
+      display: flex;
+      padding: 0;
+
+      li {
+        padding: 2px 5px;
+        list-style-type: disc;
+        list-style-position: inside;
+      }
+    }
+  }
+
+  .footer-logo {
+    background: url('./img/tsun.png') center no-repeat transparent;
+    background-size: contain;
+    width: 119px;
+    height: 150px;
+  }
+
+  .meta {
+    flex-grow: 2;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 5px;
+    align-items: flex-end;
+    text-align: center;
+    justify-content: center;
+
+    a { margin: 0 3px; }
+  }
+}

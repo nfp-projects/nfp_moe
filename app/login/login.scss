@@ -6,6 +6,15 @@
   flex-direction: column;
   justify-content: center;
   background: $border;
+  padding: 40px 0;
+
+  .login-icon {
+    background: url('./img/login.png') center no-repeat transparent;
+    background-size: contain;
+    width: 106px;
+    height: 130px;
+    align-self: center;
+  }
 }
 
 article.login {

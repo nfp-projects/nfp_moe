@@ -52,11 +52,25 @@ module.exports = {
   },
 
   view: function(vnode) {
+    var bannerPath = ''
+    if (this.featured && this.featured.banner) {
+      var deviceWidth = window.innerWidth
+      var pixelRatio = window.devicePixelRatio || 1
+      if (deviceWidth < 400 && pixelRatio <= 1) {
+        bannerPath = this.featured.banner.small_url
+      } else if ((deviceWidth < 800 && pixelRatio <= 1)
+                || (deviceWidth < 600 && pixelRatio > 1)) {
+        bannerPath = this.featured.banner.medium_url
+      } else {
+        bannerPath = this.featured.banner.url
+      }
+    }
+
     return [
       (this.featured && this.featured.banner
         ? m('a.frontpage-banner', {
             href: '/article/' + this.featured.path,
-            style: { 'background-image': 'url("' + this.featured.banner.url + '")' },
+            style: { 'background-image': 'url("' + bannerPath + '")' },
           },
           this.featured.name
         )

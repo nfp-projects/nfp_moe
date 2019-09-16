@@ -54,9 +54,7 @@ const Menu = {
               ])
             : null
           ),
-        ] : [
-          m(m.route.Link, { href: '/login' }, 'Login'),
-        ]),
+        ] : null),
       ]),
       m('nav', [
         m(m.route.Link, {

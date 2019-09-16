@@ -79,7 +79,7 @@ exports.up = function up(knex, Promise) {
     }),
     knex.schema.createTable('files', function(table) {
       table.increments()
-      table.integer('articdle_id')
+      table.integer('article_id')
         .references('articles.id')
       table.text('filename')
       table.text('filetype')

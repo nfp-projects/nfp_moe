@@ -106,6 +106,7 @@ const Login = {
   view: function(vnode) {
     return [
       m('div.login-wrapper', [
+        m('div.login-icon'),
         m('article.login', [
           m('header', [
             m('h1', 'NFP.moe login'),

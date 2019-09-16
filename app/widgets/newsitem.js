@@ -3,6 +3,7 @@ const Fileinfo = require('./fileinfo')
 
 const Newsitem = {
   view: function(vnode) {
+    var pixelRatio = window.devicePixelRatio || 1
     return m('newsitem', [
       m(m.route.Link,
         { href: '/article/' + vnode.attrs.path, class: 'title' },
@@ -12,7 +13,7 @@ const Newsitem = {
         vnode.attrs.media
           ? m('a.cover', {
               href: '/article/' + vnode.attrs.path,
-            }, m('img', { src: vnode.attrs.media.medium_url }))
+            }, m('img', { alt: 'Image for news item ' + vnode.attrs.name, src: pixelRatio > 1 ? vnode.attrs.media.medium_url : vnode.attrs.media.small_url }))
           : m('a.cover.nobg'),
         m('div.entrycontent', [
           (vnode.attrs.description
