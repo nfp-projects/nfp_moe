@@ -1,5 +1,5 @@
 import send from 'koa-send'
-import defaults from './defaults'
+import defaults from './defaults.mjs'
 
 export function serve(docRoot, pathname, options = {}) {
   options.root = docRoot
