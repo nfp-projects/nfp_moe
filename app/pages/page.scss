@@ -1,10 +1,9 @@
 article.page {
-  background: white;
-  padding: 0 0 40px;
+  padding-bottom: 0;
 
   header {
     text-align: center;
-    margin: 20px;
+    margin: 20px 20px 0;
     padding: 10px;
     background: $secondary-bg;
     width: 100%;
@@ -71,6 +70,11 @@ article.page {
     flex-direction: column;
     align-items: center;
     height: auto;
+    padding: 20px 0;
+
+    background: $newsitem-bg;
+    border-right: $newsitem-border;
+    border-left: $newsitem-border;
 
     &.multi {
       align-self: center;
@@ -183,6 +187,47 @@ aside.news {
       margin: 0;
       width: 100%;
       padding: 0 5px;
+    }
+  }
+}
+
+.darkmodeon {
+  article.page {
+    header {
+      background: $dark_secondary-bg;
+      h1 {
+        color: $dark_secondary-fg;
+      }
+    }
+
+    .container {
+      background: $dark_newsitem-bg;
+      border-right: $dark_newsitem-border;
+      border-left: $dark_newsitem-border;
+    }
+
+    aside.sidebar {
+      h4 {
+        border-bottom: 1px solid $dark_border;
+      }
+
+      a {
+        color: $dark_secondary-dark-bg;
+      }
+    }
+  }
+
+  aside.news {
+    &.single {
+      & > h4 {
+        border-bottom: 1px solid $dark_border;
+      }
+    }
+  }
+
+  @media screen and (max-width: 639px){
+    article.page aside.sidebar {
+      border-bottom: 1px solid $dark_border;
     }
   }
 }

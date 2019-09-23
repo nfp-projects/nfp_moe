@@ -1,5 +1,6 @@
 const m = require('mithril')
 const Authentication = require('../authentication')
+const Darkmode = require('../darkmode')
 const { Tree, getTree } = require('../api/page')
 
 const Menu = {
@@ -34,16 +35,23 @@ const Menu = {
   },
 
   view: function() {
+    var pixelRatio = window.devicePixelRatio || 1
     return [
       m('div.top', [
         m(m.route.Link,
-          { href: '/', class: 'logo' },
+          { href: '/', class: 'logo', style: {
+            'background-image': pixelRatio > 1 ? 'url("/assets/img/logo.jpg")' : 'url("/assets/img/logo_small.jpg")'
+          } },
           m('h2', 'NFP Moe')
         ),
         m('aside', Authentication.currentUser ? [
           m('p', [
             'Welcome ' + Authentication.currentUser.email,
             m(m.route.Link, { href: '/logout' }, 'Logout'),
+            (Darkmode.darkIsOn
+              ? m('button.dark', { onclick: Darkmode.setDarkMode.bind(Darkmode, false) }, 'Day mode')
+              : m('button.dark', { onclick: Darkmode.setDarkMode.bind(Darkmode, true) }, 'Night mode')
+            )
           ]),
           (Authentication.currentUser.level >= 10
             ? m('div.adminlinks', [
@@ -54,7 +62,11 @@ const Menu = {
               ])
             : null
           ),
-        ] : null),
+        ] : (Darkmode.darkIsOn
+            ? m('button.dark', { onclick: Darkmode.setDarkMode.bind(Darkmode, false) }, 'Day mode')
+            : m('button.dark', { onclick: Darkmode.setDarkMode.bind(Darkmode, true) }, 'Night mode')
+          )
+        ),
       ]),
       m('nav', [
         m(m.route.Link, {

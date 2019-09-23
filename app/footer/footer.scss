@@ -5,6 +5,7 @@ footer {
   display: flex;
   padding: 20px;
   background: $border;
+  color: $border-fg;
 
   .sitemap {
     display: flex;
@@ -17,7 +18,7 @@ footer {
 
     a {
       text-decoration: none;
-      color: #8f3c00;
+      color: $border-fg-url;
     }
 
     a.root {
@@ -40,7 +41,7 @@ footer {
   }
 
   .footer-logo {
-    background: url('./img/tsun.png') center no-repeat transparent;
+    background: center no-repeat transparent;
     background-size: contain;
     width: 119px;
     height: 150px;
@@ -56,5 +57,19 @@ footer {
     justify-content: center;
 
     a { margin: 0 3px; }
+  }
+}
+
+.darkmodeon {
+  footer {
+    border-top: 1px solid $dark_border;
+    background: $dark_border;
+    color: $dark_border-fg;
+
+    .sitemap {
+      a {
+        color: $dark_border-fg-url;
+      }
+    }
   }
 }

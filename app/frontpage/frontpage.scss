@@ -1,5 +1,5 @@
 .frontpage-banner {
-  background-color: #999999;
+  background-color: $meta-light-fg;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -20,13 +20,67 @@
 
 frontpage {
   display: flex;
-  flex-direction: column;
   align-self: center;
-  margin: 0 20px;
-  padding: 0 20px 40px;
   width: calc(100% - 40px);
-  max-width: 1000px;
+  max-width: 1200px;
   flex: 2 0 0;
+
+  .frontpage-news {
+    display: flex;
+    flex-direction: column;
+  }
+
+  aside.sidebar {
+    width: 250px;
+    flex: 0 0 250px;
+    align-self: flex-start;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+
+    img {
+      align-self: center;
+    }
+
+    .categories {
+      padding: 10px 10px 20px;
+      margin-bottom: 20px;
+      background: $newsitem-bg;
+      border: $newsitem-border;
+    }
+
+    h4 {
+      font-size: 14px;
+      padding: 0 5px 5px;
+      font-weight: bold;
+      margin: 0 0 10px;
+      border-bottom: 1px solid $border;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        padding-left: 10px;
+        list-style-type: disc;
+        list-style-position: inside;
+
+        a {
+          display: inline-block;
+        }
+      }
+    }
+
+    a {
+      padding: 5px 5px 0px;
+      display: block;
+      text-decoration: none;
+      color: $secondary-dark-bg;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
 
   .loading-spinner {
     height: 100px;
@@ -34,6 +88,28 @@ frontpage {
 
   newsitem {
     margin-bottom: 30px;
+  }
+}
+
+@media screen and (max-width: 1000px){
+  frontpage aside.sidebar {
+    width: 200px;
+    flex: 0 0 200px;
+  }
+}
+
+@media screen and (max-width: 800px){
+  frontpage {
+    flex-direction: column;
+  }
+
+  frontpage aside.sidebar {
+    width: auto;
+    flex: 0 0 auto;
+    align-self: stretch;
+    margin: 20px 0 30px;
+    border-bottom: 1px solid $border;
+    order: 2;
   }
 }
 
@@ -46,5 +122,28 @@ frontpage {
     padding: 0 10px;
     margin: 0;
     width: 100%;
+  }
+}
+
+.darkmodeon {
+  .frontpage-banner {
+    background-color: $dark_meta-light-fg;
+  }
+
+  frontpage {
+    aside.sidebar {
+      .categories {
+        background: $dark_newsitem-bg;
+        border: $dark_newsitem-border;
+      }
+
+      h4 {
+        border-bottom: 1px solid $dark_border;
+      }
+
+      a {
+        color: $dark_secondary-dark-bg;
+      }
+    }
   }
 }

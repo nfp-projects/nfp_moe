@@ -1,6 +1,7 @@
 const m = require('mithril')
 const { Tree } = require('../api/page')
 const Authentication = require('../authentication')
+const Darkmode = require('../darkmode')
 
 const Footer = {
   oninit: function(vnode) {
@@ -8,7 +9,11 @@ const Footer = {
   },
 
   view: function() {
-    console.log(Tree)
+    var pixelRatio = window.devicePixelRatio || 1
+    var darkPrefix = ''
+    if (Darkmode.darkIsOn) {
+      darkPrefix = 'dark_'
+    }
     return [
       m('div.sitemap', [
         m('div', 'Sitemap'),
@@ -33,7 +38,9 @@ const Footer = {
             ' (Fuck EU)',
         ])
       ]),
-      m('div.footer-logo'),
+      m('div.footer-logo', { style: {
+        'background-image': pixelRatio > 1 ? 'url("/assets/img/' + darkPrefix + 'tsun.jpg")' : 'url("/assets/img/' + darkPrefix + 'tsun_small.jpg")'
+      } }),
     ]
   },
 }

@@ -21,7 +21,8 @@ article.login {
   text-align: center;
   flex-grow: 0;
   border: 1px solid $title-fg;
-  background: white;
+  background: $main-bg;
+  color: $main-fg;
   align-self: center;
 
   .content {
@@ -43,5 +44,17 @@ article.login {
   form {
     align-self: stretch;
     margin-bottom: 20px;
+  }
+}
+
+.darkmodeon {
+  .login-wrapper {
+    background: $dark_border;
+  }
+
+  article.login {
+    border: 1px solid $dark_title-fg;
+    background: $dark_main-bg;
+    color: $dark_main-fg;
   }
 }

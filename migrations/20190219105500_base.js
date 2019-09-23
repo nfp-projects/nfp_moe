@@ -29,6 +29,7 @@ exports.up = function up(knex, Promise) {
       table.text('small_image')
       table.text('medium_image')
       table.text('large_image')
+      table.text('org_image')
       table.integer('size')
       table.integer('staff_id')
         .references('staff.id')

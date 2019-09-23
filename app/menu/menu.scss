@@ -11,8 +11,17 @@
     height: 100px;
     display: flex;
 
+    button.dark {
+      background: transparent;
+      color: $secondary-light-bg;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
     a.logo {
-      background: url('./img/logo.png') 25px center no-repeat transparent;
+      background: 25px center no-repeat transparent;
+      background-size: auto 91px;
       padding-left: 120px;
       display: flex;
       color: $primary-dark-fg;
@@ -38,6 +47,10 @@
 
         a {
           margin-left: 5px;
+        }
+
+        button {
+          font-size: 0.8em;
         }
       }
 
@@ -103,7 +116,48 @@
     background: $primary-bg;
     text-align: center;
     padding: 10px;
-    color: #FFC7C7;
+    color: $primary-fg-url;
     font-weight: bold;
+  }
+}
+
+.darkmodeon {
+  #nav {
+    .top {
+      background: $dark_primary-dark-bg;
+      color: $dark_primary-dark-fg;
+
+      a.logo {
+        color: $dark_primary-dark-fg;
+      }
+
+      aside {
+        p {
+          color: $dark_meta-light-fg;
+        }
+
+        a, a:visited {
+          color: $dark_secondary-light-bg;
+        }
+      }
+    }
+
+    nav {
+      background: $dark_primary-light-bg;
+      color: $dark_primary-light-fg;
+
+      a, a:visited {
+        color: $dark_primary-light-fg;
+
+        &.active {
+          border-bottom: 3px solid $dark_secondary-bg;
+        }
+      }
+    }
+
+    .menuerror {
+      background: $dark_primary-bg;
+      color: $dark_primary-fg-url;
+    }
   }
 }

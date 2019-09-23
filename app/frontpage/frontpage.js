@@ -1,9 +1,11 @@
 const m = require('mithril')
 
+const { Tree } = require('../api/page')
 const { getAllArticlesPagination } = require('../api/article')
 const { fetchPage } = require('../api/pagination')
 const Pages = require('../widgets/pages')
 const Newsitem = require('../widgets/newsitem')
+const Darkmode = require('../darkmode')
 
 module.exports = {
   oninit: function(vnode) {
@@ -52,9 +54,20 @@ module.exports = {
   },
 
   view: function(vnode) {
+    var deviceWidth = window.innerWidth
+
     var bannerPath = ''
+    var asuna_side = ''
+
+    if (deviceWidth > 800) {
+      if (Darkmode.darkIsOn) {
+        asuna_side = '/assets/img/dark_asuna_frontpage.jpg'
+      } else {
+        asuna_side = '/assets/img/asuna_frontpage.jpg'
+      }
+    }
+
     if (this.featured && this.featured.banner) {
-      var deviceWidth = window.innerWidth
       var pixelRatio = window.devicePixelRatio || 1
       if (deviceWidth < 400 && pixelRatio <= 1) {
         bannerPath = this.featured.banner.small_url
@@ -76,16 +89,34 @@ module.exports = {
         )
         : null),
       m('frontpage', [
-        (this.loading
-          ? m('div.loading-spinner')
-          : null),
-        this.articles.map(function(article) {
-          return m(Newsitem, article)
-        }),
-        m(Pages, {
-          base: '/',
-          links: this.links,
-        }),
+        m('aside.sidebar', [
+          m('div.categories', [
+            m('h4', 'Categories'),
+            Tree.map(function(page) {
+              return [
+                m(m.route.Link, { class: 'root', href: '/page/' + page.path }, page.name),
+                (page.children.length
+                  ? m('ul', page.children.map(function(subpage) {
+                      return m('li', m(m.route.Link, { class: 'child', href: '/page/' + subpage.path }, subpage.name))
+                    }))
+                  : null),
+              ]
+            }),
+          ]),
+          asuna_side ? m('img', { src: asuna_side, alt: 'Asuna standing tall welcomes you' }) : null,
+        ]),
+        m('.frontpage-news', [
+          (this.loading
+            ? m('div.loading-spinner')
+            : null),
+          this.articles.map(function(article) {
+            return m(Newsitem, article)
+          }),
+          m(Pages, {
+            base: '/',
+            links: this.links,
+          }),
+        ]),
       ]),
     ]
   },

@@ -21,13 +21,15 @@ export default class MediaRoutes {
 
     let smallPath = await this.resize.createSmall(result.path)
     let mediumPath = await this.resize.createMedium(result.path)
+    let largePath = await this.resize.createLarge(result.path)
 
     let token = this.jwt.signDirect({ site: config.get('upload:name') }, config.get('upload:secret'))
 
-    let [large, small, medium] = await Promise.all([
+    let [org, small, medium, large] = await Promise.all([
       this.uploadFile(token, result.path),
       this.uploadFile(token, smallPath),
       this.uploadFile(token, mediumPath),
+      this.uploadFile(token, largePath),
     ])
 
     ctx.body = await this.Media.create({
@@ -36,6 +38,7 @@ export default class MediaRoutes {
       small_image: small.path,
       medium_image: medium.path,
       large_image: large.path,
+      org_image: org.path,
       size: result.size,
       staff_id: ctx.state.user.id,
     })
