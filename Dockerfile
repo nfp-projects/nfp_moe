@@ -12,7 +12,7 @@ COPY public $HOME/public
 WORKDIR $HOME
 
 RUN apk add --update --no-cache --virtual .build-deps gcc g++ make libc6-compat python && \
-  apk add build-base --no-cache \
+  apk add build-base vips-dev fftw-dev build-base --no-cache \
         --repository https://alpine.global.ssl.fastly.net/alpine/edge/main \
         --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing \
         --repository https://alpine.global.ssl.fastly.net/alpine/edge/community && \
@@ -33,7 +33,7 @@ COPY index.mjs package.json server.mjs $HOME/
 WORKDIR $HOME
 
 RUN apk add --update --no-cache --virtual .build-deps gcc g++ make libc6-compat python && \
-  apk add vips-dev fftw-dev build-base --no-cache \
+  apk add build-base vips-dev fftw-dev build-base --no-cache \
         --repository https://alpine.global.ssl.fastly.net/alpine/edge/main \
         --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing \
         --repository https://alpine.global.ssl.fastly.net/alpine/edge/community && \
