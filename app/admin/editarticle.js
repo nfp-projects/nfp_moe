@@ -1,10 +1,10 @@
 const Authentication = require('../authentication')
 const FileUpload = require('../widgets/fileupload')
 const Froala = require('./froala')
-const { Tree } = require('../api/page')
-const { uploadFile } = require('../api/file')
+const Page = require('../api/page')
+const File = require('../api/file')
 const Fileinfo = require('../widgets/fileinfo')
-const { createArticle, updateArticle, getArticle } = require('../api/article')
+const Article = require('../api/article')
 
 const EditArticle = {
   getFroalaOptions: function() {
@@ -67,7 +67,7 @@ const EditArticle = {
     this.loadedFroala = Froala.loadedFroala
 
     if (this.lastid !== 'add') {
-      getArticle(this.lastid)
+      Article.getArticle(this.lastid)
       .then(function(result) {
         vnode.state.editedPath = true
         vnode.state.article = result
@@ -127,7 +127,7 @@ const EditArticle = {
     let promise
 
     if (this.article.id) {
-      promise = updateArticle(this.article.id, {
+      promise = Article.updateArticle(this.article.id, {
         name: this.article.name,
         path: this.article.path,
         parent_id: this.article.parent_id,
@@ -136,7 +136,7 @@ const EditArticle = {
         media_id: this.article.media && this.article.media.id,
       })
     } else {
-      promise = createArticle({
+      promise = Article.createArticle({
         name: this.article.name,
         path: this.article.path,
         parent_id: this.article.parent_id,
@@ -165,12 +165,12 @@ const EditArticle = {
     })
   },
 
-  uploadFile(vnode, event) {
+  uploadFile: function(vnode, event) {
     if (!event.target.files[0]) return
     vnode.state.error = ''
     vnode.state.loadingFile = true
 
-    uploadFile(this.article.id, event.target.files[0])
+    File.uploadFile(this.article.id, event.target.files[0])
     .then(function(res) {
       vnode.state.article.files.push(res)
     })
@@ -186,7 +186,7 @@ const EditArticle = {
 
   getFlatTree: function() {
     let out = [{id: null, name: '-- Frontpage --'}]
-    Tree.forEach(function(page) {
+    Page.Tree.forEach(function(page) {
       out.push({ id: page.id, name: page.name })
       if (page.children.length) {
         page.children.forEach(function(sub) {

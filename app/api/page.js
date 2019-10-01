@@ -1,11 +1,11 @@
-const { sendRequest } = require('./common')
+const common = require('./common')
 
 const Tree = window.__nfptree || []
 
 exports.Tree = Tree
 
 exports.createPage = function(body) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'POST',
     url: '/api/pages',
     body: body,
@@ -26,14 +26,14 @@ exports.createPage = function(body) {
 }
 
 exports.getTree = function() {
-  return sendRequest({
+  return common.sendRequest({
     method: 'GET',
     url: '/api/pages?tree=true&includes=children&fields=id,name,path,children(id,name,path)',
   })
 }
 
 exports.updatePage = function(id, body) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'PUT',
     url: '/api/pages/' + id,
     body: body,
@@ -62,21 +62,21 @@ exports.updatePage = function(id, body) {
 }
 
 exports.getAllPages = function() {
-  return sendRequest({
+  return common.sendRequest({
     method: 'GET',
     url: '/api/pages',
   })
 }
 
 exports.getPage = function(id) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'GET',
     url: '/api/pages/' + id + '?includes=media,banner,children,news,news.media',
   })
 }
 
 exports.removePage = function(page, id) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'DELETE',
     url: '/api/pages/' + id,
   }).then(function() {

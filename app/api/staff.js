@@ -1,7 +1,7 @@
-const { sendRequest } = require('./common')
+const common = require('./common')
 
 exports.createStaff = function(body) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'POST',
     url: '/api/staff',
     body: body,
@@ -9,7 +9,7 @@ exports.createStaff = function(body) {
 }
 
 exports.updateStaff = function(id, body) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'PUT',
     url: '/api/staff/' + id,
     body: body,
@@ -17,21 +17,21 @@ exports.updateStaff = function(id, body) {
 }
 
 exports.getAllStaff = function() {
-  return sendRequest({
+  return common.sendRequest({
     method: 'GET',
     url: '/api/staff',
   })
 }
 
 exports.getStaff = function(id) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'GET',
     url: '/api/staff/' + id,
   })
 }
 
 exports.removeStaff = function(id) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'DELETE',
     url: '/api/staff/' + id,
   })

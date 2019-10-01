@@ -1,7 +1,7 @@
 const m = require('mithril')
-const { getPage } = require('../api/page')
-const { getAllPageArticlesPagination } = require('../api/article')
-const { fetchPage } = require('../api/pagination')
+const ApiPage = require('../api/page')
+const Article = require('../api/article')
+const pagination = require('../api/pagination')
 const Authentication = require('../authentication')
 const Newsentry = require('../widgets/newsentry')
 const Pages = require('../widgets/pages')
@@ -27,7 +27,7 @@ const Page = {
     }
     this.loading = true
 
-    getPage(this.path)
+    ApiPage.getPage(this.path)
     .then(function(result) {
       vnode.state.page = result
     })
@@ -52,7 +52,7 @@ const Page = {
     this.newslinks = null
     this.lastpage = m.route.param('page') || '1'
 
-    return fetchPage(getAllPageArticlesPagination(this.page.id, {
+    return pagination.fetchPage(Article.getAllPageArticlesPagination(this.page.id, {
       per_page: 10,
       page: this.lastpage,
       includes: ['files', 'media'],

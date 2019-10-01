@@ -1,5 +1,5 @@
 const m = require('mithril')
-const { Tree } = require('../api/page')
+const Page = require('../api/page')
 const Authentication = require('../authentication')
 
 const Footer = {
@@ -12,7 +12,7 @@ const Footer = {
       m('div.sitemap', [
         m('div', 'Sitemap'),
         m(m.route.Link, { class: 'root', href: '/' }, 'Home'),
-        Tree.map(function(page) {
+        Page.Tree.map(function(page) {
           return [
             m(m.route.Link, { class: 'root', href: '/page/' + page.path }, page.name),
             (page.children.length

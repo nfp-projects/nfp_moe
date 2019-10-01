@@ -1,7 +1,7 @@
-const { sendRequest } = require('./common')
+const common = require('./common')
 
 exports.createArticle = function(body) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'POST',
     url: '/api/articles',
     body: body,
@@ -9,7 +9,7 @@ exports.createArticle = function(body) {
 }
 
 exports.updateArticle = function(id, body) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'PUT',
     url: '/api/articles/' + id,
     body: body,
@@ -17,7 +17,7 @@ exports.updateArticle = function(id, body) {
 }
 
 exports.getAllArticles = function() {
-  return sendRequest({
+  return common.sendRequest({
     method: 'GET',
     url: '/api/articles?includes=parent',
   })
@@ -43,7 +43,7 @@ exports.getAllArticlesPagination = function(options) {
 }
 
 exports.getAllPageArticles = function(pageId, includes) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'GET',
     url: '/api/pages/' + pageId + '/articles?includes=' + includes.join(','),
   })
@@ -69,14 +69,14 @@ exports.getAllPageArticlesPagination = function(pageId, options) {
 }
 
 exports.getArticle = function(id) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'GET',
     url: '/api/articles/' + id + '?includes=media,parent,banner,files',
   })
 }
 
 exports.removeArticle = function(article, id) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'DELETE',
     url: '/api/articles/' + id,
   })

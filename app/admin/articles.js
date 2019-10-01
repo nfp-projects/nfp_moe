@@ -1,5 +1,5 @@
-const { getAllArticlesPagination, removeArticle } = require('../api/article')
-const { fetchPage } = require('../api/pagination')
+const Article = require('../api/article')
+const pagination = require('../api/pagination')
 const Dialogue = require('../widgets/dialogue')
 const Pages = require('../widgets/pages')
 
@@ -24,7 +24,7 @@ const AdminArticles = {
     this.links = null
     this.lastpage = m.route.param('page') || '1'
 
-    return fetchPage(getAllArticlesPagination({
+    return pagination.fetchPage(Article.getAllArticlesPagination({
       per_page: 10,
       page: this.lastpage,
       includes: ['parent'],
@@ -46,7 +46,7 @@ const AdminArticles = {
     let removingArticle = this.removeArticle
     this.removeArticle = null
     this.loading = true
-    removeArticle(removingArticle, removingArticle.id)
+    Article.removeArticle(removingArticle, removingArticle.id)
       .then(this.oninit.bind(this, vnode))
       .catch(function(err) {
         vnode.state.error = err.message

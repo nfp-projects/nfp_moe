@@ -1,8 +1,8 @@
 const m = require('mithril')
 
-const { Tree } = require('../api/page')
-const { getAllArticlesPagination } = require('../api/article')
-const { fetchPage } = require('../api/pagination')
+const Page = require('../api/page')
+const Article = require('../api/article')
+const Pagination = require('../api/pagination')
 const Pages = require('../widgets/pages')
 const Newsitem = require('../widgets/newsitem')
 
@@ -32,14 +32,14 @@ const Frontpage = {
     }
   },
 
-  fetchArticles(vnode) {
+  fetchArticles: function(vnode) {
     this.error = ''
     this.loading = true
     this.links = null
     this.articles = []
     this.lastpage = m.route.param('page') || '1'
 
-    return fetchPage(getAllArticlesPagination({
+    return Pagination.fetchPage(Article.getAllArticlesPagination({
       per_page: 10,
       page: this.lastpage,
       includes: ['parent', 'files', 'media', 'banner'],
@@ -96,7 +96,7 @@ const Frontpage = {
         m('aside.sidebar', [
           m('div.categories', [
             m('h4', 'Categories'),
-            Tree.map(function(page) {
+            Page.Tree.map(function(page) {
               return [
                 m(m.route.Link, { class: 'root', href: '/page/' + page.path }, page.name),
                 (page.children.length

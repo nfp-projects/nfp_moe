@@ -1,6 +1,6 @@
 const m = require('mithril')
 const Authentication = require('../authentication')
-const { sendRequest } = require('../api/common')
+const Api = require('../api/common')
 
 const Login = {
   loadedGoogle: false,
@@ -81,7 +81,7 @@ const Login = {
 
     Login.loading = true
 
-    sendRequest({
+    Api.sendRequest({
       method: 'POST',
       url: '/api/login/user',
       body: {

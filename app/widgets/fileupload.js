@@ -1,12 +1,12 @@
-const { uploadMedia } = require('../api/media')
+const Media = require('../api/media')
 
 const FileUpload = {
-  uploadFile(vnode, event) {
+  uploadFile: function(vnode, event) {
     if (!event.target.files[0]) return
     vnode.state.updateError(vnode, '')
     vnode.state.loading = true
 
-    uploadMedia(event.target.files[0])
+    Media.uploadMedia(event.target.files[0])
     .then(function(res) {
       if (vnode.attrs.onupload) {
         vnode.attrs.onupload(res)

@@ -1,5 +1,5 @@
 const m = require('mithril')
-const { getArticle } = require('../api/article')
+const ApiArticle = require('../api/article')
 const Authentication = require('../authentication')
 const Fileinfo = require('../widgets/fileinfo')
 
@@ -26,7 +26,7 @@ const Article = {
     }
     this.loading = true
 
-    getArticle(this.path)
+    ApiArticle.getArticle(this.path)
     .then(function(result) {
       vnode.state.article = result
     })

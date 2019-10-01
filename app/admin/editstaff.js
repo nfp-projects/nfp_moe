@@ -1,4 +1,4 @@
-const { createStaff, updateStaff, getStaff } = require('../api/staff')
+const Staff = require('../api/staff')
 
 const EditStaff = {
   oninit: function(vnode) {
@@ -24,7 +24,7 @@ const EditStaff = {
     }
 
     if (this.lastid !== 'add') {
-      getStaff(this.lastid)
+      Staff.getStaff(this.lastid)
       .then(function(result) {
         vnode.state.editedPath = true
         vnode.state.staff = result
@@ -61,14 +61,14 @@ const EditStaff = {
     let promise
 
     if (this.staff.id) {
-      promise = updateStaff(this.staff.id, {
+      promise = Staff.updateStaff(this.staff.id, {
         fullname: this.staff.fullname,
         email: this.staff.email,
         level: this.staff.level,
         password: this.staff.password,
       })
     } else {
-      promise = createStaff({
+      promise = Staff.createStaff({
         fullname: this.staff.fullname,
         email: this.staff.email,
         level: this.staff.level,

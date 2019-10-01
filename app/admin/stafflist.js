@@ -1,4 +1,4 @@
-const { getAllStaff, removeStaff } = require('../api/staff')
+const Staff = require('../api/staff')
 const Dialogue = require('../widgets/dialogue')
 const Pages = require('../widgets/pages')
 
@@ -15,7 +15,7 @@ const AdminStaffList = {
   fetchStaffs: function(vnode) {
     this.loading = true
 
-    return getAllStaff()
+    return Staff.getAllStaff()
     .then(function(result) {
       vnode.state.staff = result
     })
@@ -32,7 +32,7 @@ const AdminStaffList = {
     let removingStaff = this.removeStaff
     this.removeStaff = null
     this.loading = true
-    removeStaff(removingStaff.id)
+    Staff.removeStaff(removingStaff.id)
       .then(this.oninit.bind(this, vnode))
       .catch(function(err) {
         vnode.state.error = err.message

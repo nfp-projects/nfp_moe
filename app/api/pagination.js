@@ -1,12 +1,12 @@
 const parse = require('parse-link-header')
-const { sendRequest } = require('./common')
+const common = require('./common')
 
 exports.fetchPage = function(url) {
-  return sendRequest({
+  return common.sendRequest({
     method: 'GET',
     url: url,
   }, true)
-  .then(result => {
+  .then(function(result) {
     return {
       data: result.data,
       links: parse(result.headers.link || ''),

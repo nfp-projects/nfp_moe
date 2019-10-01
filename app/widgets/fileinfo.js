@@ -1,5 +1,5 @@
 const Fileinfo = {
-  getPrefix(vnode) {
+  getPrefix: function(vnode) {
     if (!vnode.attrs.file.filename.endsWith('.torrent')) {
       return vnode.attrs.file.filename.split('.').slice(-1)
     }
@@ -15,21 +15,21 @@ const Fileinfo = {
     return 'Other'
   },
 
-  getTitle(vnode) {
+  getTitle: function(vnode) {
     if (vnode.attrs.file.meta.torrent) {
       return vnode.attrs.file.meta.torrent.name
     }
     return vnode.attrs.file.filename
   },
 
-  getDownloadName(vnode) {
+  getDownloadName: function(vnode) {
     if (vnode.attrs.file.meta.torrent) {
       return 'Torrent'
     }
     return 'Download'
   },
 
-  getSize(orgSize) {
+  getSize: function(orgSize) {
     var size = orgSize
     var i = -1
     var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB']

@@ -1,7 +1,7 @@
 const Authentication = require('../authentication')
 const FileUpload = require('../widgets/fileupload')
 const Froala = require('./froala')
-const { createPage, updatePage, getPage, Tree } = require('../api/page')
+const Page = require('../api/page')
 
 const EditPage = {
   getFroalaOptions: function() {
@@ -39,7 +39,7 @@ const EditPage = {
     this.loadedFroala = Froala.loadedFroala
 
     if (m.route.param('key') !== 'add') {
-      getPage(m.route.param('key'))
+      Page.getPage(m.route.param('key'))
       .then(function(result) {
         vnode.state.editedPath = true
         vnode.state.page = result
@@ -105,7 +105,7 @@ const EditPage = {
     let promise
 
     if (this.page.id) {
-      promise = updatePage(this.page.id, {
+      promise = Page.updatePage(this.page.id, {
         name: this.page.name,
         path: this.page.path,
         parent_id: this.page.parent_id,
@@ -114,7 +114,7 @@ const EditPage = {
         media_id: this.page.media && this.page.media.id || null,
       })
     } else {
-      promise = createPage({
+      promise = Page.createPage({
         name: this.page.name,
         path: this.page.path,
         parent_id: this.page.parent_id,
@@ -145,7 +145,7 @@ const EditPage = {
   },
 
   view: function(vnode) {
-    const parents = [{id: null, name: '-- Frontpage --'}].concat(Tree).filter(function (page) { return !vnode.state.page || page.id !== vnode.state.page.id})
+    const parents = [{id: null, name: '-- Frontpage --'}].concat(Page.Tree).filter(function (page) { return !vnode.state.page || page.id !== vnode.state.page.id})
     return (
       this.loading ?
         m('div.loading-spinner')

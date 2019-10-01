@@ -1,7 +1,7 @@
 const m = require('mithril')
 const Authentication = require('../authentication')
 const Darkmode = require('../darkmode')
-const { Tree, getTree } = require('../api/page')
+const Page = require('../api/page')
 
 const Menu = {
   currentActive: 'home',
@@ -18,14 +18,14 @@ const Menu = {
   oninit: function(vnode) {
     Menu.onbeforeupdate()
 
-    if (Tree.length) return
+    if (Page.Tree.length) return
 
     Menu.loading = true
 
-    getTree()
+    Page.getTree()
     .then(function(results) {
-      Tree.splice(0, Tree.length)
-      Tree.push.apply(Tree, results)
+      Page.Tree.splice(0, Page.Tree.length)
+      Page.Tree.push.apply(Page.Tree, results)
     })
     .catch(function(err) {
       Menu.error = err.message
@@ -72,7 +72,7 @@ const Menu = {
           href: '/',
           class: Menu.currentActive === 'home' ? 'active' : '',
         }, 'Home'),
-        Menu.loading ? m('div.loading-spinner') : Tree.map(function(page) {
+        Menu.loading ? m('div.loading-spinner') : Page.Tree.map(function(page) {
           if (page.children.length) {
             return m('div.hassubmenu', [
                 m(m.route.Link, {

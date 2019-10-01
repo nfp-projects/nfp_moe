@@ -1,4 +1,4 @@
-const { getAllPages, removePage } = require('../api/page')
+const Page = require('../api/page')
 const Dialogue = require('../widgets/dialogue')
 
 const AdminPages = {
@@ -24,7 +24,7 @@ const AdminPages = {
     this.pages = []
     this.removePage = null
 
-    getAllPages()
+    Page.getAllPages()
     .then(function(result) {
       vnode.state.pages = AdminPages.parseTree(result)
     })
@@ -41,7 +41,7 @@ const AdminPages = {
     let removingPage = this.removePage
     this.removePage = null
     this.loading = true
-    removePage(removingPage, removingPage.id)
+    Page.removePage(removingPage, removingPage.id)
       .then(this.oninit.bind(this, vnode))
       .catch(function(err) {
         vnode.state.error = err.message
