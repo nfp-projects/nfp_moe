@@ -17,10 +17,15 @@ const Frontpage = {
         && window.__nfplinks) {
       this.links = window.__nfplinks
       this.articles = window.__nfpdata
-      this.lastpage = '1'
+      this.lastpage = m.route.param('page') || '1'
       window.__nfpdata = null
       window.__nfplinks = null
-      Frontpage.processFeatured(vnode, this.articles)
+
+      if (this.articles.length === 0) {
+        m.route.set('/')
+      } else {
+        Frontpage.processFeatured(vnode, this.articles)
+      }
     } else {
       this.fetchArticles(vnode)
     }
@@ -38,6 +43,12 @@ const Frontpage = {
     this.links = null
     this.articles = []
     this.lastpage = m.route.param('page') || '1'
+
+    if (this.lastpage !== '1') {
+      document.title = 'Page ' + this.lastpage + ' - NFP Moe - Anime/Manga translation group'
+    } else {
+      document.title = 'NFP Moe - Anime/Manga translation group'
+    }
 
     return Pagination.fetchPage(Article.getAllArticlesPagination({
       per_page: 10,
@@ -59,6 +70,7 @@ const Frontpage = {
   },
 
   processFeatured: function(vnode, data) {
+    if (vnode.state.featured) return
     for (var i = data.length - 1; i >= 0; i--) {
       if (data[i].banner) {
         vnode.state.featured = data[i]

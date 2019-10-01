@@ -8,13 +8,18 @@ const Article = {
     this.error = ''
     this.lastarticle = m.route.param('article') || '1'
     this.loadingnews = false
-    this.fetchArticle(vnode)
+
+    if (window.__nfpdata) {
+      this.path = m.route.param('id')
+      this.article = window.__nfpdata
+      window.__nfpdata = null
+    } else {
+      this.fetchArticle(vnode)
+    }
   },
 
   fetchArticle: function(vnode) {
     this.path = m.route.param('id')
-    this.news = []
-    this.newslinks = null
     this.article = {
       id: 0,
       name: '',
@@ -29,6 +34,11 @@ const Article = {
     ApiArticle.getArticle(this.path)
     .then(function(result) {
       vnode.state.article = result
+      if (result.parent) {
+        document.title = result.name + ' - ' + result.parent.name + ' - NFP Moe'
+      } else {
+        document.title = result.name + ' - NFP Moe'
+      }
     })
     .catch(function(err) {
       vnode.state.error = err.message

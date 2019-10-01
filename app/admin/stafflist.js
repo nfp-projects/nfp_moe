@@ -15,6 +15,8 @@ const AdminStaffList = {
   fetchStaffs: function(vnode) {
     this.loading = true
 
+    document.title = 'Staff members - Admin NFP Moe'
+
     return Staff.getAllStaff()
     .then(function(result) {
       vnode.state.staff = result

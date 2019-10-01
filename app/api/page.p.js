@@ -14,6 +14,6 @@ exports.getTree = function() {
 exports.getPage = function(id) {
   return common.sendRequest({
     method: 'GET',
-    url: '/api/pages/' + id + '?includes=media,banner,children,news,news.media',
+    url: '/api/pages/' + id + '?includes=media,banner,children',
   })
 }

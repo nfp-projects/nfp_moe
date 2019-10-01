@@ -19,8 +19,13 @@ export default class MediaRoutes {
   async upload(ctx) {
     let result = await this.multer.processBody(ctx)
 
+    let height = null
+    if (ctx.query.height) {
+      height = Number(ctx.query.height)
+    }
+
     let smallPath = await this.resize.createSmall(result.path)
-    let mediumPath = await this.resize.createMedium(result.path)
+    let mediumPath = await this.resize.createMedium(result.path, height)
     let largePath = await this.resize.createLarge(result.path)
 
     let token = this.jwt.signDirect({ site: config.get('upload:name') }, config.get('upload:secret'))

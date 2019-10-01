@@ -24,6 +24,8 @@ const AdminArticles = {
     this.links = null
     this.lastpage = m.route.param('page') || '1'
 
+    document.title = 'Articles Page ' + this.lastpage + ' - Admin NFP Moe'
+
     return pagination.fetchPage(Article.getAllArticlesPagination({
       per_page: 10,
       page: this.lastpage,

@@ -11,7 +11,17 @@ const Page = {
     this.error = ''
     this.lastpage = m.route.param('page') || '1'
     this.loadingnews = false
-    this.fetchPage(vnode)
+
+    if (window.__nfpdata) {
+      this.path = m.route.param('id')
+      this.page = window.__nfpdata
+      this.news = []
+      this.newslinks = null
+      window.__nfpdata = null
+      vnode.state.fetchArticles(vnode)
+    } else {
+      this.fetchPage(vnode)
+    }
   },
 
   fetchPage: function(vnode) {
@@ -30,6 +40,7 @@ const Page = {
     ApiPage.getPage(this.path)
     .then(function(result) {
       vnode.state.page = result
+      document.title = result.name + ' - NFP Moe'
     })
     .catch(function(err) {
       vnode.state.error = err.message
@@ -71,11 +82,26 @@ const Page = {
   },
 
   view: function(vnode) {
+    var deviceWidth = window.innerWidth
+    var bannerPath = ''
+
+    if (this.page && this.page.banner) {
+      var pixelRatio = window.devicePixelRatio || 1
+      if (deviceWidth < 400 && pixelRatio <= 1) {
+        bannerPath = this.page.banner.small_url
+      } else if ((deviceWidth < 800 && pixelRatio <= 1)
+                || (deviceWidth < 600 && pixelRatio > 1)) {
+        bannerPath = this.page.banner.medium_url
+      } else {
+        bannerPath = this.page.banner.large_url
+      }
+    }
+
     return (
       this.loading ?
         m('div.loading-spinner')
       : m('article.page', [
-          this.page.banner ? m('.div.page-banner', { style: { 'background-image': 'url("' + this.page.banner.url + '")' } } ) : null,
+          bannerPath ? m('.div.page-banner', { style: { 'background-image': 'url("' + bannerPath + '")' } } ) : null,
           m('header', m('h1', this.page.name)),
           m('.container', {
               class: this.page.children.length ? 'multi' : '',
@@ -90,7 +116,7 @@ const Page = {
               : null,
             this.page.description
               ? m('.fr-view', [
-                  this.page.media ? m('img.page-cover', { src: this.page.media.url, alt: 'Cover image for ' + this.page.name } ) : null,
+                  this.page.media ? m('img.page-cover', { src: this.page.media.medium_url, alt: 'Cover image for ' + this.page.name } ) : null,
                   m.trust(this.page.description),
                   this.news.length && this.page.description
                     ? m('aside.news', [
@@ -107,7 +133,7 @@ const Page = {
                 ])
               : this.news.length
                 ? m('aside.news.single', [
-                    this.page.media ? m('img.page-cover', { src: this.page.media.url, alt: 'Cover image for ' + this.page.name } ) : null,
+                    this.page.media ? m('img.page-cover', { src: this.page.media.medium_url, alt: 'Cover image for ' + this.page.name } ) : null,
                     m('h4', 'Latest posts under ' + this.page.name + ':'),
                     this.loadingnews ? m('div.loading-spinner') : this.news.map(function(article) {
                       return m(Newsentry, article)
@@ -118,7 +144,7 @@ const Page = {
                     }),
                   ])
                 : this.page.media
-                  ? m('img.page-cover.single', { src: this.page.media.url, alt: 'Cover image for ' + this.page.name } )
+                  ? m('img.page-cover.single', { src: this.page.media.medium_url, alt: 'Cover image for ' + this.page.name } )
                   : null,
           ]),
           Authentication.currentUser

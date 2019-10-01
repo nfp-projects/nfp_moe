@@ -77,13 +77,13 @@ const Article = bookshelf.createModel({
       })
   },
 
-  getFrontpageArticles() {
+  getFrontpageArticles(page = 1) {
     return this.query(qb => {
         qb.orderBy('updated_at', 'DESC')
       })
       .fetchPage({
         pageSize: 10,
-        page: 1,
+        page: page,
         withRelated: ['files', 'media', 'banner'],
       })
   },

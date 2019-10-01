@@ -24,12 +24,12 @@ export default class Resizer {
             .then(() => output)
   }
 
-  createMedium(input) {
+  createMedium(input, height) {
     let output = this.Media.getSubUrl(input, 'medium')
 
     return this.sharp(input)
-            .resize(700, 700, {
-              fit: sharp.fit.inside,
+            .resize(700, height || 700, {
+              fit: height && sharp.fit.cover || sharp.fit.inside,
               withoutEnlargement: true,
             })
             .jpeg({

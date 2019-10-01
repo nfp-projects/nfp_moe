@@ -28,6 +28,7 @@ const EditStaff = {
       .then(function(result) {
         vnode.state.editedPath = true
         vnode.state.staff = result
+        document.title = 'Editing: ' + result.fullname + ' - Admin NFP Moe'
       })
       .catch(function(err) {
         vnode.state.error = err.message
@@ -36,6 +37,8 @@ const EditStaff = {
         vnode.state.loading = false
         m.redraw()
       })
+    } else {
+      document.title = 'Creating Staff Member - Admin NFP Moe'
     }
   },
 

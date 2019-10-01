@@ -52,6 +52,15 @@ export default class Jwt {
 
   static jwtMiddleware() {
     return koaJwt({
+      getToken: ctx => {
+        if (ctx.request.header.authorization) {
+          return ctx.request.header.authorization.split(' ')[1]
+        }
+        if (ctx.query.token) {
+          return ctx.query.token
+        }
+        return null
+      },
       secret: (header, payload) =>
         `${config.get('jwt:secret')}${payload.email}`,
       passthrough: true,

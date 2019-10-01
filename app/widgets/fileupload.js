@@ -6,7 +6,7 @@ const FileUpload = {
     vnode.state.updateError(vnode, '')
     vnode.state.loading = true
 
-    Media.uploadMedia(event.target.files[0])
+    Media.uploadMedia(event.target.files[0], vnode.attrs.height || null)
     .then(function(res) {
       if (vnode.attrs.onupload) {
         vnode.attrs.onupload(res)

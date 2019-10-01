@@ -143,6 +143,16 @@ frontpage {
     margin: 0;
     width: 100%;
   }
+
+  frontpage aside.sidebar a {
+    padding: 9px 10px;
+  }
+}
+
+@media (pointer:coarse) {
+  frontpage aside.sidebar a {
+    padding: 9px 10px;
+  }
 }
 
 .darkmodeon {

@@ -45,6 +45,9 @@ const EditArticle = {
   onupdate: function(vnode) {
     if (this.lastid !== m.route.param('id')) {
       this.fetchArticle(vnode)
+      if (this.lastid === 'add') {
+        m.redraw()
+      }
     }
   },
 
@@ -63,7 +66,6 @@ const EditArticle = {
       files: [],
     }
     this.editedPath = false
-    this.froala = null
     this.loadedFroala = Froala.loadedFroala
 
     if (this.lastid !== 'add') {
@@ -71,14 +73,23 @@ const EditArticle = {
       .then(function(result) {
         vnode.state.editedPath = true
         vnode.state.article = result
+        document.title = 'Editing: ' + result.name + ' - Admin NFP Moe'
       })
       .catch(function(err) {
         vnode.state.error = err.message
       })
       .then(function() {
         vnode.state.loading = false
+        if (vnode.state.froala) {
+          vnode.state.froala.html.set(vnode.state.article.description)
+        }
         m.redraw()
       })
+    } else {
+      document.title = 'Create Article - Admin NFP Moe'
+      if (vnode.state.froala) {
+        vnode.state.froala.html.set(this.article.description)
+      }
     }
   },
 
@@ -216,6 +227,7 @@ const EditArticle = {
               onclick: function() { vnode.state.error = '' },
             }, this.error),
             m(FileUpload, {
+              height: 300,
               onupload: this.mediaUploaded.bind(this, 'banner'),
               onerror: function(e) { vnode.state.error = e },
               ondelete: this.mediaRemoved.bind(this, 'banner'),

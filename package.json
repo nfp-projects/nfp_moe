@@ -66,7 +66,8 @@
     "nconf": "^0.10.0",
     "parse-torrent": "^7.0.1",
     "pg": "^7.8.0",
-    "sharp": "^0.22.1"
+    "sharp": "^0.22.1",
+    "striptags": "^3.1.1"
   },
   "devDependencies": {
     "browserify": "^16.2.3",

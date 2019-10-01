@@ -14,7 +14,7 @@ export function accessChecks(opts = { }) {
 
 export function restrict(level = orgAccess.Normal) {
   return async (ctx, next) => {
-    if (!ctx.headers.authorization) {
+    if (!ctx.headers.authorization && !ctx.query.token) {
       return ctx.throw(403, 'Authentication token was not found (did you forget to login?)')
     }
 
@@ -26,6 +26,8 @@ export function restrict(level = orgAccess.Normal) {
       return ctx.throw(403, 'You do not have enough access to access this resource')
     }
 
-    return next()
+    if (next) {
+      return next()
+    }
   }
 }

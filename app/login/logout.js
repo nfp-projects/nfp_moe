@@ -6,12 +6,12 @@ const Logout = {
     Authentication.createGoogleScript()
       .then(function() {
         return new Promise(function (res) {
-          gapi.load('auth2', res);
+          gapi.load('auth2', res)
         })
       })
       .then(function() { return gapi.auth2.init() })
       .then(function() {
-        let auth2 = gapi.auth2.getAuthInstance();
+        let auth2 = gapi.auth2.getAuthInstance()
         return auth2.signOut()
       })
       .then(function() {

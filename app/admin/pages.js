@@ -24,6 +24,8 @@ const AdminPages = {
     this.pages = []
     this.removePage = null
 
+    document.title = 'Pages - Admin NFP Moe'
+
     Page.getAllPages()
     .then(function(result) {
       vnode.state.pages = AdminPages.parseTree(result)

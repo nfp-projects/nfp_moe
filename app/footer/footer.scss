@@ -101,7 +101,15 @@ only screen and (                min-resolution: 2dppx) {
 @media (pointer:coarse) {
   footer .sitemap a.root,
   footer .sitemap a.child {
-    // padding: 10px 10px;
-    // display: inline-block;
+    padding: 10px 10px;
+    display: inline-block;
+  }
+}
+
+@media screen and (max-width: 480px){
+  footer .sitemap a.root,
+  footer .sitemap a.child {
+    padding: 9px 10px;
+    display: inline-block;
   }
 }

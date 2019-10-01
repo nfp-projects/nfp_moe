@@ -43,6 +43,7 @@ const EditPage = {
       .then(function(result) {
         vnode.state.editedPath = true
         vnode.state.page = result
+        document.title = 'Editing: ' + result.name + ' - Admin NFP Moe'
       })
       .catch(function(err) {
         vnode.state.error = err.message
@@ -51,6 +52,8 @@ const EditPage = {
         vnode.state.loading = false
         m.redraw()
       })
+    } else {
+      document.title = 'Create Page - Admin NFP Moe'
     }
 
     if (!this.loadedFroala) {
