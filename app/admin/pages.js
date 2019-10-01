@@ -1,6 +1,3 @@
-const m = require('mithril')
-
-const Authentication = require('../authentication')
 const { getAllPages, removePage } = require('../api/page')
 const Dialogue = require('../widgets/dialogue')
 

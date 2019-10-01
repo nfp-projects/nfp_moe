@@ -76,6 +76,17 @@ const Article = bookshelf.createModel({
         return result
       })
   },
+
+  getFrontpageArticles() {
+    return this.query(qb => {
+        qb.orderBy('updated_at', 'DESC')
+      })
+      .fetchPage({
+        pageSize: 10,
+        page: 1,
+        withRelated: ['files', 'media', 'banner'],
+      })
+  },
 })
 
 export default Article

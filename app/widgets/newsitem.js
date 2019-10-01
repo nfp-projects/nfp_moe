@@ -1,4 +1,3 @@
-const m = require('mithril')
 const Fileinfo = require('./fileinfo')
 
 const Newsitem = {
@@ -14,8 +13,10 @@ const Newsitem = {
           ? m('a.cover', {
               href: '/article/' + vnode.attrs.path,
             }, m('img', { alt: 'Image for news item ' + vnode.attrs.name, src: pixelRatio > 1 ? vnode.attrs.media.medium_url : vnode.attrs.media.small_url }))
-          : m('a.cover.nobg'),
-        m('div.entrycontent', [
+          : null,
+        m('div.entrycontent', {
+          class: vnode.attrs.media ? '' : 'extrapadding',
+        }, [
           (vnode.attrs.description
               ? m('.fr-view', m.trust(vnode.attrs.description))
               : null),

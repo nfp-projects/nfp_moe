@@ -10,7 +10,7 @@ const Darkmode = {
       Darkmode.darkIsOn = true
     } else {
       localStorage.removeItem(storageName)
-      document.body.className = ''
+      document.body.className = 'daymode'
       Darkmode.darkIsOn = false
     }
   },

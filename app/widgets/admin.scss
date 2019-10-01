@@ -1,0 +1,133 @@
+
+fileupload {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: stretch;
+
+  .showicon,
+  .showbordericon,
+  .display {
+    flex-grow: 2;
+  }
+
+  .showbordericon {
+    border: 3px solid $title-fg;
+    border-style: dashed;
+    background-image: url('./img/upload.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 50px;
+  }
+
+  .showicon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 50px;
+    height: 50px;
+    background-image: url('./img/upload.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  img {
+    max-width: 600px;
+    width: 100%;
+    align-self: center;
+    min-height: 100px;
+  }
+
+  .display {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .loading-spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #33333388;
+    width: 100%;
+  }
+
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.01;
+    width: 100%;
+    cursor: pointer;
+    text-indent: -9999px;
+    z-index: 2;
+  }
+
+  .remove {
+    border: none;
+    position: absolute;
+    top: 5px;
+    right: 60px;
+    width: 50px;
+    height: 50px;
+    background-image: url('./img/delete.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-size: contain;
+    z-index: 3;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+dialogue {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: calc(100% - 40px);
+  max-width: 500px;
+  color: $main-fg;
+
+  h2 {
+    background: $secondary-dark-bg;
+    color: $secondary-dark-fg;
+    font-size: 1.5em;
+    padding: 10px;
+  }
+
+  p {
+    padding: 10px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+  }
+
+  button {
+    border: 1px solid $secondary-dark-bg;
+    background: transparent;
+    color: $secondary-dark-bg;
+    padding: 5px 15px;
+    min-width: 150px;
+  }
+
+  button.alert {
+    border-color: red;
+    color: red;
+  }
+
+  button.cancel {
+    border-color: #999;
+    color: #999;
+  }
+}

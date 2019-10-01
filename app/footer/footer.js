@@ -1,7 +1,6 @@
 const m = require('mithril')
 const { Tree } = require('../api/page')
 const Authentication = require('../authentication')
-const Darkmode = require('../darkmode')
 
 const Footer = {
   oninit: function(vnode) {
@@ -9,11 +8,6 @@ const Footer = {
   },
 
   view: function() {
-    var pixelRatio = window.devicePixelRatio || 1
-    var darkPrefix = ''
-    if (Darkmode.darkIsOn) {
-      darkPrefix = 'dark_'
-    }
     return [
       m('div.sitemap', [
         m('div', 'Sitemap'),
@@ -31,16 +25,15 @@ const Footer = {
         !Authentication.currentUser
           ? m(m.route.Link, { class: 'root', href: '/login' }, 'Login')
           : null,
-        m('div.meta', ['©'
-            + this.year
-            + ' NFP Encodes - nfp@nfp.moe - ',
-            m('a', { href: 'https://www.iubenda.com/privacy-policy/31076050', target: '_blank' }, 'Privacy Policy'),
-            ' (Fuck EU)',
-        ])
+        m('div.meta', [
+          '©'
+          + this.year
+          + ' NFP Encodes - nfp@nfp.moe - ',
+          m('a', { rel: 'noopener', href: 'https://www.iubenda.com/privacy-policy/31076050', target: '_blank' }, 'Privacy Policy'),
+          ' (Fuck EU)',
+        ]),
       ]),
-      m('div.footer-logo', { style: {
-        'background-image': pixelRatio > 1 ? 'url("/assets/img/' + darkPrefix + 'tsun.jpg")' : 'url("/assets/img/' + darkPrefix + 'tsun_small.jpg")'
-      } }),
+      m('div.footer-logo'),
     ]
   },
 }

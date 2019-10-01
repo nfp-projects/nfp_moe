@@ -1,5 +1,3 @@
-const m = require('mithril')
-
 const Fileinfo = {
   getPrefix(vnode) {
     if (!vnode.attrs.file.filename.endsWith('.torrent')) {
@@ -49,6 +47,7 @@ const Fileinfo = {
         m('span.prefix', this.getPrefix(vnode) + ':'),
         m('a', {
           target: '_blank',
+          rel: 'noopener',
           href: vnode.attrs.file.url,
         }, this.getDownloadName(vnode)),
         vnode.attrs.file.magnet

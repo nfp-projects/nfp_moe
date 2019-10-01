@@ -5,15 +5,25 @@ const { getAllArticlesPagination } = require('../api/article')
 const { fetchPage } = require('../api/pagination')
 const Pages = require('../widgets/pages')
 const Newsitem = require('../widgets/newsitem')
-const Darkmode = require('../darkmode')
 
-module.exports = {
+const Frontpage = {
   oninit: function(vnode) {
     this.error = ''
     this.loading = false
     this.featured = null
     this.links = null
-    this.fetchArticles(vnode)
+
+    if (window.__nfpdata
+        && window.__nfplinks) {
+      this.links = window.__nfplinks
+      this.articles = window.__nfpdata
+      this.lastpage = '1'
+      window.__nfpdata = null
+      window.__nfplinks = null
+      Frontpage.processFeatured(vnode, this.articles)
+    } else {
+      this.fetchArticles(vnode)
+    }
   },
 
   onupdate: function(vnode) {
@@ -30,19 +40,14 @@ module.exports = {
     this.lastpage = m.route.param('page') || '1'
 
     return fetchPage(getAllArticlesPagination({
-      per_page: 10,
+      per_page: 2,
       page: this.lastpage,
       includes: ['parent', 'files', 'media', 'banner'],
     }))
     .then(function(result) {
       vnode.state.articles = result.data
       vnode.state.links = result.links
-
-      for (var i = result.data.length - 1; i >= 0; i--) {
-        if (result.data[i].banner) {
-          vnode.state.featured = result.data[i]
-        }
-      }
+      Frontpage.processFeatured(vnode, result.data)
     })
     .catch(function(err) {
       vnode.state.error = err.message
@@ -53,19 +58,18 @@ module.exports = {
     })
   },
 
+  processFeatured: function(vnode, data) {
+    for (var i = data.length - 1; i >= 0; i--) {
+      if (data[i].banner) {
+        vnode.state.featured = data[i]
+      }
+    }
+  },
+
   view: function(vnode) {
     var deviceWidth = window.innerWidth
 
     var bannerPath = ''
-    var asuna_side = ''
-
-    if (deviceWidth > 800) {
-      if (Darkmode.darkIsOn) {
-        asuna_side = '/assets/img/dark_asuna_frontpage.jpg'
-      } else {
-        asuna_side = '/assets/img/asuna_frontpage.jpg'
-      }
-    }
 
     if (this.featured && this.featured.banner) {
       var pixelRatio = window.devicePixelRatio || 1
@@ -75,12 +79,12 @@ module.exports = {
                 || (deviceWidth < 600 && pixelRatio > 1)) {
         bannerPath = this.featured.banner.medium_url
       } else {
-        bannerPath = this.featured.banner.url
+        bannerPath = this.featured.banner.large_url
       }
     }
 
     return [
-      (this.featured && this.featured.banner
+      (bannerPath
         ? m('a.frontpage-banner', {
             href: '/article/' + this.featured.path,
             style: { 'background-image': 'url("' + bannerPath + '")' },
@@ -103,7 +107,7 @@ module.exports = {
               ]
             }),
           ]),
-          asuna_side ? m('img', { src: asuna_side, alt: 'Asuna standing tall welcomes you' }) : null,
+          m('div.asunaside'),
         ]),
         m('.frontpage-news', [
           (this.loading
@@ -121,3 +125,5 @@ module.exports = {
     ]
   },
 }
+
+module.exports = Frontpage

@@ -1,5 +1,3 @@
-const m = require('mithril')
-
 const { createStaff, updateStaff, getStaff } = require('../api/staff')
 
 const EditStaff = {

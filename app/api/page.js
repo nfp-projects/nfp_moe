@@ -1,6 +1,6 @@
 const { sendRequest } = require('./common')
 
-const Tree = []
+const Tree = window.__nfptree || []
 
 exports.Tree = Tree
 
@@ -25,7 +25,7 @@ exports.createPage = function(body) {
   })
 }
 
-exports.getTree = function(body) {
+exports.getTree = function() {
   return sendRequest({
     method: 'GET',
     url: '/api/pages?tree=true&includes=children&fields=id,name,path,children(id,name,path)',

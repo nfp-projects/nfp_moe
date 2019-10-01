@@ -1,4 +1,3 @@
-const m = require('mithril')
 const { uploadMedia } = require('../api/media')
 
 const FileUpload = {

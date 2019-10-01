@@ -1,4 +1,3 @@
-const m = require('mithril')
 const Authentication = require('../authentication')
 
 exports.sendRequest = function(options, isPagination) {

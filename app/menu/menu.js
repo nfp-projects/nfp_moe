@@ -18,11 +18,13 @@ const Menu = {
   oninit: function(vnode) {
     Menu.onbeforeupdate()
 
+    if (Tree.length) return
+
     Menu.loading = true
 
     getTree()
     .then(function(results) {
-      Tree.splice(0, Tree.Length)
+      Tree.splice(0, Tree.length)
       Tree.push.apply(Tree, results)
     })
     .catch(function(err) {
@@ -35,13 +37,10 @@ const Menu = {
   },
 
   view: function() {
-    var pixelRatio = window.devicePixelRatio || 1
     return [
       m('div.top', [
         m(m.route.Link,
-          { href: '/', class: 'logo', style: {
-            'background-image': pixelRatio > 1 ? 'url("/assets/img/logo.jpg")' : 'url("/assets/img/logo_small.jpg")'
-          } },
+          { href: '/', class: 'logo' },
           m('h2', 'NFP Moe')
         ),
         m('aside', Authentication.currentUser ? [
@@ -51,16 +50,16 @@ const Menu = {
             (Darkmode.darkIsOn
               ? m('button.dark', { onclick: Darkmode.setDarkMode.bind(Darkmode, false) }, 'Day mode')
               : m('button.dark', { onclick: Darkmode.setDarkMode.bind(Darkmode, true) }, 'Night mode')
-            )
+            ),
           ]),
-          (Authentication.currentUser.level >= 10
+          (Authentication.isAdmin
             ? m('div.adminlinks', [
                 m(m.route.Link, { href: '/admin/articles/add' }, 'Create article'),
                 m(m.route.Link, { href: '/admin/articles' }, 'Articles'),
                 m(m.route.Link, { href: '/admin/pages' }, 'Pages'),
                 m(m.route.Link, { hidden: Authentication.currentUser.level < 100, href: '/admin/staff' }, 'Staff'),
               ])
-            : null
+            : (Authentication.currentUser.level > 10 ? m('div.loading-spinner') : null)
           ),
         ] : (Darkmode.darkIsOn
             ? m('button.dark', { onclick: Darkmode.setDarkMode.bind(Darkmode, false) }, 'Day mode')

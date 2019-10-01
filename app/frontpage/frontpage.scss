@@ -38,10 +38,6 @@ frontpage {
     display: flex;
     flex-direction: column;
 
-    img {
-      align-self: center;
-    }
-
     .categories {
       padding: 10px 10px 20px;
       margin-bottom: 20px;
@@ -89,6 +85,10 @@ frontpage {
   newsitem {
     margin-bottom: 30px;
   }
+
+  .asunaside {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 1000px){
@@ -110,6 +110,26 @@ frontpage {
     margin: 20px 0 30px;
     border-bottom: 1px solid $border;
     order: 2;
+  }
+}
+
+@media screen and (min-width: 800px){
+  frontpage .asunaside {
+    display: block;
+    width: 200px;
+    height: 480px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top left;
+    align-self: center;
+  }
+
+  .daymode frontpage .asunaside {
+    background-image: url("/assets/img/asuna_frontpage.jpg");
+  }
+
+  .darkmodeon frontpage .asunaside {
+    background-image: url("/assets/img/dark_asuna_frontpage.jpg");
   }
 }
 

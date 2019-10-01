@@ -73,3 +73,35 @@ footer {
     }
   }
 }
+
+.daymode footer .footer-logo {
+  background-image: url("/assets/img/tsun_small.jpg");
+}
+
+.darkmodeon footer .footer-logo {
+  background-image: url("/assets/img/dark_tsun_small.jpg");
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) { 
+  .daymode .footer-logo {
+    background-image: url("/assets/img/tsun.jpg");
+  }
+
+  .darkmodeon .footer-logo {
+    background-image: url("/assets/img/dark_tsun.jpg");
+  }
+}
+
+@media (pointer:coarse) {
+  footer .sitemap a.root,
+  footer .sitemap a.child {
+    // padding: 10px 10px;
+    // display: inline-block;
+  }
+}

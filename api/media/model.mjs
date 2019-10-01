@@ -44,7 +44,7 @@ const Media = bookshelf.createModel({
     },
 
     url() {
-      return `${Media.baseUrl}${this.get('large_image')}`
+      return `${Media.baseUrl}${this.get('medium_image')}`
     },
 
     thumb() {

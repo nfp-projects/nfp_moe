@@ -1,0 +1,79 @@
+@import './_common';
+
+.error {
+  font-size: 0.8em;
+  color: $secondary-dark-bg;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
+$bordercolor: $primary-bg;
+$headcolor: $primary-light-bg;
+$headtext: $primary-light-fg;
+
+.admin-wrapper table {
+  width: calc(100% - 20px);
+  margin: 10px;
+  border: solid 1px $bordercolor;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.8em;
+
+  thead th {
+    background-color: $headcolor;
+    border: solid 1px $bordercolor;
+    color: $headtext;
+    padding: 10px;
+    text-align: left;
+  }
+  tbody td {
+    text-align: left;
+    border: solid 1px $bordercolor;
+    color: $table-fg;
+    padding: 10px;
+  }
+  a,
+  a:visited,
+  a:hover {
+    text-decoration: none;
+    color: $secondary-dark-bg;
+    font-weight: bold;
+  }
+
+  button {
+    color: $secondary-dark-bg;
+    background: transparent;
+    border: 1px solid $secondary-dark-bg;
+  }
+
+  td.right,
+  th.right {
+    text-align: right;
+  }
+}
+
+.floating-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #00000099;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@import 'admin/admin';
+@import 'widgets/admin';
+
+.darkmodeon {
+  .maincontainer .admin-wrapper {
+    color: $main-fg;
+  }
+
+  .error {
+    color: $dark_secondary-dark-bg;
+  }
+}

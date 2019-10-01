@@ -26,6 +26,7 @@
       display: flex;
       color: $primary-dark-fg;
       text-decoration: none;
+      background-image: url("/assets/img/logo_small.jpg");
     }
 
     h2 {
@@ -74,6 +75,11 @@
           min-width: 100px;
         }
       }
+
+      .loading-spinner {
+        position: relative;
+        width: 200px;
+      }
     }
   }
 
@@ -118,6 +124,18 @@
     padding: 10px;
     color: $primary-fg-url;
     font-weight: bold;
+  }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) { 
+  #nav .top a.logo {
+    background-image: url("/assets/img/logo.jpg");
   }
 }
 

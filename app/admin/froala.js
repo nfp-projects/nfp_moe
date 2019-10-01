@@ -33,7 +33,7 @@ const Froala = {
           element.setAttribute('href', Froala.files[i].url)
         } else {
           element = document.createElement('script')
-          element.setAttribute('type','text/javascript')
+          element.setAttribute('type', 'text/javascript')
           element.setAttribute('src', Froala.files[i].url)
         }
         element.onload = onload

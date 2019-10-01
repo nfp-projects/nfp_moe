@@ -1,5 +1,3 @@
-const m = require('mithril')
-
 const { getAllArticlesPagination, removeArticle } = require('../api/article')
 const { fetchPage } = require('../api/pagination')
 const Dialogue = require('../widgets/dialogue')

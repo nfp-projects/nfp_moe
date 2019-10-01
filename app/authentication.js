@@ -1,30 +1,35 @@
-const m = require('mithril')
-
 const storageName = 'logintoken'
-const loadingListeners = []
-
-window.googleLoaded = function() {
-  Authentication.loadedGoogle = true
-  while (Authentication.loadingListeners.length) {
-    Authentication.loadingListeners.pop()()
-  }
-}
 
 const Authentication = {
   currentUser: null,
+  isAdmin: false,
   loadedGoogle: false,
   loadingGoogle: false,
   loadingListeners: [],
+  authListeners: [],
 
   updateToken: function(token) {
     if (!token) return Authentication.clearToken()
     localStorage.setItem(storageName, token)
     Authentication.currentUser = JSON.parse(atob(token.split('.')[1]))
+
+    if (Authentication.authListeners.length) {
+      Authentication.authListeners.forEach(function(x) { x(Authentication.currentUser) })
+    }
   },
 
   clearToken: function() {
     Authentication.currentUser = null
     localStorage.removeItem(storageName)
+    Authentication.isAdmin = false
+  },
+
+  addEvent: function(event) {
+    Authentication.authListeners.push(event)
+  },
+
+  setAdmin: function(item) {
+    Authentication.isAdmin = item
   },
 
   createGoogleScript: function() {
@@ -48,6 +53,15 @@ const Authentication = {
   getToken: function() {
     return localStorage.getItem(storageName)
   },
+}
+
+if (!window.googleLoaded) {
+  window.googleLoaded = function() {
+    Authentication.loadedGoogle = true
+    while (Authentication.loadingListeners.length) {
+      Authentication.loadingListeners.pop()()
+    }
+  }
 }
 
 Authentication.updateToken(localStorage.getItem(storageName))

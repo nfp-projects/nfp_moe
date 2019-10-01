@@ -1,5 +1,3 @@
-const m = require('mithril')
-
 const Pages = {
   oninit: function(vnode) {
     this.onpage = vnode.attrs.onpage || function() {}

@@ -1,0 +1,208 @@
+.fr-view {
+  word-wrap: break-word;
+
+  .clearfix::after {
+    clear: both;
+    display: block;
+    content: "";
+    height: 0
+  }
+  h1, h2, h3, h4, h5, h6, p, dl, ol, ul {
+    margin: 0 0 1em !important;
+  }
+
+  blockquote {
+    border-left: solid 2px $main-fg;
+    margin-left: 0;
+    padding-left: 5px;
+    color: $main-fg;
+  }
+
+  .hide-by-clipping {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0
+  }
+
+  img.fr-rounded,
+  .fr-img-caption.fr-rounded img {
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box
+  }
+
+  img.fr-bordered,
+  .fr-img-caption.fr-bordered img {
+    border: solid 5px #CCC
+  }
+
+  img.fr-bordered {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box
+  }
+
+  .fr-img-caption.fr-bordered img {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+  }
+
+  span.fr-emoticon {
+    font-weight: normal;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "NotoColorEmoji", "Segoe UI Symbol", "Android Emoji", "EmojiSymbols";
+    display: inline;
+    line-height: 0
+  }
+
+  img {
+    position: relative;
+    max-width: 100%
+  }
+
+  img.fr-dib {
+    margin: 5px auto;
+    display: block;
+    float: none;
+    vertical-align: top
+  }
+
+  img.fr-dib.fr-fil {
+    margin-left: 0;
+    text-align: left
+  }
+
+  img.fr-dib.fr-fir {
+    margin-right: 0;
+    text-align: right
+  }
+
+  img.fr-dii {
+    display: inline-block;
+    float: none;
+    vertical-align: bottom;
+    margin-left: 5px;
+    margin-right: 5px;
+    max-width: calc(100% - (2 * 5px))
+  }
+
+  img.fr-dii.fr-fil {
+    float: left;
+    margin: 5px 5px 5px 0;
+    max-width: calc(100% - 5px)
+  }
+
+  img.fr-dii.fr-fir {
+    float: right;
+    margin: 5px 0 5px 5px;
+    max-width: calc(100% - 5px)
+  }
+
+  span.fr-img-caption {
+    position: relative;
+    max-width: 100%
+  }
+
+  span.fr-img-caption.fr-dib {
+    margin: 5px auto;
+    display: block;
+    float: none;
+    vertical-align: top
+  }
+
+  span.fr-img-caption.fr-dib.fr-fil {
+    margin-left: 0;
+    text-align: left
+  }
+
+  span.fr-img-caption.fr-dib.fr-fir {
+    margin-right: 0;
+    text-align: right
+  }
+
+  span.fr-img-caption.fr-dii {
+    display: inline-block;
+    float: none;
+    vertical-align: bottom;
+    margin-left: 5px;
+    margin-right: 5px;
+    max-width: calc(100% - (2 * 5px))
+  }
+
+  span.fr-img-caption.fr-dii.fr-fil {
+    float: left;
+    margin: 5px 5px 5px 0;
+    max-width: calc(100% - 5px)
+  }
+
+  span.fr-img-caption.fr-dii.fr-fir {
+    float: right;
+    margin: 5px 0 5px 5px;
+    max-width: calc(100% - 5px)
+  }
+
+  a.fr-strong {
+    font-weight: 700
+  }
+
+  a.fr-green {
+    color: green
+  }
+
+  .fr-img-caption {
+    text-align: center
+  }
+
+  .fr-img-caption .fr-img-wrap {
+    padding: 0;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    width: 100%
+  }
+
+  .fr-img-caption .fr-img-wrap img {
+    display: block;
+    margin: auto;
+    width: 100%
+  }
+
+  .fr-img-caption .fr-img-wrap>span {
+    margin: auto;
+    display: block;
+    padding: 5px 5px 10px;
+    font-size: 14px;
+    font-weight: initial;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-opacity: 0.9;
+    -moz-opacity: 0.9;
+    opacity: 0.9;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    width: 100%;
+    text-align: center
+  }
+
+  a { color: $secondary-dark-bg; }
+  dt { font-weight: bold; }
+  ol { list-style-type: decimal; padding-left: 40px; }
+  ul { list-style-type: disc; padding-left: 40px; }
+  h1 { font-size: 1.8em; font-weight: bold; }
+  h2 { font-size: 1.6em; font-weight: bold; }
+  h3 { font-size: 1.4em; font-weight: bold; }
+  h4 { font-size: 1.2em; font-weight: bold; }
+  h5 { font-size: 1.0em; font-weight: bold; }
+  h6 { font-size: 0.8em; font-weight: bold; }
+  hr { width: 100%; }
+  strong { font-weight: 700 }
+
+}

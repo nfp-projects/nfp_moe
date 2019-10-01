@@ -54,6 +54,7 @@ const Article = {
           m('.fr-view', [
             this.article.media
               ? m('a.cover', {
+                  rel: 'noopener',
                   href: this.article.media.url,
                 }, m('img', { src: this.article.media.medium_url, alt: 'Cover image for ' + this.article.name }))
               : null,

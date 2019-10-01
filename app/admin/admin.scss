@@ -38,21 +38,3 @@
 @import 'pages';
 @import 'articles';
 @import 'staff';
-
-.darkmodeon {
-  .admin-wrapper {
-    background: $dark_primary-bg;
-  }
-
-  .admin-actions {
-    background: $dark_primary-bg;
-
-    span {
-      color: $dark_primary-fg;
-    }
-
-    a {
-      color: $dark_secondary-light-bg;
-    }
-  }
-}

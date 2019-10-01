@@ -1,4 +1,3 @@
-const m = require('mithril')
 const { sendRequest } = require('./common')
 
 exports.uploadMedia = function(file) {

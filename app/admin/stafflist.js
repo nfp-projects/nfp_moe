@@ -1,5 +1,3 @@
-const m = require('mithril')
-
 const { getAllStaff, removeStaff } = require('../api/staff')
 const Dialogue = require('../widgets/dialogue')
 const Pages = require('../widgets/pages')

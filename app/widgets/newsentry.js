@@ -1,4 +1,3 @@
-const m = require('mithril')
 const Fileinfo = require('./fileinfo')
 
 const Newsentry = {

@@ -1,5 +1,3 @@
-const m = require('mithril')
-
 const Authentication = require('../authentication')
 const FileUpload = require('../widgets/fileupload')
 const Froala = require('./froala')
@@ -98,6 +96,9 @@ const EditPage = {
     if (this.error) return
 
     this.page.description = vnode.state.froala ? vnode.state.froala.html.get() : this.page.description
+    if (this.page.description) {
+      this.page.description = this.page.description.replace(/<p[^>]+data-f-id="pbf"[^>]+>[^>]+>[^>]+>[^>]+>/, '')
+    }
 
     this.loading = true
 

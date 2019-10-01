@@ -61,6 +61,12 @@ const Page = bookshelf.createModel({
       })
       .fetch({ require, withRelated, ctx })
   },
+  getTree() {
+    return this.query(qb => {
+      qb.where({ parent_id: null })
+      qb.select(['id', 'name', 'path'])
+    }).fetchAll({ withRelated: ['children'] })
+  },
 })
 
 export default Page
