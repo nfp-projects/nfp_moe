@@ -1,7 +1,7 @@
 const m = require('mithril')
 
-const Page = require('../api/page')
-const Article = require('../api/article')
+const Page = require('../api/page.p')
+const Article = require('../api/article.p')
 const Pagination = require('../api/pagination')
 const Pages = require('../widgets/pages')
 const Newsitem = require('../widgets/newsitem')

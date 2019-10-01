@@ -1,7 +1,7 @@
 const m = require('mithril')
 const Authentication = require('../authentication')
 const Darkmode = require('../darkmode')
-const Page = require('../api/page')
+const Page = require('../api/page.p')
 
 const Menu = {
   currentActive: 'home',

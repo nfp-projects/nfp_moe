@@ -1,5 +1,5 @@
 const m = require('mithril')
-const Page = require('../api/page')
+const Page = require('../api/page.p')
 const Authentication = require('../authentication')
 
 const Footer = {

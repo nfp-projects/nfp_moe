@@ -1,5 +1,5 @@
 const m = require('mithril')
-const ApiArticle = require('../api/article')
+const ApiArticle = require('../api/article.p')
 const Authentication = require('../authentication')
 const Fileinfo = require('../widgets/fileinfo')
 
