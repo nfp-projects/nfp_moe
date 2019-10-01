@@ -19,8 +19,7 @@ jobs:
       - run:
           name: Replace version in config
           command: |
-            sed -i .org "s/circleci_version_number/${CIRCLE_BUILD_NUM}/g" config/config.default.json
-            rm config/config/config.default.json.org
+            sed -i "s/circleci_version_number/${CIRCLE_BUILD_NUM}/g" config/config.default.json
       - run:
           name: Build docker image
           command: docker build -t ${di}:build_${CIRCLE_BUILD_NUM} -t ${di}:${CIRCLE_SHA1} -t ${di}:${dtag} .
