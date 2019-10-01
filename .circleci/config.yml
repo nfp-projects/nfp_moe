@@ -12,8 +12,8 @@ jobs:
     working_directory: ~/nfpmoe
     steps:
       - run:
-          name: Update and install SSH & Git
-          command: apk update && apk upgrade && apk add --no-cache bash git openssh
+          name: Update and install SSH & Git & sed
+          command: apk update && apk upgrade && apk add --no-cache bash git openssh sed
       - checkout
       - setup_remote_docker
       - run:
