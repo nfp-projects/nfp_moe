@@ -40,7 +40,7 @@ const Frontpage = {
     this.lastpage = m.route.param('page') || '1'
 
     return fetchPage(getAllArticlesPagination({
-      per_page: 2,
+      per_page: 10,
       page: this.lastpage,
       includes: ['parent', 'files', 'media', 'banner'],
     }))
