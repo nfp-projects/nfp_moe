@@ -27,7 +27,7 @@
     ]
   },
   "frontend": {
-    "url": "http://localhost:8080"
+    "url": "http://beta01.nfp.moe"
   },
   "jwt": {
     "secret": "this-is-my-secret",

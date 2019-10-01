@@ -8,6 +8,7 @@ import Article from './article/model.mjs'
 
 const body = readFileSync('./public/index.html').toString()
 const bodyTemplate = dot.template(body)
+const frontend = config.get('frontend:url')
 
 function mapArticle(x) {
   return {
@@ -76,7 +77,8 @@ export async function serveIndex(ctx, path) {
   let tree = null
   let data = null
   let links = null
-  let image = '/assets/img/heart.jpg'
+  let url = frontend + ctx.request.url
+  let image = frontend + '/assets/img/heart.jpg'
   let title = 'NFP Moe - Anime/Manga translation group'
   let description = 'Small fansubbing and scanlation group translating and encoding our favourite shows from Japan.'
   try {
@@ -139,6 +141,7 @@ export async function serveIndex(ctx, path) {
     tree: JSON.stringify(tree),
     data: JSON.stringify(data),
     links: JSON.stringify(links),
+    url: url,
     image: image,
     title: title,
     description: description,
