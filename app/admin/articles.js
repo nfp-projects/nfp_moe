@@ -29,7 +29,7 @@ const AdminArticles = {
     return pagination.fetchPage(Article.getAllArticlesPagination({
       per_page: 10,
       page: this.lastpage,
-      includes: ['parent'],
+      includes: ['parent', 'staff'],
     }))
     .then(function(result) {
       vnode.state.articles = result.data
@@ -70,13 +70,10 @@ const AdminArticles = {
         name: '-- Frontpage --',
       }
     }
-    let other = ''
     let className = ''
     if (new Date() < new Date(article.published_at)) {
-      other = '(hidden)'
       className = 'rowhidden'
     } else if (article.is_featured) {
-      other = '(featured)'
       className = 'rowfeatured'
     }
     return [
@@ -85,7 +82,7 @@ const AdminArticles = {
         m('td', m(m.route.Link, { href: parent.path }, parent.name)),
         m('td', m(m.route.Link, { href: '/article/' + article.path }, '/article/' + article.path)),
         m('td.right', article.published_at.replace('T', ' ').split('.')[0]),
-        m('td.right', other),
+        m('td.right', article.staff && article.staff.fullname || 'Admin'),
         m('td.right', m('button', { onclick: function() { vnode.state.removeArticle = article } }, 'Remove')),
       ]),
     ]
@@ -113,7 +110,7 @@ const AdminArticles = {
                   m('th', 'Page'),
                   m('th', 'Path'),
                   m('th.right', 'Publish'),
-                  m('th.right', 'Other'),
+                  m('th.right', 'By'),
                   m('th.right', 'Actions'),
                 ])
               ),

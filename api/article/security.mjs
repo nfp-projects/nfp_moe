@@ -8,6 +8,7 @@ const requiredFields = [
 const validFields = [
   'name',
   'path',
+  'staff_id',
   'description',
   'parent_id',
   'media_id',

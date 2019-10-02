@@ -32,7 +32,6 @@ const Newsentry = {
           : vnode.attrs.description
             ? m('span.entrydescription', Newsentry.strip(vnode.attrs.description))
             : null),
-        m('span.entrymeta', 'Posted ' + vnode.attrs.published_at.replace('T', ' ').split('.')[0]),
       ]),
     ])
   },

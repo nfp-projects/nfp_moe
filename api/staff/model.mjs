@@ -26,9 +26,7 @@ const Staff = bookshelf.createModel({
   ]),
 }, {
   // Hide password from any relations and include requests.
-  publicFields: bookshelf.safeColumns([
-    'fullname',
-  ]),
+  publicFields: ['id', 'fullname'],
 
   hash(password) {
     return new Promise((resolve, reject) =>

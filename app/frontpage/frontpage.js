@@ -57,7 +57,7 @@ const Frontpage = {
     return Pagination.fetchPage(Article.getAllArticlesPagination({
       per_page: 10,
       page: this.lastpage,
-      includes: ['parent', 'files', 'media', 'banner'],
+      includes: ['parent', 'files', 'media', 'banner', 'staff'],
     }))
     .then(function(result) {
       vnode.state.articles = result.data

@@ -40,6 +40,14 @@ article.editarticle {
       height: 300px;
     }
 
+    label.slim {
+      font-size: 0.7em;
+    }
+    input.slim {
+      font-size: 0.8em;
+      padding: 2px 5px;
+    }
+
     .loading-spinner {
       height: 300px;
       position: relative;

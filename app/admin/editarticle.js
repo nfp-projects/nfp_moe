@@ -1,5 +1,6 @@
 const Authentication = require('../authentication')
 const FileUpload = require('../widgets/fileupload')
+const Staff = require('../api/staff')
 const Froala = require('./froala')
 const Page = require('../api/page')
 const File = require('../api/file')
@@ -30,6 +31,18 @@ const EditArticle = {
   oninit: function(vnode) {
     this.froala = null
     this.loadedFroala = Froala.loadedFroala
+    this.staffers = []
+
+    Staff.getAllStaff()
+    .then(function(result) {
+      vnode.state.staffers = result
+    })
+    .catch(function(err) {
+      vnode.state.error = err.message
+    })
+    .then(function() {
+      m.redraw()
+    })
 
     if (!this.loadedFroala) {
       Froala.createFroalaScript()
@@ -121,6 +134,10 @@ const EditArticle = {
     }
   },
 
+  updateStaffer: function(e) {
+    this.article.staff_id = Number(e.currentTarget.value)
+  },
+
   mediaUploaded: function(type, media) {
     this.article[type] = media
   },
@@ -159,6 +176,7 @@ const EditArticle = {
         media_id: this.article.media && this.article.media.id,
         published_at: new Date(this.article.published_at),
         is_featured: this.article.is_featured,
+        staff_id: this.article.staff_id,
       })
     } else {
       promise = Article.createArticle({
@@ -170,6 +188,7 @@ const EditArticle = {
         media_id: this.article.media && this.article.media.id,
         published_at: new Date(this.article.published_at),
         is_featured: this.article.is_featured,
+        staff_id: this.article.staff_id,
       })
     }
 
@@ -225,8 +244,20 @@ const EditArticle = {
     return out
   },
 
+  getStaffers: function() {
+    if (!this.article.staff_id) {
+      this.article.staff_id = 1
+    }
+    let out = []
+    this.staffers.forEach(function(item) {
+      out.push({ id: item.id, name: item.fullname })
+    })
+    return out
+  },
+
   view: function(vnode) {
     const parents = this.getFlatTree()
+    const staffers = this.getStaffers()
     return (
       this.loading ?
         m('div.loading-spinner')
@@ -265,17 +296,17 @@ const EditArticle = {
               m('select', {
                 onchange: this.updateParent.bind(this),
               }, parents.map(function(item) { return m('option', { value: item.id || -1, selected: item.id === vnode.state.article.parent_id }, item.name) })),
-              m('label', 'Path'),
-              m('input', {
-                type: 'text',
-                value: this.article.path,
-                oninput: this.updateValue.bind(this, 'path'),
-              }),
               m('label', 'Name'),
               m('input', {
                 type: 'text',
                 value: this.article.name,
                 oninput: this.updateValue.bind(this, 'name'),
+              }),
+              m('label.slim', 'Path'),
+              m('input.slim', {
+                type: 'text',
+                value: this.article.path,
+                oninput: this.updateValue.bind(this, 'path'),
               }),
               m('label', 'Description'),
               (
@@ -289,12 +320,16 @@ const EditArticle = {
                   })
                   : null
               ),
-              m('label', 'Publish at'),
+              m('label', 'Published at'),
               m('input', {
                 type: 'datetime-local',
                 value: this.article.published_at,
                 oninput: this.updateValue.bind(this, 'published_at'),
               }),
+              m('label', 'Published by'),
+              m('select', {
+                onchange: this.updateStaffer.bind(this),
+              }, staffers.map(function(item) { return m('option', { value: item.id, selected: item.id === vnode.state.article.staff_id }, item.name) })),
               m('label', 'Make featured'),
               m('input', {
                 type: 'checkbox',

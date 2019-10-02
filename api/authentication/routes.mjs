@@ -38,7 +38,7 @@ export default class AuthRoutes {
       level = staff.get('level')
     }
 
-    ctx.body = { token: this.jwt.createToken(output.email, level) }
+    ctx.body = { token: this.jwt.createToken(staff.id, output.email, level) }
   }
 
   /*

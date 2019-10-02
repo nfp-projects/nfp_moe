@@ -55,6 +55,10 @@ export default class ArticleRoutes {
   async createArticle(ctx) {
     await this.security.validUpdate(ctx)
 
+    if (!ctx.request.body.staff_id) {
+      ctx.request.body.staff_id = ctx.state.user.id
+    }
+
     ctx.body = await this.Article.create(ctx.request.body)
   }
 

@@ -41,6 +41,6 @@ exports.getAllPageArticlesPagination = function(pageId, options) {
 exports.getArticle = function(id) {
   return common.sendRequest({
     method: 'GET',
-    url: '/api/articles/public/' + id + '?includes=media,parent,banner,files',
+    url: '/api/articles/public/' + id + '?includes=media,parent,banner,files,staff',
   })
 }

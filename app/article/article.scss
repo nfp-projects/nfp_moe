@@ -26,7 +26,7 @@ article.article {
 
   .fr-view {
     margin: 0 20px;
-    padding: 20px 20px 60px;
+    padding: 20px 20px 10px;
     width: calc(100% - 40px);
     max-width: 800px;
     flex: 2 0 0;
@@ -73,6 +73,34 @@ article.article {
     min-height: 50px;
     position: relative;
   }
+
+  .goback {
+    width: calc(100% - 40px);
+    max-width: 800px;
+    align-self: center;
+    padding: 10px 5px 0;
+    margin-bottom: -10px;
+
+    a {
+      font-weight: bold;
+      text-decoration: none;
+      color: $secondary-dark-bg;
+    }
+  }
+
+  .entrymeta {
+    flex-grow: 2;
+    font-size: 11px;
+    color: $meta-fg;
+    font-weight: bold;
+    margin: 40px 0 0;
+
+    a {
+      color: $secondary-dark-bg;
+      margin: 0 4px;
+      text-decoration: none;
+    }
+  }
 }
 
 .darkmodeon {
@@ -87,6 +115,14 @@ article.article {
 
     .fr-view {
       background: $dark_newsitem-bg;
+    }
+
+    .opencomments {
+      color: $dark_secondary-dark-bg;
+    }
+
+    .goback a {
+      color: $dark_secondary-dark-bg;
     }
   }
 }

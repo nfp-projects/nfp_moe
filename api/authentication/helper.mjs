@@ -28,6 +28,6 @@ export default class AuthHelper {
       throw err
     }
 
-    return this.jwt.createToken(staff.get('email'), staff.get('level'))
+    return this.jwt.createToken(staff.id, staff.get('email'), staff.get('level'))
   }
 }

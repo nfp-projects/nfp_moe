@@ -43,8 +43,9 @@ export default class Jwt {
     return this.jwt.decode(token)
   }
 
-  createToken(email, level, opts) {
+  createToken(id, email, level, opts) {
     return this.sign({
+      id: id,
       email: email,
       level: level,
     }, email, opts)

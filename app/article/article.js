@@ -75,6 +75,7 @@ const Article = {
       this.loading ?
         m('div.loading-spinner')
       : m('article.article', [
+          this.article.parent ? m('div.goback', ['« ', m(m.route.Link, { href: '/page/' + this.article.parent.path }, this.article.parent.name)]) : null,
           m('header', m('h1', this.article.name)),
           m('.fr-view', [
             this.article.media
@@ -89,6 +90,13 @@ const Article = {
                   return m(Fileinfo, { file: file })
                 })
               : null),
+            m('div.entrymeta', [
+              'Posted ',
+              (this.article.parent ? 'in' : ''),
+              (this.article.parent ? m(m.route.Link, { href: '/page/' + this.article.parent.path }, this.article.parent.name) : null),
+              'at ' + (this.article.published_at.replace('T', ' ').split('.')[0]).substr(0, 16),
+              ' by ' + (this.article.staff && this.article.staff.fullname || 'Admin'),
+            ]),
           ]),
           Authentication.currentUser
             ? m('div.admin-actions', [

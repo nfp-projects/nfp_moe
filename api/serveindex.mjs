@@ -17,6 +17,10 @@ function mapArticle(trim = false, x, includeBanner = false, includeFiles = true)
     path: x.path,
     description: x.description,
     name: x.name,
+    staff: x.staff && ({
+      id: x.staff.id,
+      fullname: x.staff.fullname,
+    }) || null,
     media: x.media && ({
       link: !trim && x.media.link || null,
       large_url: x.media.large_url,
@@ -95,7 +99,7 @@ export async function serveIndex(ctx, path) {
         { id: x.id, name: x.name, path: x.path }
       ))
     ))
-    featured = await Article.getFeatured(['files', 'media', 'banner'])
+    featured = await Article.getFeatured(['media', 'banner'])
     if (featured) {
       featured = mapArticle(true, featured.toJSON(), true, false)
     }
@@ -120,7 +124,7 @@ export async function serveIndex(ctx, path) {
       if (id) {
         let found
         if (path.startsWith('/article/')) {
-          found = await Article.getSingle(id, ['media', 'parent', 'banner', 'files'], false, null, true)
+          found = await Article.getSingle(id, ['media', 'parent', 'banner', 'files', 'staff'], false, null, true)
           if (found) {
             found = mapArticle(false, found.toJSON())
           }

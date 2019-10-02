@@ -30,6 +30,7 @@ const Newsitem = {
             (vnode.attrs.parent ? 'in' : ''),
             (vnode.attrs.parent ? m(m.route.Link, { href: '/page/' + vnode.attrs.parent.path }, vnode.attrs.parent.name) : null),
             'at ' + (vnode.attrs.published_at.replace('T', ' ').split('.')[0]).substr(0, 16),
+            ' by ' + (vnode.attrs.staff && vnode.attrs.staff.fullname || 'Admin'),
           ]),
         ]),
       ]),
