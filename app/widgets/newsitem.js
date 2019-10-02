@@ -25,7 +25,7 @@ const Newsitem = {
                 return m(Fileinfo, { file: file })
               })
             : null),
-          m('span.entrymeta', 'Posted ' + vnode.attrs.created_at.replace('T', ' ').split('.')[0]),
+          m('span.entrymeta', 'Posted ' + vnode.attrs.published_at.replace('T', ' ').split('.')[0]),
         ]),
       ]),
     ])
