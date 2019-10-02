@@ -76,6 +76,11 @@ exports.up = function up(knex, Promise) {
       table.boolean('is_deleted')
         .notNullable()
         .default(false)
+      table.timestamp('published_at')
+        .defaultTo(knex.fn.now())
+      table.boolean('is_featured')
+        .notNullable()
+        .default(false)
       table.timestamps()
     }),
     knex.schema.createTable('files', function(table) {

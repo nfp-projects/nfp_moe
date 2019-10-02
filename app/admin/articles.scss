@@ -46,6 +46,16 @@ article.editarticle {
     }
   }
 
+  table {
+    tr.rowhidden td {
+      background: #e6e6e6;
+    }
+
+    tr.rowfeatured td {
+      background: hsl(120, 60%, 85%);
+    }
+  }
+
   h5 {
     margin-bottom: 20px;
   }

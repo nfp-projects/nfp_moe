@@ -77,6 +77,7 @@ export async function serveIndex(ctx, path) {
   let tree = null
   let data = null
   let links = null
+  let featured = null
   let url = frontend + ctx.request.url
   let image = frontend + '/assets/img/heart.jpg'
   let title = 'NFP Moe - Anime/Manga translation group'
@@ -88,6 +89,11 @@ export async function serveIndex(ctx, path) {
         { id: x.id, name: x.name, path: x.path }
       ))
     ))
+    featured = await Article.getFeatured(['files', 'media', 'banner'])
+    if (featured) {
+      featured = mapArticle(featured.toJSON())
+    }
+
     if (path === '/') {
       data = await Article.getFrontpageArticles(Number(ctx.query.page || '1'))
 
@@ -108,26 +114,30 @@ export async function serveIndex(ctx, path) {
       if (id) {
         let found
         if (path.startsWith('/article/')) {
-          found = await Article.getSingle(id, ['media', 'parent', 'banner', 'files'])
-          found = mapArticle(found.toJSON())
+          found = await Article.getSingle(id, ['media', 'parent', 'banner', 'files'], false, null, true)
+          if (found) {
+            found = mapArticle(found.toJSON())
+          }
           data = found
         } else {
           found = await Page.getSingle(id, ['media', 'banner', 'children'])
           found = mapPage(found.toJSON())
           data = found
         }
-        if (found.media) {
-          image = found.media.large_url
-        } else if (found.banner) {
-          image = found.banner.large_url
-        }
-        if (found.description) {
-          description = striptags(found.description)
-        }
-        if (found.parent) {
-          title = found.name + ' - ' + found.parent.name + ' - NFP Moe'
-        } else {
-          title = found.name + ' - NFP Moe'
+        if (found) {
+          if (found.media) {
+            image = found.media.large_url
+          } else if (found.banner) {
+            image = found.banner.large_url
+          }
+          if (found.description) {
+            description = striptags(found.description)
+          }
+          if (found.parent) {
+            title = found.name + ' - ' + found.parent.name + ' - NFP Moe'
+          } else {
+            title = found.name + ' - NFP Moe'
+          }
         }
       }
     }
@@ -141,6 +151,7 @@ export async function serveIndex(ctx, path) {
     tree: JSON.stringify(tree),
     data: JSON.stringify(data),
     links: JSON.stringify(links),
+    featured: JSON.stringify(featured),
     url: url,
     image: image,
     title: title,

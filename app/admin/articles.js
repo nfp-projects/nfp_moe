@@ -70,12 +70,22 @@ const AdminArticles = {
         name: '-- Frontpage --',
       }
     }
+    let other = ''
+    let className = ''
+    if (new Date() < new Date(article.published_at)) {
+      other = '(hidden)'
+      className = 'rowhidden'
+    } else if (article.is_featured) {
+      other = '(featured)'
+      className = 'rowfeatured'
+    }
     return [
-      m('tr', [
+      m('tr', { class: className }, [
         m('td', m(m.route.Link, { href: '/admin/articles/' + article.id }, article.name)),
         m('td', m(m.route.Link, { href: parent.path }, parent.name)),
         m('td', m(m.route.Link, { href: '/article/' + article.path }, '/article/' + article.path)),
-        m('td.right', article.updated_at.replace('T', ' ').split('.')[0]),
+        m('td.right', article.published_at.replace('T', ' ').split('.')[0]),
+        m('td.right', other),
         m('td.right', m('button', { onclick: function() { vnode.state.removeArticle = article } }, 'Remove')),
       ]),
     ]
@@ -102,7 +112,8 @@ const AdminArticles = {
                   m('th', 'Title'),
                   m('th', 'Page'),
                   m('th', 'Path'),
-                  m('th.right', 'Updated'),
+                  m('th.right', 'Publish'),
+                  m('th.right', 'Other'),
                   m('th.right', 'Actions'),
                 ])
               ),

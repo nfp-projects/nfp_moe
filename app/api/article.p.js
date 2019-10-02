@@ -16,7 +16,7 @@ exports.getAllArticlesPagination = function(options) {
     extra += '&includes=' + options.includes.join(',')
   }
 
-  return '/api/articles?' + extra
+  return '/api/articles/public?' + extra
 }
 
 exports.getAllPageArticlesPagination = function(pageId, options) {
@@ -35,12 +35,12 @@ exports.getAllPageArticlesPagination = function(pageId, options) {
     extra += '&includes=' + options.includes.join(',')
   }
 
-  return '/api/pages/' + pageId + '/articles?' + extra
+  return '/api/pages/' + pageId + '/articles/public?' + extra
 }
 
 exports.getArticle = function(id) {
   return common.sendRequest({
     method: 'GET',
-    url: '/api/articles/' + id + '?includes=media,parent,banner,files',
+    url: '/api/articles/public/' + id + '?includes=media,parent,banner,files',
   })
 }

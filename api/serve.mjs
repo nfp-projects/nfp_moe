@@ -3,6 +3,7 @@ import defaults from './defaults.mjs'
 import access from './access/index.mjs'
 import { restrict } from './access/middleware.mjs'
 import { serveIndex } from './serveindex.mjs'
+import config from './config.mjs'
 
 const restrictAdmin = restrict(access.Manager)
 
@@ -36,8 +37,13 @@ export function serve(docRoot, pathname, options = {}) {
     if (filepath.indexOf('admin') >= 0
         && (filepath.indexOf('js') >= 0
             || filepath.indexOf('css') >= 0)) {
-      await restrictAdmin(ctx)
-      ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+      if (filepath.indexOf('.map') === -1) {
+        await restrictAdmin(ctx)
+        ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+      } else if (config.get('NODE_ENV') !== 'development') {
+        ctx.status = 404
+        return
+      }
     }
 
     return send(ctx, filepath, opts).catch((er) => {

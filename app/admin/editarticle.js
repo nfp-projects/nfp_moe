@@ -64,6 +64,8 @@ const EditArticle = {
       media: null,
       banner: null,
       files: [],
+      is_featured: false,
+      published_at: new Date().toISOString(),
     }
     this.editedPath = false
     this.loadedFroala = Froala.loadedFroala
@@ -73,6 +75,7 @@ const EditArticle = {
       .then(function(result) {
         vnode.state.editedPath = true
         vnode.state.article = result
+        EditArticle.parsePublishedAt(vnode, null)
         document.title = 'Editing: ' + result.name + ' - Admin NFP Moe'
       })
       .catch(function(err) {
@@ -86,6 +89,7 @@ const EditArticle = {
         m.redraw()
       })
     } else {
+      EditArticle.parsePublishedAt(vnode, new Date())
       document.title = 'Create Article - Admin NFP Moe'
       if (vnode.state.froala) {
         vnode.state.froala.html.set(this.article.description)
@@ -93,8 +97,16 @@ const EditArticle = {
     }
   },
 
+  parsePublishedAt: function(vnode, date) {
+    vnode.state.article.published_at = ((date && date.toISOString() || vnode.state.article.published_at).split('.')[0]).substr(0, 16)
+  },
+
   updateValue: function(name, e) {
-    this.article[name] = e.currentTarget.value
+    if (name === 'is_featured') {
+      this.article[name] = e.currentTarget.checked
+    } else {
+      this.article[name] = e.currentTarget.value
+    }
     if (name === 'path') {
       this.editedPath = true
     } else if (name === 'name' && !this.editedPath) {
@@ -145,6 +157,8 @@ const EditArticle = {
         description: this.article.description,
         banner_id: this.article.banner && this.article.banner.id,
         media_id: this.article.media && this.article.media.id,
+        published_at: new Date(this.article.published_at),
+        is_featured: this.article.is_featured,
       })
     } else {
       promise = Article.createArticle({
@@ -154,6 +168,8 @@ const EditArticle = {
         description: this.article.description,
         banner_id: this.article.banner && this.article.banner.id,
         media_id: this.article.media && this.article.media.id,
+        published_at: new Date(this.article.published_at),
+        is_featured: this.article.is_featured,
       })
     }
 
@@ -163,6 +179,7 @@ const EditArticle = {
         res.banner = vnode.state.article.banner
         res.files = vnode.state.article.files
         vnode.state.article = res
+        EditArticle.parsePublishedAt(vnode, null)
       } else {
         m.route.set('/admin/articles/' + res.id)
       }
@@ -248,6 +265,12 @@ const EditArticle = {
               m('select', {
                 onchange: this.updateParent.bind(this),
               }, parents.map(function(item) { return m('option', { value: item.id || -1, selected: item.id === vnode.state.article.parent_id }, item.name) })),
+              m('label', 'Path'),
+              m('input', {
+                type: 'text',
+                value: this.article.path,
+                oninput: this.updateValue.bind(this, 'path'),
+              }),
               m('label', 'Name'),
               m('input', {
                 type: 'text',
@@ -266,11 +289,17 @@ const EditArticle = {
                   })
                   : null
               ),
-              m('label', 'Path'),
+              m('label', 'Publish at'),
               m('input', {
-                type: 'text',
-                value: this.article.path,
-                oninput: this.updateValue.bind(this, 'path'),
+                type: 'datetime-local',
+                value: this.article.published_at,
+                oninput: this.updateValue.bind(this, 'published_at'),
+              }),
+              m('label', 'Make featured'),
+              m('input', {
+                type: 'checkbox',
+                checked: this.article.is_featured,
+                oninput: this.updateValue.bind(this, 'is_featured'),
               }),
               m('div.loading-spinner', { hidden: this.loadedFroala }),
               m('input', {

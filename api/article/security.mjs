@@ -12,6 +12,8 @@ const validFields = [
   'parent_id',
   'media_id',
   'banner_id',
+  'published_at',
+  'is_featured',
 ]
 
 export async function ensureIncludes(ctx) {
@@ -33,5 +35,9 @@ export async function validUpdate(ctx) {
 
   if (out.length > 0) {
     ctx.throw(422, `Body had following invalid properties: ${out.join(', ')}`)
+  }
+
+  if (ctx.request.body.published_at) {
+    ctx.request.body.published_at = new Date(ctx.request.body.published_at)
   }
 }

@@ -13,14 +13,14 @@ export default class ArticleRoutes {
   async getAllArticles(ctx) {
     await this.security.ensureIncludes(ctx)
 
-    ctx.body = await this.Article.getAll(ctx, { }, ctx.state.filter.includes, ctx.query.sort || '-id')
+    ctx.body = await this.Article.getAll(ctx, { }, ctx.state.filter.includes, ctx.query.sort || '-published_at')
   }
 
   /** GET: /api/pages/:pageId/articles */
   async getAllPageArticles(ctx) {
     await this.security.ensureIncludes(ctx)
 
-    ctx.body = await this.Article.getAllFromPage(ctx, ctx.params.pageId, ctx.state.filter.includes, ctx.query.sort || '-id')
+    ctx.body = await this.Article.getAllFromPage(ctx, ctx.params.pageId, ctx.state.filter.includes, ctx.query.sort || '-published_at')
   }
 
   /** GET: /api/articles/:id */
@@ -28,6 +28,27 @@ export default class ArticleRoutes {
     await this.security.ensureIncludes(ctx)
 
     ctx.body = await this.Article.getSingle(ctx.params.id, ctx.state.filter.includes, true, ctx)
+  }
+
+  /** GET: /api/articles/public */
+  async getPublicAllArticles(ctx) {
+    await this.security.ensureIncludes(ctx)
+
+    ctx.body = await this.Article.getAll(ctx, { }, ctx.state.filter.includes, ctx.query.sort || '-published_at', true)
+  }
+
+  /** GET: /api/pages/:pageId/articles/public */
+  async getPublicAllPageArticles(ctx) {
+    await this.security.ensureIncludes(ctx)
+
+    ctx.body = await this.Article.getAllFromPage(ctx, ctx.params.pageId, ctx.state.filter.includes, ctx.query.sort || '-published_at', true)
+  }
+
+  /** GET: /api/articles/public/:id */
+  async getPublicSingleArticle(ctx) {
+    await this.security.ensureIncludes(ctx)
+
+    ctx.body = await this.Article.getSingle(ctx.params.id, ctx.state.filter.includes, true, ctx, true)
   }
 
   /** POST: /api/articles */
@@ -40,6 +61,10 @@ export default class ArticleRoutes {
   /** PUT: /api/articles/:id */
   async updateArticle(ctx) {
     await this.security.validUpdate(ctx)
+
+    if (ctx.request.body.is_featured) {
+      await Article.setAllUnfeatured()
+    }
 
     let page = await this.Article.getSingle(ctx.params.id)
 

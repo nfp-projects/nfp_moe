@@ -13,6 +13,12 @@ const Frontpage = {
     this.featured = null
     this.links = null
 
+    if (window.__nfpfeatured) {
+      this.featured = window.__nfpfeatured
+    }
+
+    console.log(this.featured)
+
     if (window.__nfpdata
         && window.__nfplinks) {
       this.links = window.__nfplinks
