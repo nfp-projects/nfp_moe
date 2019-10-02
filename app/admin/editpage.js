@@ -25,8 +25,33 @@ const EditPage = {
   },
 
   oninit: function(vnode) {
-    this.loading = m.route.param('key') !== 'add'
-    this.creating = m.route.param('key') === 'add'
+    this.froala = null
+    this.loadedFroala = Froala.loadedFroala
+
+    if (!this.loadedFroala) {
+      Froala.createFroalaScript()
+      .then(function() {
+        vnode.state.loadedFroala = true
+        m.redraw()
+      })
+    }
+
+    this.fetchPage(vnode)
+  },
+
+  onupdate: function(vnode) {
+    if (this.lastid !== m.route.param('id')) {
+      this.fetchPage(vnode)
+      if (this.lastid === 'add') {
+        m.redraw()
+      }
+    }
+  },
+
+  fetchPage: function(vnode) {
+    this.lastid = m.route.param('id')
+    this.loading = this.lastid !== 'add'
+    this.creating = this.lastid === 'add'
     this.error = ''
     this.page = {
       name: '',
@@ -35,11 +60,9 @@ const EditPage = {
       media: null,
     }
     this.editedPath = false
-    this.froala = null
-    this.loadedFroala = Froala.loadedFroala
 
-    if (m.route.param('key') !== 'add') {
-      Page.getPage(m.route.param('key'))
+    if (this.lastid !== 'add') {
+      Page.getPage(this.lastid)
       .then(function(result) {
         vnode.state.editedPath = true
         vnode.state.page = result
@@ -54,14 +77,6 @@ const EditPage = {
       })
     } else {
       document.title = 'Create Page - Admin NFP Moe'
-    }
-
-    if (!this.loadedFroala) {
-      Froala.createFroalaScript()
-      .then(function() {
-        vnode.state.loadedFroala = true
-        m.redraw()
-      })
     }
   },
 
