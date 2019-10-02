@@ -36,6 +36,7 @@ const Page = {
       media: null,
     }
     this.loading = true
+    this.loadingnews = true
 
     ApiPage.getPage(this.path)
     .then(function(result) {
@@ -53,8 +54,10 @@ const Page = {
   onupdate: function(vnode) {
     if (this.path !== m.route.param('id')) {
       this.fetchPage(vnode)
+      m.redraw()
     } else if (m.route.param('page') && m.route.param('page') !== this.lastpage) {
       this.fetchArticles(vnode)
+      m.redraw()
     }
   },
 
@@ -109,7 +112,7 @@ const Page = {
 
     return (
       this.loading ?
-        m('div.loading-spinner')
+        m('article.page', m('div.loading-spinner'))
       : m('article.page', [
           bannerPath ? m('.div.page-banner', { style: { 'background-image': 'url("' + bannerPath + '")' } } ) : null,
           this.page.parent

@@ -12,11 +12,22 @@ const Newsentry = {
   },
 
   view: function(vnode) {
+    var deviceWidth = window.innerWidth
+    var pixelRatio = window.devicePixelRatio || 1
+    var imagePath = ''
+
+    if (vnode.attrs.media) {
+      if (deviceWidth > 440 || pixelRatio <= 1) {
+        imagePath = vnode.attrs.media.small_url
+      } else {
+        imagePath = vnode.attrs.media.medium_url
+      }
+    }
     return m('newsentry', [
-      vnode.attrs.media
+      imagePath
         ? m('a.cover', {
             href: '/article/' + vnode.attrs.path,
-          }, m('img', { src: vnode.attrs.media.small_url, alt: 'Article image for ' + vnode.attrs.name }))
+          }, m('img', { src: imagePath, alt: 'Article image for ' + vnode.attrs.name }))
         : m('a.cover.nobg'),
       m('div.entrycontent', [
         m('div.title', [

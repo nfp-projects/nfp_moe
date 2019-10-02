@@ -58,7 +58,8 @@ newsentry {
 fileinfo {
   padding: 0 5px;
   margin-bottom: 5px;
-  display: block;
+  display: flex;
+  flex-direction: column;
 
   &.slim {
     padding: 0;
@@ -98,6 +99,22 @@ fileinfo {
     li {
       padding-left: 20px;
     }
+  }
+}
+
+@media screen and (max-width: 480px){
+  fileinfo,
+  fileinfo.slim {
+    padding: 8px 5px;
+    justify-content: center;
+  }
+}
+
+@media (pointer:coarse) {
+  fileinfo,
+  fileinfo.slim {
+    padding: 8px 5px;
+    justify-content: center;
   }
 }
 
@@ -225,6 +242,23 @@ pages {
 
     .entrycontent.extrapadding {
       padding: 0 5px 5px;
+    }
+  }
+}
+
+@media screen and (max-width: 440px){
+  newsentry {
+    flex-direction: column;
+    align-items: center;
+
+    a.cover {
+      margin: 0 0 15px;
+      width: 100%;
+
+      img {
+        max-height: unset;
+        width: 100%;
+      }
     }
   }
 }

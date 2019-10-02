@@ -8,7 +8,7 @@
     background: $primary-dark-bg;
     color: $primary-dark-fg;
     padding: 0 10px 0 0;
-    height: 100px;
+    min-height: 100px;
     display: flex;
 
     button.dark {

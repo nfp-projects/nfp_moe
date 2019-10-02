@@ -7,7 +7,6 @@ const Article = {
   oninit: function(vnode) {
     this.error = ''
     this.lastarticle = m.route.param('article') || '1'
-    this.loadingnews = false
     this.showcomments = false
 
     if (window.__nfpdata) {
@@ -46,7 +45,7 @@ const Article = {
       vnode.state.error = err.message
     })
     .then(function() {
-      vnode.state.loading = vnode.state.loadingnews = false
+      vnode.state.loading = false
       m.redraw()
     })
   },
@@ -54,6 +53,7 @@ const Article = {
   onupdate: function(vnode) {
     if (this.path !== m.route.param('id')) {
       this.fetchArticle(vnode)
+      m.redraw()
     }
   },
 
@@ -73,7 +73,7 @@ const Article = {
 
     return (
       this.loading ?
-        m('div.loading-spinner')
+        m('article.article', m('div.loading-spinner'))
       : m('article.article', [
           this.article.parent ? m('div.goback', ['« ', m(m.route.Link, { href: '/page/' + this.article.parent.path }, this.article.parent.name)]) : null,
           m('header', m('h1', this.article.name)),

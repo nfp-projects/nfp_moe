@@ -110,11 +110,12 @@ export async function serveIndex(ctx, path) {
     }
 
     if (path === '/') {
-      data = await Article.getFrontpageArticles(Number(ctx.query.page || '1'))
+      let currPage = Number(ctx.query.page || '1')
+      data = await Article.getFrontpageArticles(currPage)
 
       if (data.pagination.rowCount > 10) {
         links = {
-          current: { title: 'Page 1' },
+          current: { title: 'Page ' + currPage },
           next: { page: 2, title: 'Next' },
           last: { page: Math.ceil(data.pagination.rowCount / 10), title: 'Last' },
         }
@@ -122,6 +123,10 @@ export async function serveIndex(ctx, path) {
         links = {
           current: { title: 'Page 1' },
         }
+      }
+      if (currPage > 1) {
+        links.previous = { page: currPage - 1, title: 'Previous' }
+        links.first = { page: 1, title: 'First' }
       }
       data = data.toJSON().map(mapArticle.bind(null, true))
     } else if (path.startsWith('/article/') || path.startsWith('/page/')) {

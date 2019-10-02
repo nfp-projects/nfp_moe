@@ -28,6 +28,7 @@ frontpage {
   .frontpage-news {
     display: flex;
     flex-direction: column;
+    flex-grow: 2;
   }
 
   aside.sidebar {
@@ -61,27 +62,24 @@ frontpage {
         padding-left: 10px;
         list-style-type: disc;
         list-style-position: inside;
-
-        a {
-          display: inline-block;
-          padding: 0;
-          max-width: 206px;
-        }
       }
     }
 
     a {
-      padding: 5px 5px 0px;
+      padding: 2px 5px;
       display: block;
       text-decoration: none;
       color: $secondary-dark-bg;
       font-size: 14px;
       font-weight: bold;
+      display: inline-block;
+      max-width: 200px;
     }
   }
 
   .loading-spinner {
     height: 100px;
+    position: relative;
   }  
 
   newsitem {
@@ -104,8 +102,8 @@ frontpage {
     width: 200px;
     flex: 0 0 200px;
 
-    ul li a {
-      max-width: 156px;
+    a {
+      max-width: 150px;
     }
   }
 }
@@ -123,7 +121,7 @@ frontpage {
     border-bottom: 1px solid $border;
     order: 2;
 
-    ul li a {
+    a {
       max-width: unset;
     }
   }

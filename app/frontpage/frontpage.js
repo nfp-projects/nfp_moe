@@ -38,6 +38,7 @@ const Frontpage = {
   onupdate: function(vnode) {
     if (this.lastpage !== (m.route.param('page') || '1')) {
       this.fetchArticles(vnode)
+      m.redraw()
     }
   },
 

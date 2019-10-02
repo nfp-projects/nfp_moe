@@ -15,6 +15,12 @@ article.page {
     }
   }
 
+  .loading-spinner {
+    position: relative;
+    flex-grow: 2;
+    height: 300px;
+  }
+
   .page-banner {
     background-size: cover;
     background-repeat: no-repeat;
@@ -54,12 +60,6 @@ article.page {
 
   .admin-actions {
     margin-bottom: 20px;
-  }
-
-  & > .loading-spinner {
-    width: 240px;
-    height: 50px;
-    position: relative;
   }
 
   aside.sidebar,
@@ -179,20 +179,25 @@ aside.news {
 }
 
 @media screen and (max-width: 639px){
-  article.page .container {
-    flex-direction: column !important;
-  }
+  article.page {
+    padding: 0;
 
-  article.page aside.sidebar {
-    width: calc(100% - 80px);
-    flex: 0 0 auto;
-    margin: 0px 30px 30px;
-    border-bottom: 1px solid $border;
-    padding: 0 0 5px;
-  }
+    .container {
+      flex-direction: column !important;
+      border: none !important;
+    }
 
-  article.page .news.single .page-cover {
-    margin: 0 0 20px;
+    aside.sidebar {
+      width: calc(100% - 80px);
+      flex: 0 0 auto;
+      margin: 0px 30px 30px;
+      border-bottom: 1px solid $border;
+      padding: 0 0 5px;
+    }
+
+    .news.single .page-cover {
+      margin: 0 0 20px;
+    }
   }
 }
 
@@ -211,6 +216,18 @@ aside.news {
       width: 100%;
       padding: 0 5px;
     }
+  }
+}
+
+@media screen and (max-width: 480px){
+  article.page aside.sidebar a {
+    padding: 9px 10px;
+  }
+}
+
+@media (pointer:coarse) {
+  article.page aside.sidebar a {
+    padding: 9px 10px;
   }
 }
 
@@ -237,6 +254,10 @@ aside.news {
       a {
         color: $dark_secondary-dark-bg;
       }
+    }
+
+    .goback a {
+      color: $dark_secondary-dark-bg;
     }
   }
 

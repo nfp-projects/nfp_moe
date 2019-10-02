@@ -16,6 +16,12 @@ article.article {
     }
   }
 
+  .loading-spinner {
+    position: relative;
+    flex-grow: 2;
+    height: 300px;
+  }
+
   .cover {
     margin: 0 0 20px;
   }
@@ -103,6 +109,16 @@ article.article {
   }
 }
 
+@media screen and (max-width: 639px){
+  article.article {
+    .fr-view {
+      margin: 0;
+      width: 100%;
+      border: none !important;
+    }
+  }
+}
+
 .darkmodeon {
   article.article {
     header {
@@ -123,6 +139,13 @@ article.article {
 
     .goback a {
       color: $dark_secondary-dark-bg;
+    }
+
+    .entrymeta {
+      color: $dark_meta-fg;
+      a {
+        color: $dark_secondary-dark-bg;
+      }
     }
   }
 }
