@@ -1,6 +1,18 @@
 const m = require('mithril')
 window.m = m
 
+m.route.setOrig = m.route.set
+m.route.set = function(path, data, options){
+  m.route.setOrig(path, data, options)
+  window.scrollTo(0, 0)
+}
+
+m.route.linkOrig = m.route.link
+m.route.link = function(vnode){
+  m.route.linkOrig(vnode)
+  window.scrollTo(0, 0)
+}
+
 const Authentication = require('./authentication')
 
 m.route.prefix = ''

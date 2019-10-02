@@ -83,9 +83,7 @@ const Frontpage = {
   },
 
   view: function(vnode) {
-    console.log(this.articles)
     var deviceWidth = window.innerWidth
-
     var bannerPath = ''
 
     if (this.featured && this.featured.banner) {
