@@ -86,9 +86,10 @@ const Article = {
           this.showcomments
             ? m('div.commentcontainer', [
                 m('div#disqus_thread', { oncreate: function() {
+                  let fullhost = window.location.protocol + '//' + window.location.host
                   /*eslint-disable */
                   window.disqus_config = function () {
-                    this.page.url = '/article/' + vnode.state.article.path
+                    this.page.url = fullhost + '/article/' + vnode.state.article.path
                     this.page.identifier = 'article-' + vnode.state.article.id
                   };
                   (function() { // DON'T EDIT BELOW THIS LINE
