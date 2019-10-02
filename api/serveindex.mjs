@@ -14,6 +14,7 @@ function mapArticle(x) {
   return {
     id: x.id,
     created_at: x.created_at,
+    published_at: x.published_at,
     path: x.path,
     description: x.description,
     name: x.name,
