@@ -168,6 +168,10 @@ form {
   }
 }
 
+a, button {
+  outline: none;
+}
+
 @import 'froala';
 
 @import 'menu/menu';

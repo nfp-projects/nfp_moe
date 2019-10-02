@@ -43,6 +43,28 @@ article.article {
       padding: 0 5px;
     }
   }
+
+  .opencomments {
+    border: none;
+    align-self: center;
+    width: calc(100% - 40px);
+    max-width: 300px;
+    background: transparent;
+    font-size: 1.2em;
+    color: $secondary-dark-bg;
+    cursor: pointer;
+    height: 50px;
+    margin: 0 0 30px;
+  }
+
+  .commentcontainer {
+    align-self: center;
+    width: calc(100% - 40px);
+    max-width: 800px;
+    margin-bottom: 30px;
+    min-height: 50px;
+    position: relative;
+  }
 }
 
 .darkmodeon {

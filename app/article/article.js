@@ -8,6 +8,7 @@ const Article = {
     this.error = ''
     this.lastarticle = m.route.param('article') || '1'
     this.loadingnews = false
+    this.showcomments = false
 
     if (window.__nfpdata) {
       this.path = m.route.param('id')
@@ -20,6 +21,7 @@ const Article = {
 
   fetchArticle: function(vnode) {
     this.path = m.route.param('id')
+    this.showcomments = false
     this.article = {
       id: 0,
       name: '',
@@ -81,6 +83,26 @@ const Article = {
               m(m.route.Link, { href: '/admin/articles/' + this.article.id }, 'Edit article'),
             ])
             : null,
+          this.showcomments
+            ? m('div.commentcontainer', [
+                m('div#disqus_thread', { oncreate: function() {
+                  /*eslint-disable */
+                  window.disqus_config = function () {
+                    this.page.url = '/article/' + vnode.state.article.path
+                    this.page.identifier = 'article-' + vnode.state.article.id
+                  };
+                  (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://nfp-moe.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                  })()
+                  /*eslint-enable */
+                }}, m('div.loading-spinner')),
+              ])
+            : m('button.opencomments', {
+                onclick: function() { vnode.state.showcomments = true },
+              }, 'Open comment discussion'),
         ])
     )
   },
