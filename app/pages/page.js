@@ -112,6 +112,9 @@ const Page = {
         m('div.loading-spinner')
       : m('article.page', [
           bannerPath ? m('.div.page-banner', { style: { 'background-image': 'url("' + bannerPath + '")' } } ) : null,
+          this.page.parent
+            ? m('div.goback', ['« ', m(m.route.Link, { href: '/page/' + this.page.parent.path }, this.page.parent.name)])
+            : m('div.goback', ['« ', m(m.route.Link, { href: '/' }, 'Home')]),
           m('header', m('h1', this.page.name)),
           m('.container', {
               class: this.page.children.length ? 'multi' : '',

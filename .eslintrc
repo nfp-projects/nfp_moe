@@ -22,7 +22,7 @@
     "require-await": 0,
     "array-callback-return": 2,
     "block-scoped-var": 2,
-    "complexity": ["error", 30],
+    "complexity": ["error", 40],
     "eqeqeq": [2, "smart"],
     "no-else-return": ["error", { "allowElseIf": false }],
     "no-extra-bind": 2,

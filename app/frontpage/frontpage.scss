@@ -64,6 +64,8 @@ frontpage {
 
         a {
           display: inline-block;
+          padding: 0;
+          max-width: 206px;
         }
       }
     }
@@ -97,10 +99,14 @@ frontpage {
   }
 }
 
-@media screen and (max-width: 1000px){
+@media screen and (max-width: 1000px) {
   frontpage aside.sidebar {
     width: 200px;
     flex: 0 0 200px;
+
+    ul li a {
+      max-width: 156px;
+    }
   }
 }
 
@@ -116,6 +122,10 @@ frontpage {
     margin: 20px 0 30px;
     border-bottom: 1px solid $border;
     order: 2;
+
+    ul li a {
+      max-width: unset;
+    }
   }
 }
 

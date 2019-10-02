@@ -70,6 +70,11 @@ function mapPage(x) {
       medium_url: x.media.medium_url,
       small_url: x.media.small_url,
     }) || null,
+    parent: x.parent && ({
+      id: x.parent.id,
+      name: x.parent.name,
+      path: x.parent.path,
+    }),
     banner: x.banner && ({
       large_url: x.banner.large_url,
       medium_url: x.banner.medium_url,
@@ -130,7 +135,7 @@ export async function serveIndex(ctx, path) {
           }
           data = found
         } else {
-          found = await Page.getSingle(id, ['media', 'banner', 'children'])
+          found = await Page.getSingle(id, ['media', 'banner', 'children', 'parent'])
           found = mapPage(found.toJSON())
           data = found
         }

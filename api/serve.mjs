@@ -37,7 +37,7 @@ export function serve(docRoot, pathname, options = {}) {
     if (filepath.indexOf('admin') >= 0
         && (filepath.indexOf('js') >= 0
             || filepath.indexOf('css') >= 0)) {
-      if (filepath.indexOf('.map') === -1) {
+      if (filepath.indexOf('.map') === -1 && filepath.indexOf('.scss') === -1) {
         await restrictAdmin(ctx)
         ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate')
       } else if (config.get('NODE_ENV') !== 'development') {
