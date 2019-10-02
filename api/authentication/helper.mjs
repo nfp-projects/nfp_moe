@@ -20,8 +20,6 @@ export default class AuthHelper {
         })
         .fetch({ require: true })
 
-      console.log(ctx.request.body.password, staff.get('password'))
-
       await this.Staff.compare(ctx.request.body.password, staff.get('password'))
     } catch (err) {
       if (err.message === 'EmptyResponse' || err.message === 'PasswordMismatch') {

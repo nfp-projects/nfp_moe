@@ -18,7 +18,7 @@ export default class PageRoutes {
       filter.parent_id = null
     }
 
-    ctx.body = await this.Page.getAll(ctx, filter, ctx.state.filter.includes)
+    ctx.body = await this.Page.getAll(ctx, filter, ctx.state.filter.includes, 'name')
   }
 
   /** GET: /api/pages/:id */

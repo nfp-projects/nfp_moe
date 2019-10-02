@@ -56,7 +56,7 @@ const AdminPages = {
     return [
       m('tr', [
         m('td', [
-          page.parent_id ? m('span.subpage', '| >') : null,
+          page.parent_id ? m('span.subpage', ' - ') : null,
           m(m.route.Link, { href: '/admin/pages/' + page.id }, page.name),
         ]),
         m('td', m(m.route.Link, { href: '/page/' + page.path }, '/page/' + page.path)),

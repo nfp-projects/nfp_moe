@@ -22,10 +22,15 @@ const Newsitem = {
               : null),
           (vnode.attrs.files && vnode.attrs.files.length
             ? vnode.attrs.files.map(function(file) {
-                return m(Fileinfo, { file: file })
+                return m(Fileinfo, { file: file, trim: true })
               })
             : null),
-          m('span.entrymeta', 'Posted ' + vnode.attrs.published_at.replace('T', ' ').split('.')[0]),
+          m('span.entrymeta', [
+            'Posted ',
+            (vnode.attrs.parent ? 'in' : ''),
+            (vnode.attrs.parent ? m(m.route.Link, { href: '/page/' + vnode.attrs.parent.path }, vnode.attrs.parent.name) : null),
+            'at ' + (vnode.attrs.published_at.replace('T', ' ').split('.')[0]).substr(0, 16),
+          ]),
         ]),
       ]),
     ])

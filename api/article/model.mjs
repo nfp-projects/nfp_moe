@@ -136,7 +136,7 @@ const Article = bookshelf.createModel({
       .fetchPage({
         pageSize: 10,
         page: page,
-        withRelated: ['files', 'media', 'banner'],
+        withRelated: ['files', 'media', 'banner', 'parent'],
       })
   },
 })

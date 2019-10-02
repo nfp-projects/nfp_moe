@@ -57,13 +57,19 @@ const Fileinfo = {
           : null,
         m('span', this.getTitle(vnode)),
       ]),
-      vnode.attrs.file.meta.torrent && !vnode.attrs.slim
+      vnode.attrs.file.meta.torrent
+          && !vnode.attrs.slim
+          && vnode.attrs.file.meta.torrent.files.length > 1
+          && (!vnode.attrs.trim || vnode.attrs.file.meta.torrent.files.length <= 4)
         ? m('ul', vnode.attrs.file.meta.torrent.files.map(function(file) {
             return m('li', [
               file.name + ' ',
               m('span.meta', '(' + Fileinfo.getSize(file.size) + ')'),
             ])
           }))
+        : null,
+      vnode.attrs.trim && vnode.attrs.file.meta.torrent.files.length > 4
+        ? m('div.trimmed', '...' + vnode.attrs.file.meta.torrent.files.length + ' files...')
         : null,
     ])
   },

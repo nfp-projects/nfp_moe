@@ -10,20 +10,20 @@ const body = readFileSync('./public/index.html').toString()
 const bodyTemplate = dot.template(body)
 const frontend = config.get('frontend:url')
 
-function mapArticle(x) {
+function mapArticle(trim = false, x, includeBanner = false, includeFiles = true) {
   return {
     id: x.id,
-    created_at: x.created_at,
     published_at: x.published_at,
     path: x.path,
     description: x.description,
     name: x.name,
     media: x.media && ({
+      link: !trim && x.media.link || null,
       large_url: x.media.large_url,
       medium_url: x.media.medium_url,
       small_url: x.media.small_url,
     }) || null,
-    banner: x.banner && ({
+    banner: x.banner && includeBanner && ({
       large_url: x.banner.large_url,
       medium_url: x.banner.medium_url,
       small_url: x.banner.small_url,
@@ -33,16 +33,20 @@ function mapArticle(x) {
       name: x.parent.name,
       path: x.parent.path,
     }),
-    files: x.files && x.files.map(f => ({
+    files: x.files && includeFiles && x.files.map(f => ({
       filename: f.filename,
       url: f.url,
       magnet: f.magnet,
       meta: f.meta.torrent && ({
         torrent: {
-          files: f.meta.torrent.files.map(tf => ({
-            name: tf.name,
-            size: tf.size,
-          })),
+          name: f.meta.torrent.name,
+          files: f.meta.torrent.files.map(tf => {
+            if (trim && f.meta.torrent.files.length > 4) return 1
+            return {
+              name: tf.name,
+              size: tf.size,
+            }
+          }),
         },
       }) || {},
     })) || [],
@@ -57,6 +61,7 @@ function mapPage(x) {
     description: x.description,
     name: x.name,
     media: x.media && ({
+      link: x.media.link,
       large_url: x.media.large_url,
       medium_url: x.media.medium_url,
       small_url: x.media.small_url,
@@ -92,7 +97,7 @@ export async function serveIndex(ctx, path) {
     ))
     featured = await Article.getFeatured(['files', 'media', 'banner'])
     if (featured) {
-      featured = mapArticle(featured.toJSON())
+      featured = mapArticle(true, featured.toJSON(), true, false)
     }
 
     if (path === '/') {
@@ -109,7 +114,7 @@ export async function serveIndex(ctx, path) {
           current: { title: 'Page 1' },
         }
       }
-      data = data.toJSON().map(mapArticle)
+      data = data.toJSON().map(mapArticle.bind(null, true))
     } else if (path.startsWith('/article/') || path.startsWith('/page/')) {
       let id = path.split('/')[2]
       if (id) {
@@ -117,7 +122,7 @@ export async function serveIndex(ctx, path) {
         if (path.startsWith('/article/')) {
           found = await Article.getSingle(id, ['media', 'parent', 'banner', 'files'], false, null, true)
           if (found) {
-            found = mapArticle(found.toJSON())
+            found = mapArticle(false, found.toJSON())
           }
           data = found
         } else {

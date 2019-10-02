@@ -87,7 +87,13 @@ frontpage {
   }
 
   .asunaside {
-    display: none;
+    display: block;
+    width: 200px;
+    height: 480px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top left;
+    align-self: center;
   }
 }
 
@@ -98,7 +104,7 @@ frontpage {
   }
 }
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 900px){
   frontpage {
     flex-direction: column;
   }
@@ -113,24 +119,12 @@ frontpage {
   }
 }
 
-@media screen and (min-width: 800px){
-  frontpage .asunaside {
-    display: block;
-    width: 200px;
-    height: 480px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: top left;
-    align-self: center;
-  }
+.daymode frontpage .asunaside {
+  background-image: url("/assets/img/asuna_frontpage.jpg");
+}
 
-  .daymode frontpage .asunaside {
-    background-image: url("/assets/img/asuna_frontpage.jpg");
-  }
-
-  .darkmodeon frontpage .asunaside {
-    background-image: url("/assets/img/dark_asuna_frontpage.jpg");
-  }
+.darkmodeon frontpage .asunaside {
+  background-image: url("/assets/img/dark_asuna_frontpage.jpg");
 }
 
 @media screen and (max-width: 480px){

@@ -84,6 +84,10 @@ fileinfo {
     }
   }
 
+  .trimmed {
+    padding: 3px 0 5px 25px;
+  }
+
   ul {
     margin: 10px 0;
     padding-left: 0;
@@ -166,9 +170,13 @@ newsitem {
     font-size: 11px;
     color: $meta-fg;
     font-weight: bold;
-    display: flex;
-    align-items: flex-end;
     padding: 10px 0;
+
+    a {
+      color: $secondary-dark-bg;
+      margin: 0 5px;
+      text-decoration: none;
+    }
   }
 }
 
@@ -255,6 +263,10 @@ pages {
 
     .entrymeta {
       color: $dark_meta-fg;
+
+      a {
+        color: $dark_secondary-dark-bg;
+      }
     }
   }
 

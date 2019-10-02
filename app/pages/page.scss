@@ -144,6 +144,7 @@ aside.news {
     border-top: none;
     margin-top: 0;
     align-self: flex-start;
+    margin: 0;
 
     & > h4 {
       padding: 0 5px 5px;
@@ -170,6 +171,10 @@ aside.news {
     margin: 0px 30px 30px;
     border-bottom: 1px solid $border;
     padding: 0 0 5px;
+  }
+
+  article.page .news.single .page-cover {
+    margin: 0 0 20px;
   }
 }
 

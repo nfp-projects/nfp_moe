@@ -58,6 +58,19 @@ const Article = {
   },
 
   view: function(vnode) {
+    var deviceWidth = window.innerWidth
+    var imagePath = ''
+
+    if (this.article.media) {
+      var pixelRatio = window.devicePixelRatio || 1
+      if ((deviceWidth < 800 && pixelRatio <= 1)
+                || (deviceWidth < 600 && pixelRatio > 1)) {
+        imagePath = this.article.media.medium_url
+      } else {
+        imagePath = this.article.media.large_url
+      }
+    }
+
     return (
       this.loading ?
         m('div.loading-spinner')
@@ -67,8 +80,8 @@ const Article = {
             this.article.media
               ? m('a.cover', {
                   rel: 'noopener',
-                  href: this.article.media.url,
-                }, m('img', { src: this.article.media.medium_url, alt: 'Cover image for ' + this.article.name }))
+                  href: this.article.media.link,
+                }, m('img', { src: imagePath, alt: 'Cover image for ' + this.article.name }))
               : null,
             this.article.description ? m.trust(this.article.description) : null,
             (this.article.files && this.article.files.length

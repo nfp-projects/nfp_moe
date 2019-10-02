@@ -17,7 +17,7 @@ article.article {
   }
 
   .cover {
-    margin: 0 -10px 20px;
+    margin: 0 0 20px;
   }
 
   .admin-actions {
@@ -41,6 +41,14 @@ article.article {
 
     main {
       padding: 0 5px;
+    }
+  }
+
+  fileinfo {
+    font-size: 0.8em;
+
+    ul {
+      padding-left: 0;
     }
   }
 

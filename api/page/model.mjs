@@ -1,3 +1,4 @@
+
 import bookshelf from '../bookshelf.mjs'
 import Media from '../media/model.mjs'
 import Staff from '../staff/model.mjs'
@@ -37,6 +38,9 @@ const Page = bookshelf.createModel({
 
   children() {
     return this.hasManyFiltered(Page, 'children', 'parent_id')
+      .query(qb => {
+        qb.orderBy('name', 'ASC')
+      })
   },
 
   news() {
@@ -65,6 +69,7 @@ const Page = bookshelf.createModel({
     return this.query(qb => {
       qb.where({ parent_id: null })
       qb.select(['id', 'name', 'path'])
+      qb.orderBy('name', 'ASC')
     }).fetchAll({ withRelated: ['children'] })
   },
 })

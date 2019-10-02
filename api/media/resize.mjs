@@ -18,7 +18,7 @@ export default class Resizer {
               withoutEnlargement: true,
             })
             .jpeg({
-              quality: 80,
+              quality: 90,
             })
             .toFile(output)
             .then(() => output)
@@ -33,7 +33,7 @@ export default class Resizer {
               withoutEnlargement: true,
             })
             .jpeg({
-              quality: 80,
+              quality: 90,
             })
             .toFile(output)
             .then(() => output)
@@ -43,8 +43,12 @@ export default class Resizer {
     let output = this.Media.getSubUrl(input, 'large')
 
     return this.sharp(input)
+            .resize(1280, 1280, {
+              fit: sharp.fit.inside,
+              withoutEnlargement: true,
+            })
             .jpeg({
-              quality: 80,
+              quality: 90,
             })
             .toFile(output)
             .then(() => output)
