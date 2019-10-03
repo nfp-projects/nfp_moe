@@ -80,7 +80,9 @@ const Fileinfo = {
             ])
           }))
         : null,
-      vnode.attrs.trim && vnode.attrs.file.meta.torrent.files.length > 4
+      vnode.attrs.trim
+          && vnode.attrs.file.meta.torrent
+          && vnode.attrs.file.meta.torrent.files.length > 4
         ? m('div.trimmed', '...' + vnode.attrs.file.meta.torrent.files.length + ' files...')
         : null,
     ])
