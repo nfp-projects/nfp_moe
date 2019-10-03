@@ -223,6 +223,11 @@ pages {
 @media screen and (max-width: 1000px){
   newsitem a.cover {
     width: 300px;
+
+    img {
+      max-width: 300px;
+      width: auto;
+    }
   }
 }
 
