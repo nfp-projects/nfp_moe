@@ -147,7 +147,8 @@ newsitem {
     text-align: center;
 
     img {
-      max-height: 225px;
+      max-height: 360px;
+      max-width: 360px;
       width: auto;
     }
   }
@@ -232,7 +233,8 @@ pages {
       margin-bottom: 20px;
 
       img {
-        max-height: max-content;
+        max-height: unset;
+        max-width: unset;
       }
     }
 
