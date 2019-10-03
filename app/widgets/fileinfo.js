@@ -12,6 +12,12 @@ const Fileinfo = {
     if (vnode.attrs.file.filename.indexOf('480 ') >= 0) {
       return '480p'
     }
+    if (vnode.attrs.file.filename.indexOf('FLAC') >= 0) {
+      return 'FLAC'
+    }
+    if (vnode.attrs.file.filename.indexOf('MP3') >= 0) {
+      return 'MP3'
+    }
     return 'Other'
   },
 
