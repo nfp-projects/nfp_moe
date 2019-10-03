@@ -12,11 +12,17 @@ const Fileinfo = {
     if (vnode.attrs.file.filename.indexOf('480 ') >= 0) {
       return '480p'
     }
-    if (vnode.attrs.file.filename.indexOf('FLAC') >= 0) {
+    if (vnode.attrs.file.filename.toLowerCase().indexOf('flac') >= 0) {
       return 'FLAC'
     }
-    if (vnode.attrs.file.filename.indexOf('MP3') >= 0) {
+    if (vnode.attrs.file.filename.toLowerCase().indexOf('mp3') >= 0) {
       return 'MP3'
+    }
+    if (vnode.attrs.file.filename.toLowerCase().indexOf('psd') >= 0) {
+      return 'PSD'
+    }
+    if (vnode.attrs.file.filename.toLowerCase().indexOf('.zip') >= 0) {
+      return 'ZIP'
     }
     return 'Other'
   },
