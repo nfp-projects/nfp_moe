@@ -1,3 +1,5 @@
+require('./polyfill')
+
 const m = require('mithril')
 window.m = m
 

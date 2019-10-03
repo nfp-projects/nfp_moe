@@ -9,6 +9,7 @@ const Footer = {
 
   view: function() {
     return [
+      m('div.footer-filler'),
       m('div.sitemap', [
         m('div', 'Sitemap'),
         m(m.route.Link, { class: 'root', href: '/' }, 'Home'),

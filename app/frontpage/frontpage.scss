@@ -111,18 +111,28 @@ frontpage {
 @media screen and (max-width: 900px){
   frontpage {
     flex-direction: column;
-  }
 
-  frontpage aside.sidebar {
-    width: auto;
-    flex: 0 0 auto;
-    align-self: stretch;
-    margin: 20px 0 30px;
-    border-bottom: 1px solid $border;
-    order: 2;
+    aside.sidebar {
+      width: auto;
+      flex: 0 0 auto;
+      align-self: stretch;
+      margin: 20px 0 30px;
+      border-bottom: 1px solid $border;
+      order: 2;
 
-    a {
-      max-width: unset;
+      .categories {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h4 {
+          align-self: stretch;
+        }
+      }
+
+      a {
+        max-width: unset;
+      }
     }
   }
 }

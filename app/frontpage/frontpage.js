@@ -112,16 +112,18 @@ const Frontpage = {
         m('aside.sidebar', [
           m('div.categories', [
             m('h4', 'Categories'),
-            Page.Tree.map(function(page) {
-              return [
-                m(m.route.Link, { class: 'root', href: '/page/' + page.path }, page.name),
-                (page.children.length
-                  ? m('ul', page.children.map(function(subpage) {
-                      return m('li', m(m.route.Link, { class: 'child', href: '/page/' + subpage.path }, subpage.name))
-                    }))
-                  : null),
-              ]
-            }),
+            m('div',
+              Page.Tree.map(function(page) {
+                return [
+                  m(m.route.Link, { class: 'root', href: '/page/' + page.path }, page.name),
+                  (page.children.length
+                    ? m('ul', page.children.map(function(subpage) {
+                        return m('li', m(m.route.Link, { class: 'child', href: '/page/' + subpage.path }, subpage.name))
+                      }))
+                    : null),
+                ]
+              })
+            ),
           ]),
           m('div.asunaside'),
         ]),

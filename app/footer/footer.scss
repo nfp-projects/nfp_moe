@@ -15,7 +15,7 @@ footer {
     align-items: center;
     font-size: 11px;
     font-weight: bold;
-    padding-right: 20px;
+    padding: 0 20px;
 
     a {
       text-decoration: none;
@@ -46,9 +46,15 @@ footer {
     }
   }
 
+  .footer-filler {
+    width: 119px;
+    flex: 0 0 119px;
+  }
+
   .footer-logo {
     background: center no-repeat transparent;
     background-size: contain;
+    align-self: center;
     width: 119px;
     height: 150px;
     flex: 0 0 119px;
@@ -113,6 +119,12 @@ only screen and (                min-resolution: 2dppx) {
   }
 }
 
+@media screen and (max-width: 900px){
+  footer .footer-filler {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 480px){
   footer {
     flex-direction: column;
@@ -123,7 +135,7 @@ only screen and (                min-resolution: 2dppx) {
     }
 
     .sitemap {
-      padding-right: 0px;
+      padding: 0px;
 
       ul {
         align-self: stretch;

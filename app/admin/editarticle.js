@@ -78,7 +78,7 @@ const EditArticle = {
       banner: null,
       files: [],
       is_featured: false,
-      published_at: new Date().toISOString(),
+      published_at: new Date(new Date().setFullYear(3000)).toISOString(),
     }
     this.editedPath = false
     this.loadedFroala = Froala.loadedFroala
@@ -102,7 +102,7 @@ const EditArticle = {
         m.redraw()
       })
     } else {
-      EditArticle.parsePublishedAt(vnode, new Date())
+      EditArticle.parsePublishedAt(vnode, null)
       document.title = 'Create Article - Admin NFP Moe'
       if (vnode.state.froala) {
         vnode.state.froala.html.set(this.article.description)
@@ -256,6 +256,7 @@ const EditArticle = {
   },
 
   view: function(vnode) {
+    const showPublish = new Date(this.article.published_at) > new Date()
     const parents = this.getFlatTree()
     const staffers = this.getStaffers()
     return (
@@ -337,10 +338,15 @@ const EditArticle = {
                 oninput: this.updateValue.bind(this, 'is_featured'),
               }),
               m('div.loading-spinner', { hidden: this.loadedFroala }),
-              m('input', {
-                type: 'submit',
-                value: 'Save',
-              }),
+              m('div', [
+                m('input', {
+                  type: 'submit',
+                  value: 'Save',
+                }),
+                showPublish
+                  ? m('button.submit', { onclick: function() { vnode.state.article.published_at = new Date().toISOString() }}, 'Publish')
+                  : null,
+              ]),
             ]),
             this.article.files.length
               ? m('files', [

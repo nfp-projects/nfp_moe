@@ -151,26 +151,34 @@ form {
     }
   }
 
-  input[type=submit] {
+  input[type=submit],
+  button.submit {
     align-self: center;
     padding: 0.5em;
     margin: 0.5em 0;
     min-width: 150px;
-    border: none;
     border: 1px solid $secondary-bg;
     background: $secondary-light-bg;
     color: $secondary-light-fg;
+    height: 31px;
+  }
 
-    &:hover {
-      background: $secondary-dark-bg;
-      color: $secondary-dark-fg;
-    }
+  button.submit::-moz-focus-inner { 
+    border: 0;
   }
 }
 
 a, button {
   outline: none;
 }
+
+button::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner {
+  padding: 0 !important;
+  border: 0 none !important;
+ }
 
 @import 'froala';
 
