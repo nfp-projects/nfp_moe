@@ -38,7 +38,7 @@ jobs:
             echo "$MASTER_HOST" | base64 -d > ~/.ssh/master_host
             echo "$MASTER_KEY" | base64 -d > ~/.ssh/master_key
             chmod 600 ~/.ssh/master_key
-            ssh -p 51120 -i ~/.ssh/master_key -o "UserKnownHostsFile ~/.ssh/master_host" root@82.221.107.21 "docker ${service_name} ${di}:${CIRCLE_SHA1} ${target_port} ${service_port}"
+            ssh -p 51120 -i ~/.ssh/master_key -o "UserKnownHostsFile ~/.ssh/master_host" root@212.30.212.2 "docker ${service_name} ${di}:build_${CIRCLE_BUILD_NUM} ${target_port} ${service_port}"
 
 workflows:
   version: 2
