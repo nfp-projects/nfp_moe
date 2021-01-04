@@ -23,7 +23,7 @@ RUN apk add --update --no-cache --virtual .build-deps gcc g++ make libc6-compat 
 ###########################
 # Server
 ###########################
-FROM node:12-alpine as build
+FROM node:12-alpine
 
 ENV HOME=/app
 
