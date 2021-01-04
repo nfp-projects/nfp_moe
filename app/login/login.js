@@ -3,53 +3,9 @@ const Authentication = require('../authentication')
 const Api = require('../api/common')
 
 const Login = {
-  loadedGoogle: false,
   loading: false,
   redirect: '',
   error: '',
-
-  initGoogleButton: function() {
-    gapi.signin2.render('googlesignin', {
-      'scope': 'email',
-      'width': 240,
-      'height': 50,
-      'longtitle': true,
-      'theme': 'dark',
-      'onsuccess': Login.onGoogleSuccess,
-      'onfailure': Login.onGoogleFailure,
-    })
-  },
-
-  onGoogleSuccess: function(googleUser) {
-    Login.loading = true
-    m.redraw()
-
-    m.request({
-      method: 'POST',
-      url: '/api/login',
-      body: { token: googleUser.Zi.access_token },
-    })
-    .then(function(result) {
-      Authentication.updateToken(result.token)
-      m.route.set(Login.redirect || '/')
-    })
-    .catch(function(error) {
-      Login.error = 'Error while logging into NFP! ' + error.status + ': ' + error.message
-      let auth2 = gapi.auth2.getAuthInstance()
-      return auth2.signOut()
-    })
-    .then(function () {
-      Login.loading = false
-      m.redraw()
-    })
-  },
-
-  onGoogleFailure: function(error) {
-    if (error.error !== 'popup_closed_by_user' && error.error !== 'popup_blocked_by_browser') {
-      Login.error = 'Error while logging into Google: ' + error.error
-      m.redraw()
-    }
-  },
 
   oninit: function(vnode) {
     Login.redirect = vnode.attrs.redirect || ''
@@ -62,10 +18,6 @@ const Login = {
 
   oncreate: function() {
     if (Authentication.currentUser) return
-    Authentication.createGoogleScript()
-      .then(function() {
-        Login.initGoogleButton()
-      })
   },
 
   loginuser: function(vnode, e) {
@@ -136,8 +88,6 @@ const Login = {
                 value: 'Login',
               }),
             ]),
-            m('h5', { hidden: Login.loading }, 'Alternative login'),
-            m('div#googlesignin', { hidden: Login.loading }, m('div.loading-spinner')),
           ]),
         ]),
       ]),

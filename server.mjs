@@ -1,4 +1,4 @@
-import Koa from 'koa'
+import Koa from 'koa-lite'
 import bodyParser from 'koa-bodyparser'
 import cors from '@koa/cors'
 

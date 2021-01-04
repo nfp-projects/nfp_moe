@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 import config from './config.mjs'
 import log from './log.mjs'
-import knex from 'knex'
+import knex from 'knex-core'
 
 // This is important for setup to run cleanly.
 let knexConfig = _.cloneDeep(config.get('knex'))

@@ -90,12 +90,18 @@ const Frontpage = {
     if (this.featured && this.featured.banner) {
       var pixelRatio = window.devicePixelRatio || 1
       if (deviceWidth < 400 && pixelRatio <= 1) {
-        bannerPath = this.featured.banner.small_url
+        bannerPath = window.supportsavif
+                      && this.featured.banner.small_url_avif
+                      || this.featured.banner.small_url
       } else if ((deviceWidth < 800 && pixelRatio <= 1)
                 || (deviceWidth < 600 && pixelRatio > 1)) {
-        bannerPath = this.featured.banner.medium_url
+        bannerPath = window.supportsavif
+                      && this.featured.banner.medium_url_avif
+                      || this.featured.banner.medium_url
       } else {
-        bannerPath = this.featured.banner.large_url
+        bannerPath = window.supportsavif
+                      && this.featured.banner.large_url_avif
+                      || this.featured.banner.large_url
       }
     }
 

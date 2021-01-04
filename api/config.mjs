@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import nconf from 'nconf'
+import nconf from 'nconf-lite'
 import { readFileSync } from 'fs'
 
 // Helper method for global usage.

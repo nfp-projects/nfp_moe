@@ -14,7 +14,6 @@ const router = new Router()
 
 // API Authentication
 const authentication = new AuthRoutes()
-router.post('/api/login', authentication.login.bind(authentication))
 router.post('/api/login/user', authentication.loginUser.bind(authentication))
 
 // API Media

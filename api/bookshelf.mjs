@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import knex from 'knex'
+import knex from 'knex-core'
 import bookshelf from 'bookshelf'
 
 import config from './config.mjs'
@@ -178,7 +178,7 @@ function getConfig(index = 0, addEvents = true) {
       afterCreate: addEvents && afterCreate || null,
       min: 2,
       max: 10,
-      beforeDestroy: addEvents && beforeDestroy || null,
+      // beforeDestroy: addEvents && beforeDestroy || null,
     },
     acquireConnectionTimeout: 10000,
   }

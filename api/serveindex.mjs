@@ -24,13 +24,19 @@ function mapArticle(trim = false, x, includeBanner = false, includeFiles = true)
     media: x.media && ({
       link: !trim && x.media.link || null,
       large_url: x.media.large_url,
+      large_url_avif: x.media.large_url_avif,
       medium_url: x.media.medium_url,
+      medium_url_avif: x.media.medium_url_avif,
       small_url: x.media.small_url,
+      small_url_avif: x.media.small_url_avif,
     }) || null,
     banner: x.banner && includeBanner && ({
       large_url: x.banner.large_url,
+      large_url_avif: x.banner.large_url_avif,
       medium_url: x.banner.medium_url,
+      medium_url_avif: x.banner.medium_url_avif,
       small_url: x.banner.small_url,
+      small_url_avif: x.banner.small_url_avif,
     }) || null,
     parent: x.parent && ({
       id: x.parent.id,
@@ -67,8 +73,11 @@ function mapPage(x) {
     media: x.media && ({
       link: x.media.link,
       large_url: x.media.large_url,
+      large_url_avif: x.media.large_url_avif,
       medium_url: x.media.medium_url,
+      medium_url_avif: x.media.medium_url_avif,
       small_url: x.media.small_url,
+      small_url_avif: x.media.small_url_avif,
     }) || null,
     parent: x.parent && ({
       id: x.parent.id,
@@ -77,8 +86,11 @@ function mapPage(x) {
     }),
     banner: x.banner && ({
       large_url: x.banner.large_url,
+      large_url_avif: x.banner.large_url_avif,
       medium_url: x.banner.medium_url,
+      medium_url_avif: x.banner.medium_url_avif,
       small_url: x.banner.small_url,
+      small_url_avif: x.banner.small_url_avif,
     }) || null,
     children: x.children && x.children.map(f => ({
       id: f.id,
@@ -94,7 +106,8 @@ export async function serveIndex(ctx, path) {
   let links = null
   let featured = null
   let url = frontend + ctx.request.url
-  let image = frontend + '/assets/img/heart.jpg'
+  let image = frontend + '/assets/img/heart.png'
+  let image_avif = frontend + '/assets/img/heart.png'
   let title = 'NFP Moe - Anime/Manga translation group'
   let description = 'Small fansubbing and scanlation group translating and encoding our favourite shows from Japan.'
   try {
@@ -147,8 +160,10 @@ export async function serveIndex(ctx, path) {
         if (found) {
           if (found.media) {
             image = found.media.large_url
+            image_avif = found.media.large_url_avifl
           } else if (found.banner) {
             image = found.banner.large_url
+            image_avif = found.banner.large_url_avifl
           }
           if (found.description) {
             description = striptags(found.description)
@@ -174,6 +189,7 @@ export async function serveIndex(ctx, path) {
     featured: JSON.stringify(featured),
     url: url,
     image: image,
+    image_avif: image_avif,
     title: title,
     description: description,
   })

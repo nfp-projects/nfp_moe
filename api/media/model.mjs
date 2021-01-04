@@ -39,6 +39,21 @@ const Media = bookshelf.createModel({
       return `${Media.baseUrl}${this.get('large_image')}`
     },
 
+    small_url_avif() {
+      if (!this.get('small_image_avif')) return null
+      return `${Media.baseUrl}${this.get('small_image_avif')}`
+    },
+
+    medium_url_avif() {
+      if (!this.get('small_image_avif')) return null
+      return `${Media.baseUrl}${this.get('medium_image_avif')}`
+    },
+
+    large_url_avif() {
+      if (!this.get('small_image_avif')) return null
+      return `${Media.baseUrl}${this.get('large_image_avif')}`
+    },
+
     link() {
       return `${Media.baseUrl}${this.get('org_image')}`
     },
@@ -54,7 +69,7 @@ const Media = bookshelf.createModel({
 }, {
   baseUrl: config.get('upload:baseurl'),
 
-  getSubUrl(input, size) {
+  getSubUrl(input, size, type = 'jpg') {
     if (!input) return input
 
     let output = input
@@ -62,7 +77,7 @@ const Media = bookshelf.createModel({
       let ext = path.extname(input).toLowerCase()
       output = input.slice(0, -ext.length)
     }
-    return `${output}.${size}.jpg`
+    return `${output}.${size}.${type}`
   },
 })
 

@@ -27,7 +27,7 @@ jobs:
           name: Push to docker
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push ${di}
+            docker push ${di} --all-tags
       - deploy:
           name: Deploy to production
           command: |

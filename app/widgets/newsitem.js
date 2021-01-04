@@ -1,8 +1,10 @@
 const Fileinfo = require('./fileinfo')
 
-const Newsitem = {
+const Newsitem = {  
   view: function(vnode) {
     var pixelRatio = window.devicePixelRatio || 1
+    var jpegImage = pixelRatio > 1 ? vnode.attrs.media.medium_url : vnode.attrs.media.small_url
+    var avifImage = pixelRatio > 1 ? vnode.attrs.media.medium_url_avif : vnode.attrs.media.small_url_avif
     return m('newsitem', [
       m(m.route.Link,
         { href: '/article/' + vnode.attrs.path, class: 'title' },
@@ -12,7 +14,14 @@ const Newsitem = {
         vnode.attrs.media
           ? m('a.cover', {
               href: '/article/' + vnode.attrs.path,
-            }, m('img', { alt: 'Image for news item ' + vnode.attrs.name, src: pixelRatio > 1 ? vnode.attrs.media.medium_url : vnode.attrs.media.small_url }))
+            },
+            m('picture', [
+              avifImage ? m('source', {
+                srcset: avifImage,
+                type: 'image/avif',
+              }) : null,
+              m('img', { alt: 'Image for news item ' + vnode.attrs.name, src: jpegImage })
+            ]))
           : null,
         m('div.entrycontent', {
           class: vnode.attrs.media ? '' : 'extrapadding',
