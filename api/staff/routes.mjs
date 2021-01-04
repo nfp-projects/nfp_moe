@@ -9,24 +9,24 @@ export default class StaffRoutes {
     })
   }
 
-  /** GET: /api/articles */
+  /** GET: /api/staff */
   async getAllStaff(ctx) {
     ctx.body = await this.Staff.getAll(ctx, { }, [])
   }
 
-  /** GET: /api/articles/:id */
+  /** GET: /api/staff/:id */
   async getSingleStaff(ctx) {
     ctx.body = await this.Staff.getSingle(ctx.params.id, [], true, ctx)
   }
 
-  /** POST: /api/articles */
+  /** POST: /api/staff */
   async createStaff(ctx) {
     await this.security.validUpdate(ctx)
 
     ctx.body = await this.Staff.create(ctx.request.body)
   }
 
-  /** PUT: /api/articles/:id */
+  /** PUT: /api/staff/:id */
   async updateStaff(ctx) {
     await this.security.validUpdate(ctx)
 
@@ -39,7 +39,7 @@ export default class StaffRoutes {
     ctx.body = page
   }
 
-  /** DELETE: /api/articles/:id */
+  /** DELETE: /api/staff/:id */
   async removeStaff(ctx) {
     let page = await this.Staff.getSingle(ctx.params.id)
 

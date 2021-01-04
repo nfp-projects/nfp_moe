@@ -1,7 +1,7 @@
 ###########################
 # Angular
 ###########################
-FROM node:alpine as build
+FROM node:12-alpine as build
 
 ENV HOME=/app
 
@@ -11,11 +11,10 @@ COPY public $HOME/public
 
 WORKDIR $HOME
 
-RUN apk add --update --no-cache --virtual .build-deps gcc g++ make libc6-compat python && \
-  apk add build-base vips-dev fftw-dev build-base --no-cache \
-        --repository https://alpine.global.ssl.fastly.net/alpine/edge/main \
-        --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing \
-        --repository https://alpine.global.ssl.fastly.net/alpine/edge/community && \
+RUN apk add --update --no-cache --virtual .build-deps gcc g++ make libc6-compat python git && \
+  apk add vips-dev fftw-dev build-base --no-cache \
+        --repository http://dl-3.alpinelinux.org/alpine/v3.10/community \
+        --repository http://dl-3.alpinelinux.org/alpine/v3.10/main && \
     npm install && \
     apk del .build-deps gcc g++ make libc6-compat python && \
     apk del build-base && \
@@ -24,7 +23,7 @@ RUN apk add --update --no-cache --virtual .build-deps gcc g++ make libc6-compat 
 ###########################
 # Server
 ###########################
-FROM node:alpine
+FROM node:12-alpine as build
 
 ENV HOME=/app
 
@@ -32,11 +31,10 @@ COPY index.mjs package.json server.mjs $HOME/
 
 WORKDIR $HOME
 
-RUN apk add --update --no-cache --virtual .build-deps gcc g++ make libc6-compat python && \
-  apk add build-base vips-dev fftw-dev build-base --no-cache \
-        --repository https://alpine.global.ssl.fastly.net/alpine/edge/main \
-        --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing \
-        --repository https://alpine.global.ssl.fastly.net/alpine/edge/community && \
+RUN apk add --update --no-cache --virtual .build-deps gcc g++ make libc6-compat python git && \
+  apk add vips-dev fftw-dev build-base --no-cache \
+        --repository http://dl-3.alpinelinux.org/alpine/v3.10/community \
+        --repository http://dl-3.alpinelinux.org/alpine/v3.10/main && \
     npm install --production && \
     rm -Rf $HOME/.npm $HOME/.npm $HOME/.config && \
     apk del .build-deps gcc g++ make libc6-compat python && \
