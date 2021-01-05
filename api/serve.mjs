@@ -24,9 +24,13 @@ export function serve(docRoot, pathname, options = {}) {
         || filepath.endsWith('.png')
         || filepath.endsWith('.js')
         || filepath.endsWith('.css')
+        || filepath.endsWith('.avif')
         || filepath.endsWith('.svg')) {
       if (filepath.indexOf('admin') === -1) {
         opts = defaults({ maxage: 2592000 * 1000 }, opts)
+      }
+      if (filepath.endsWith('.avif')) {
+        ctx.type = 'image/avif'
       }
     }
 
@@ -48,6 +52,7 @@ export function serve(docRoot, pathname, options = {}) {
 
     return send(ctx, filepath, opts).catch((er) => {
       if (er.code === 'ENOENT' && er.status === 404) {
+        ctx.type = null
         return serveIndex(ctx, filepath)
         // return send(ctx, '/index.html', options)
       }

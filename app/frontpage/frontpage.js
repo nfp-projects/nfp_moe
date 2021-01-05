@@ -107,7 +107,8 @@ const Frontpage = {
 
     return [
       (bannerPath
-        ? m('a.frontpage-banner', {
+        ? m(m.route.Link, {
+            class: 'frontpage-banner',
             href: '/article/' + this.featured.path,
             style: { 'background-image': 'url("' + bannerPath + '")' },
           },
@@ -131,7 +132,9 @@ const Frontpage = {
               })
             ),
           ]),
-          m('div.asunaside'),
+          m('div.asunaside', {
+            class: window.supportsavif ? 'avif' : 'jpeg'
+          }),
         ]),
         m('.frontpage-news', [
           (this.loading

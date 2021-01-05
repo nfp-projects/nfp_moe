@@ -137,12 +137,18 @@ frontpage {
   }
 }
 
-.daymode frontpage .asunaside {
+.daymode.jpegonly frontpage .asunaside {
   background-image: url("/assets/img/asuna_frontpage.jpg");
 }
+.daymode.avifsupport frontpage .asunaside {
+  background-image: url("/assets/img/asuna_frontpage.avif");
+}
 
-.darkmodeon frontpage .asunaside {
+.darkmodeon.jpegonly frontpage .asunaside {
   background-image: url("/assets/img/dark_asuna_frontpage.jpg");
+}
+.darkmodeon.avifsupport frontpage .asunaside {
+  background-image: url("/assets/img/dark_asuna_frontpage.avif");
 }
 
 @media screen and (max-width: 480px){

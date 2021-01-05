@@ -6,11 +6,11 @@ const Darkmode = {
   setDarkMode: function(setOn) {
     if (setOn) {
       localStorage.setItem(storageName, true)
-      document.body.className = 'darkmodeon'
+      document.body.className = 'darkmodeon' + ' ' + (window.supportsavif ? 'avifsupport' : 'jpegonly')
       Darkmode.darkIsOn = true
     } else {
       localStorage.removeItem(storageName)
-      document.body.className = 'daymode'
+      document.body.className = 'daymode' + ' ' + (window.supportsavif ? 'avifsupport' : 'jpegonly')
       Darkmode.darkIsOn = false
     }
   },

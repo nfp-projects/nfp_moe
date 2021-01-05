@@ -25,9 +25,15 @@ const Newsentry = {
     }
     return m('newsentry', [
       imagePath
-        ? m('a.cover', {
+        ? m(m.route.Link, {
+            class: 'cover',
             href: '/article/' + vnode.attrs.path,
-          }, m('img', { src: imagePath, alt: 'Article image for ' + vnode.attrs.name }))
+          }, m('picture', [
+            m('source', { srcset:
+              vnode.attrs.media.small_url + ''
+            }),
+            m('img', { src: imagePath, alt: 'Article image for ' + vnode.attrs.name }),
+          ]))
         : m('a.cover.nobg'),
       m('div.entrycontent', [
         m('div.title', [

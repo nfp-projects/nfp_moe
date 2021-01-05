@@ -1,10 +1,21 @@
 const Fileinfo = require('./fileinfo')
 
-const Newsitem = {  
+const Newsitem = {
+  oninit: function(vnode) {
+    this.srcsetJpeg = vnode.attrs.media.small_url + ' 500w, '
+                    + vnode.attrs.media.medium_url + ' 800w '
+    if (vnode.attrs.media.small_url_avif) {
+      this.srcsetAvif = vnode.attrs.media.small_url_avif + ' 500w, '
+                      + vnode.attrs.media.medium_url_avif + ' 800w '
+    } else {
+      this.srcsetAvif = null
+    }
+    this.coverSizes = '(max-width: 639px) calc(100vw - 40px), '
+                    + '(max-width: 1000px) 300px, '
+                    + '400px'
+  },
+
   view: function(vnode) {
-    var pixelRatio = window.devicePixelRatio || 1
-    var jpegImage = pixelRatio > 1 ? vnode.attrs.media.medium_url : vnode.attrs.media.small_url
-    var avifImage = pixelRatio > 1 ? vnode.attrs.media.medium_url_avif : vnode.attrs.media.small_url_avif
     return m('newsitem', [
       m(m.route.Link,
         { href: '/article/' + vnode.attrs.path, class: 'title' },
@@ -12,16 +23,23 @@ const Newsitem = {
       ),
       m('div.newsitemcontent', [
         vnode.attrs.media
-          ? m('a.cover', {
-              href: '/article/' + vnode.attrs.path,
-            },
-            m('picture', [
-              avifImage ? m('source', {
-                srcset: avifImage,
-                type: 'image/avif',
-              }) : null,
-              m('img', { alt: 'Image for news item ' + vnode.attrs.name, src: jpegImage })
-            ]))
+          ? m(m.route.Link, {
+                class: 'cover',
+                href: '/article/' + vnode.attrs.path,
+              },
+              m('picture', [
+                this.srcsetAvif ? m('source', {
+                  srcset: this.srcsetAvif,
+                  sizes: this.coverSizes,
+                  type: 'image/avif',
+                }) : null,
+                m('img', {
+                  srcset: this.srcsetJpeg,
+                  sizes: this.coverSizes,
+                  alt: 'Image for news item ' + vnode.attrs.name,
+                  src: vnode.attrs.media.small_url }),
+              ])
+            )
           : null,
         m('div.entrycontent', {
           class: vnode.attrs.media ? '' : 'extrapadding',

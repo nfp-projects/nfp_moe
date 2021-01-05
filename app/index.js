@@ -3,15 +3,6 @@ require('./polyfill')
 const m = require('mithril')
 window.m = m
 
-/*
- * imgsupport.js from leechy/imgsupport 
- */
-const AVIF = new Image();
-AVIF.onload = AVIF.onerror = function () {
-  window.supportsavif = (AVIF.height === 2)
-}
-AVIF.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A=';
-
 m.route.setOrig = m.route.set
 m.route.set = function(path, data, options){
   m.route.setOrig(path, data, options)
@@ -119,6 +110,18 @@ const allRoutes = {
   '/admin/:path/:id': AdminResolver,
 }
 
-m.route(mainRoot, '/', allRoutes)
-m.mount(menuRoot, Menu)
-m.mount(footerRoot, Footer)
+// Wait until we finish checking avif support, some views render immediately and will ask for this immediately before the callback gets called.
+
+/*
+ * imgsupport.js from leechy/imgsupport 
+ */
+const AVIF = new Image();
+AVIF.onload = AVIF.onerror = function () {
+  window.supportsavif = (AVIF.height === 2)
+  document.body.className = document.body.className + ' ' + (window.supportsavif ? 'avifsupport' : 'jpegonly')
+
+  m.route(mainRoot, '/', allRoutes)
+  m.mount(menuRoot, Menu)
+  m.mount(footerRoot, Footer)
+}
+AVIF.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A=';

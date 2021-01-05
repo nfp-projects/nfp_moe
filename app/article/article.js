@@ -50,10 +50,9 @@ const Article = {
     })
   },
 
-  onupdate: function(vnode) {
+  onbeforeupdate: function(vnode) {
     if (this.path !== m.route.param('id')) {
       this.fetchArticle(vnode)
-      m.redraw()
     }
   },
 
