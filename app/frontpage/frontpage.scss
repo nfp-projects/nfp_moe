@@ -141,14 +141,14 @@ frontpage {
   background-image: url("/assets/img/asuna_frontpage.jpg");
 }
 .daymode.avifsupport frontpage .asunaside {
-  background-image: url("/assets/img/asuna_frontpage.avif");
+  background-image: url("/assets/img/asuna_frontpage.avif?v=1");
 }
 
 .darkmodeon.jpegonly frontpage .asunaside {
   background-image: url("/assets/img/dark_asuna_frontpage.jpg");
 }
 .darkmodeon.avifsupport frontpage .asunaside {
-  background-image: url("/assets/img/dark_asuna_frontpage.avif");
+  background-image: url("/assets/img/dark_asuna_frontpage.avif?v=1");
 }
 
 @media screen and (max-width: 480px){
