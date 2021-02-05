@@ -27,7 +27,7 @@ FROM node:12-alpine
 
 ENV HOME=/app
 
-COPY index.mjs package.json server.mjs $HOME/
+COPY index.mjs package.json $HOME/
 
 WORKDIR $HOME
 
