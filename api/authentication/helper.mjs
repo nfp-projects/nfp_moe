@@ -14,13 +14,12 @@ export default class AuthHelper {
 
     try {
       staff = await this.Staff
-        .query(qb => {
-          qb.where({ email: ctx.request.body.username })
-          qb.select('*')
-        })
-        .fetch({ require: true })
+        .getSingleQuery(
+          this.Staff.query(qb => qb.where({ email: ctx.request.body.username }), [], ['*']),
+          true
+        )
 
-      await this.Staff.compare(ctx.request.body.password, staff.get('password'))
+      await this.Staff.compare(ctx.request.body.password, staff.password)
     } catch (err) {
       if (err.message === 'EmptyResponse' || err.message === 'PasswordMismatch') {
         ctx.throw(422, 'The email or password did not match')
@@ -28,6 +27,6 @@ export default class AuthHelper {
       throw err
     }
 
-    return this.jwt.createToken(staff.id, staff.get('email'), staff.get('level'))
+    return this.jwt.createToken(staff.id, staff.email, staff.level)
   }
 }

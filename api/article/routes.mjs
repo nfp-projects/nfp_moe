@@ -16,13 +16,6 @@ export default class ArticleRoutes {
     ctx.body = await this.Article.getAll(ctx, { }, ctx.state.filter.includes, ctx.query.sort || '-published_at')
   }
 
-  /** GET: /api/pages/:pageId/articles */
-  async getAllPageArticles(ctx) {
-    await this.security.ensureIncludes(ctx)
-
-    ctx.body = await this.Article.getAllFromPage(ctx, ctx.params.pageId, ctx.state.filter.includes, ctx.query.sort || '-published_at')
-  }
-
   /** GET: /api/articles/:id */
   async getSingleArticle(ctx) {
     await this.security.ensureIncludes(ctx)
@@ -70,22 +63,14 @@ export default class ArticleRoutes {
       await Article.setAllUnfeatured()
     }
 
-    let page = await this.Article.getSingle(ctx.params.id)
+    let article = await this.Article.updateSingle(ctx, ctx.params.id, ctx.request.body)
 
-    page.set(ctx.request.body)
-
-    await page.save()
-
-    ctx.body = page
+    ctx.body = article
   }
 
   /** DELETE: /api/articles/:id */
   async removeArticle(ctx) {
-    let page = await this.Article.getSingle(ctx.params.id)
-
-    page.set({ is_deleted: true })
-
-    await page.save()
+    await this.Article.updateSingle(ctx, ctx.params.id, { is_deleted: true })
 
     ctx.status = 204
   }

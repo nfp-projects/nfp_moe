@@ -13,7 +13,7 @@ setup().catch(async (error) => {
   //   process.exit(1)
   // })
 }).then(() =>
-  import('./server.mjs')
+  import('./api/server.mjs')
 ).catch(error => {
   log.error(error, 'Unknown error starting server')
 })

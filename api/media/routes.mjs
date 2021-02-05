@@ -63,13 +63,7 @@ export default class MediaRoutes {
   }
 
   async removeMedia(ctx) {
-    let media = await this.Media.getSingle(ctx.params.id)
-    
-    media.set({
-      is_deleted: true,
-    })
-
-    await media.save()
+    await this.Media.updateSingle(ctx, ctx.params.id, { is_deleted: true })
 
     ctx.status = 200
   }

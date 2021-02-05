@@ -1,4 +1,4 @@
-import bookshelf from '../bookshelf.mjs'
+import { createPrototype, safeColumns } from '../knex.mjs'
 import config from '../config.mjs'
 
 /*
@@ -20,26 +20,40 @@ File model:
 
 */
 
-const File = bookshelf.createModel({
-  tableName: 'files',
+const baseUrl = config.get('upload:baseurl')
 
-  virtuals: {
-    url() {
-      return `${File.baseUrl}${this.get('path')}`
-    },
+function FileItem(data) {
+  Object.assign(this, data)
+  this.url = `${baseUrl}${this.path}`
 
-    magnet() {
-      let meta = this.get('meta')
-      if (!meta.torrent) return ''
-      return 'magnet:?'
-        + 'xl=' + this.get('size')
-        + '&dn=' + encodeURIComponent(meta.torrent.name)
-        + '&xt=urn:btih:' + meta.torrent.hash
-        + meta.torrent.announce.map(item => ('&tr=' + encodeURIComponent(item))).join('')
-    },
-  },
-}, {
-  baseUrl: config.get('upload:baseurl'),
+  let meta = this.meta
+  if (!meta.torrent) {
+    this.magnet = ''
+  } else {
+    this.magnet = 'magnet:?'
+      + 'xl=' + this.size
+      + '&dn=' + encodeURIComponent(meta.torrent.name)
+      + '&xt=urn:btih:' + meta.torrent.hash
+      + meta.torrent.announce.map(item => ('&tr=' + encodeURIComponent(item))).join('')
+  }
+}
+
+function File() {
+  this.tableName = 'files'
+  this.Model = FileItem
+  this.publicFields = this.privateFields = safeColumns([
+    'article_id',
+    'filename',
+    'filetype',
+    'path',
+    'size',
+    'staff_id',
+    'meta',
+  ])
+  this.init()
+}
+
+File.prototype = createPrototype({
 })
 
-export default File
+export default new File()

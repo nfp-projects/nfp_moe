@@ -17,6 +17,7 @@
     }
   },
   "scripts": {
+    "knex:rollback": "node scripts/rollback.mjs | bunyan",
     "lint": "eslint .",
     "start": "node --experimental-modules index.mjs",
     "build": "sass -s compressed app/app.scss public/assets/app.css && sass -s compressed app/admin.scss public/assets/admin.css && browserify -p tinyify --no-commondir -o public/assets/app.js app/index.js && browserify -p tinyify --no-commondir -o public/assets/admin.js app/admin.js",

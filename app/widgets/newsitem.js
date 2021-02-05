@@ -2,17 +2,19 @@ const Fileinfo = require('./fileinfo')
 
 const Newsitem = {
   oninit: function(vnode) {
-    this.srcsetJpeg = vnode.attrs.media.small_url + ' 500w, '
-                    + vnode.attrs.media.medium_url + ' 800w '
-    if (vnode.attrs.media.small_url_avif) {
-      this.srcsetAvif = vnode.attrs.media.small_url_avif + ' 500w, '
-                      + vnode.attrs.media.medium_url_avif + ' 800w '
-    } else {
-      this.srcsetAvif = null
+    if (vnode.attrs.media) {
+      this.srcsetJpeg = vnode.attrs.media.small_url + ' 500w, '
+                      + vnode.attrs.media.medium_url + ' 800w '
+      if (vnode.attrs.media.small_url_avif) {
+        this.srcsetAvif = vnode.attrs.media.small_url_avif + ' 500w, '
+                        + vnode.attrs.media.medium_url_avif + ' 800w '
+      } else {
+        this.srcsetAvif = null
+      }
+      this.coverSizes = '(max-width: 639px) calc(100vw - 40px), '
+                      + '(max-width: 1000px) 300px, '
+                      + '400px'
     }
-    this.coverSizes = '(max-width: 639px) calc(100vw - 40px), '
-                    + '(max-width: 1000px) 300px, '
-                    + '400px'
   },
 
   view: function(vnode) {

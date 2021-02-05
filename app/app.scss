@@ -82,6 +82,22 @@ main {
   padding-bottom: 20px;
 }
 
+.error-wrapper {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $border;
+  padding: 40px 0;
+
+  .error {
+    border: 2px dashed $secondary-dark-bg;
+    padding: 10px 20px;
+    font-size: 1em;
+  }
+}
+
 [hidden] { display: none !important; }
 
 article {

@@ -9,6 +9,12 @@ m.route.set = function(path, data, options){
   window.scrollTo(0, 0)
 }
 
+/*console.log('tree', window.__nfptree)
+console.log('featured', window.__nfpfeatured)
+console.log('data', window.__nfpdata)
+console.log('subdata', window.__nfpsubdata)
+console.log('links', window.__nfplinks)*/
+
 m.route.linkOrig = m.route.link
 m.route.link = function(vnode){
   m.route.linkOrig(vnode)

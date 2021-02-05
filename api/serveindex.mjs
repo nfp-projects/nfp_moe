@@ -4,6 +4,7 @@ import striptags from 'striptags'
 
 import config from './config.mjs'
 import Page from './page/model.mjs'
+// import Article from '../app/article/model.mjs'
 import Article from './article/model.mjs'
 
 const body = readFileSync('./public/index.html').toString()
@@ -103,6 +104,7 @@ function mapPage(x) {
 export async function serveIndex(ctx, path) {
   let tree = null
   let data = null
+  let subdata = null
   let links = null
   let featured = null
   let url = frontend + ctx.request.url
@@ -111,29 +113,26 @@ export async function serveIndex(ctx, path) {
   let title = 'NFP Moe - Anime/Manga translation group'
   let description = 'Small fansubbing and scanlation group translating and encoding our favourite shows from Japan.'
   try {
-    tree = (await Page.getTree()).toJSON()
-    tree.forEach(item => (
-      item.children = item.children.map(x => (
-        { id: x.id, name: x.name, path: x.path }
-      ))
-    ))
-    featured = await Article.getFeatured(['media', 'banner'])
-    if (featured) {
-      featured = mapArticle(true, featured.toJSON(), true, false)
-    }
+    tree = await Page.getTree()
+    let currPage = Number(ctx.query.page || '1')
 
     if (path === '/') {
-      let currPage = Number(ctx.query.page || '1')
-      data = await Article.getFrontpageArticles(currPage)
+      let frontpage = await Article.getFrontpageArticles(currPage)
+      featured = frontpage.featured
+      data = frontpage.items.map(mapArticle.bind(null, true))
 
-      if (data.pagination.rowCount > 10) {
+      if (frontpage.total > currPage * 10) {
         links = {
+          first: currPage > 1 ? { page: 1, title: 'First' } : null,
+          previous: currPage > 1 ? { page: currPage - 1, title: 'Previous' } : null,
           current: { title: 'Page ' + currPage },
-          next: { page: 2, title: 'Next' },
-          last: { page: Math.ceil(data.pagination.rowCount / 10), title: 'Last' },
+          next: { page: currPage + 1, title: 'Next' },
+          last: { page: Math.ceil(frontpage.total / 10), title: 'Last' },
         }
       } else {
         links = {
+          first: currPage > 1 ? { page: 1, title: 'First' } : null,
+          previous: currPage > 1 ? { page: currPage - 1, title: 'Previous' } : null,
           current: { title: 'Page 1' },
         }
       }
@@ -141,40 +140,63 @@ export async function serveIndex(ctx, path) {
         links.previous = { page: currPage - 1, title: 'Previous' }
         links.first = { page: 1, title: 'First' }
       }
-      data = data.toJSON().map(mapArticle.bind(null, true))
     } else if (path.startsWith('/article/') || path.startsWith('/page/')) {
       let id = path.split('/')[2]
       if (id) {
-        let found
         if (path.startsWith('/article/')) {
-          found = await Article.getSingle(id, ['media', 'parent', 'banner', 'files', 'staff'], false, null, true)
-          if (found) {
-            found = mapArticle(false, found.toJSON())
+          data = await Article.getSingle(id, ['media', 'parent', 'banner', 'files', 'staff'], false, null, true)
+          if (data) {
+            data = mapArticle(false, data)
           }
-          data = found
         } else {
-          found = await Page.getSingle(id, ['media', 'banner', 'children', 'parent'])
-          found = mapPage(found.toJSON())
-          data = found
-        }
-        if (found) {
-          if (found.media) {
-            image = found.media.large_url
-            image_avif = found.media.large_url_avifl
-          } else if (found.banner) {
-            image = found.banner.large_url
-            image_avif = found.banner.large_url_avifl
+          data = await Page.getSingle(id, ['media', 'banner', 'children', 'parent'])
+          data = mapPage(data)
+          ctx.state.pagination = {
+            perPage: 10,
+            page: currPage,
           }
-          if (found.description) {
-            description = striptags(found.description)
-          }
-          if (found.parent) {
-            title = found.name + ' - ' + found.parent.name + ' - NFP Moe'
+          subdata = await Article.getAllFromPage(ctx, data.id, ['files', 'media'], '-published_at', true)
+          subdata = subdata.map(mapArticle.bind(null, true))
+          if (ctx.state.pagination.total > currPage * 10) {
+            links = {
+              first: currPage > 1 ? { page: 1, title: 'First' } : null,
+              previous: currPage > 1 ? { page: currPage - 1, title: 'Previous' } : null,
+              current: { title: 'Page ' + currPage },
+              next: { page: currPage + 1, title: 'Next' },
+              last: { page: Math.ceil(ctx.state.pagination.total / 10), title: 'Last' },
+            }
           } else {
-            title = found.name + ' - NFP Moe'
+            links = {
+              first: currPage > 1 ? { page: 1, title: 'First' } : null,
+              previous: currPage > 1 ? { page: currPage - 1, title: 'Previous' } : null,
+              current: { title: 'Page 1' },
+            }
+          }
+        }
+        if (data) {
+          if (data.media) {
+            image = data.media.large_url
+            image_avif = data.media.large_url_avifl
+          } else if (data.banner) {
+            image = data.banner.large_url
+            image_avif = data.banner.large_url_avifl
+          }
+          if (data.description) {
+            description = striptags(data.description)
+          }
+          if (data.parent) {
+            title = data.name + ' - ' + data.parent.name + ' - NFP Moe'
+          } else {
+            title = data.name + ' - NFP Moe'
           }
         }
       }
+    }    
+    if (!featured) {
+      featured = await Article.getFeaturedArticle(['media', 'banner'])
+    }
+    if (featured) {
+      featured = mapArticle(true, featured, true, false)
     }
   } catch (e) {
     ctx.log.error(e)
@@ -185,6 +207,7 @@ export async function serveIndex(ctx, path) {
     v: config.get('CIRCLECI_VERSION'),
     tree: JSON.stringify(tree),
     data: JSON.stringify(data),
+    subdata: JSON.stringify(subdata),
     links: JSON.stringify(links),
     featured: JSON.stringify(featured),
     url: url,

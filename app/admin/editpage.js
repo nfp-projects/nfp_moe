@@ -110,6 +110,8 @@ const EditPage = {
       this.error = 'Name is missing'
     } else if (!this.page.path) {
       this.error = 'Path is missing'
+    } else {
+      this.error = ''
     }
     if (this.error) return
 
@@ -147,6 +149,7 @@ const EditPage = {
         res.media = vnode.state.page.media
         res.banner = vnode.state.page.banner
         vnode.state.page = res
+        console.log(res)
       } else {
         m.route.set('/admin/pages/' + res.id)
       }

@@ -12,13 +12,15 @@ const Page = {
     this.lastpage = m.route.param('page') || '1'
     this.loadingnews = false
 
+    console.log(window.__nfpdata)
     if (window.__nfpdata) {
       this.path = m.route.param('id')
       this.page = window.__nfpdata
-      this.news = []
-      this.newslinks = null
+      this.news = window.__nfpsubdata
+      this.newslinks = window.__nfplinks
+
       window.__nfpdata = null
-      vnode.state.fetchArticles(vnode)
+      window.__nfpsubdata = null
     } else {
       this.fetchPage(vnode)
     }
@@ -42,12 +44,12 @@ const Page = {
     .then(function(result) {
       vnode.state.page = result
       document.title = result.name + ' - NFP Moe'
+      return vnode.state.fetchArticles(vnode)
     })
     .catch(function(err) {
       vnode.state.error = err.message
-    })
-    .then(function() {
-      return vnode.state.fetchArticles(vnode)
+      vnode.state.loading = vnode.state.loadingnews = false
+      m.redraw()
     })
   },
 
@@ -111,7 +113,14 @@ const Page = {
     return (
       this.loading ?
         m('article.page', m('div.loading-spinner'))
-      : m('article.page', [
+      : this.error
+        ? m('div.error-wrapper', m('div.error', {
+            onclick: function() {
+              vnode.state.error = ''
+              vnode.state.fetchPage(vnode)
+            },
+          }, 'Article error: ' + this.error))
+        : m('article.page', [
           bannerPath ? m('.div.page-banner', { style: { 'background-image': 'url("' + bannerPath + '")' } } ) : null,
           this.page.parent
             ? m('div.goback', ['« ', m(m.route.Link, { href: '/page/' + this.page.parent.path }, this.page.parent.name)])

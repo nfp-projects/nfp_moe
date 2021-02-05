@@ -9,16 +9,16 @@ export default class PageRoutes {
     })
   }
 
+  /** GET: /api/pagetree */
+  async getPageTree(ctx) {
+    ctx.body = await this.Page.getTree()
+  }
+
   /** GET: /api/pages */
   async getAllPages(ctx) {
     await this.security.ensureIncludes(ctx)
 
-    let filter = {}
-    if (ctx.query.tree && ctx.query.tree === 'true') {
-      filter.parent_id = null
-    }
-
-    ctx.body = await this.Page.getAll(ctx, filter, ctx.state.filter.includes, 'name')
+    ctx.body = await this.Page.getAll(ctx, null, ctx.state.filter.includes, 'name')
   }
 
   /** GET: /api/pages/:id */
@@ -39,22 +39,14 @@ export default class PageRoutes {
   async updatePage(ctx) {
     await this.security.validUpdate(ctx)
 
-    let page = await this.Page.getSingle(ctx.params.id)
-
-    page.set(ctx.request.body)
-
-    await page.save()
+    let page = await this.Page.updateSingle(ctx, ctx.params.id, ctx.request.body)
 
     ctx.body = page
   }
 
   /** DELETE: /api/pages/:id */
   async removePage(ctx) {
-    let page = await this.Page.getSingle(ctx.params.id)
-
-    page.set({ is_deleted: true })
-
-    await page.save()
+    await this.Page.updateSingle(ctx, ctx.params.id, { is_deleted: true })
 
     ctx.status = 204
   }

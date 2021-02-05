@@ -1,4 +1,4 @@
-import bookshelf from '../bookshelf.mjs'
+import { createPrototype, safeColumns } from '../knex.mjs'
 import Media from '../media/model.mjs'
 import File from '../file/model.mjs'
 import Staff from '../staff/model.mjs'
@@ -21,10 +21,136 @@ Article model:
 
 */
 
-const Article = bookshelf.createModel({
-  tableName: 'articles',
+function ArticleItem(data) {
+  Object.assign(this, data)
+}
 
-  parent() {
+function Article() {
+  this.tableName = 'articles'
+  this.Model = ArticleItem
+  this.includes = {
+    staff: Staff.includeHasOne('articles.staff_id', 'id'),
+    media: Media.includeHasOne('articles.media_id', 'id'),
+    banner: Media.includeHasOne('articles.banner_id', 'id'),
+    parent: Page.includeHasOne('articles.parent_id', 'id'),
+    files: File.includeHasMany('article_id', 'articles.id'),
+  }
+  this.publicFields = this.privateFields = safeColumns([
+    'staff_id',
+    'parent_id',
+    'name',
+    'path',
+    'description',
+    'banner_id',
+    'media_id',
+    'published_at',
+    'is_featured',
+  ])
+  this.init()
+}
+
+Article.prototype = createPrototype({
+  getAll(ctx, where = null, includes = [], orderBy = 'id', limitToday = false) {
+    return this._getAll(ctx, (qb) => {
+      if (where) qb.where(where)
+      if (limitToday) {
+        qb.where(this.tableName + '.published_at', '<=', (new Date()).toISOString())
+      }
+    }, includes, orderBy, [])
+  },
+
+  getAllFromPage(ctx, pageId, includes = [], orderBy = 'id', limitToday = false) {
+    return this._getAll(ctx, (qb) => {
+      qb = qb.innerJoin('pages', 'articles.parent_id', 'pages.id')
+      qb.where(subq => {
+        subq.where('pages.id', pageId)
+            .orWhere('pages.parent_id', pageId)
+      })
+      if (limitToday) {
+        qb.where(this.tableName + '.published_at', '<=', (new Date()).toISOString())
+      }
+      return qb
+    }, includes, orderBy, [])
+  },
+
+  getSingle(id, includes = [], require = true, ctx = null, limitToday = false) {
+    return this._getSingle(qb => {
+      qb.where(subq => {
+        subq.where(this.tableName + '.id', '=', Number(id) || 0)
+            .orWhere(this.tableName + '.path', '=', id)
+      })
+      if (limitToday && (!ctx || !ctx.state.user || ctx.state.user.level < 10)) {
+        qb.where(this.tableName + '.published_at', '<=', (new Date()).toISOString())
+      }
+    }, includes, require, ctx)
+  },
+
+  getFeaturedArticle(includes = [], ctx = null) {
+    return this._getSingle(qb => {
+      qb.where({ is_featured: true })
+        .where(this.tableName + '.published_at', '<=', (new Date()).toISOString())
+        .orderBy(this.tableName + '.published_at', 'DESC')
+        .select(this.knex.raw('1 as __group'))
+        .limit(1)
+    }, includes, false, ctx)
+  },
+
+  async getFrontpageArticles(orgPage = 1) {
+    let page = Math.max(orgPage, 1)
+    let out = {
+      featured: null,
+      items: [],
+      total: 0,
+    }
+
+    let qFeatured =  this.query(qb => {
+      return qb.where({ is_featured: true })
+        .where(this.tableName + '.published_at', '<=', (new Date()).toISOString())
+        .orderBy(this.tableName + '.published_at', 'DESC')
+        .select(this.knex.raw('1 as __group'))
+        .limit(1)
+    }, ['staff', 'media', 'banner'])
+    let qArticles = this.query(qb => {
+      return qb
+        .where(this.tableName + '.published_at', '<=', (new Date()).toISOString())
+        .select(this.knex.raw('2 as __group'))
+        .orderBy(this.tableName + '.published_at', 'DESC')
+        .limit(10)
+        .offset((page - 1) * 10)
+    }, ['staff', 'media', 'banner'], null, qFeatured)
+
+    let [articles, total] = await Promise.all([
+      this.getAllQuery(
+        this.knex
+          .unionAll(qFeatured, true)
+          .unionAll(qArticles, true),
+        qFeatured
+      ),
+      this.knex('articles')
+        .where(this.tableName + '.published_at', '<=', (new Date()).toISOString())
+        .where({ is_deleted: false })
+        .count('* as count'),
+    ])
+
+    out.total = total[0].count
+    if (articles.length > 0 && articles[0].is_featured) {
+      out.featured = articles[0]
+      out.items = articles.slice(1)
+    } else {
+      out.items = articles
+    }
+    return out
+  },
+
+  setAllUnfeatured() {
+    return knex('articles')
+      .where({ is_featured: true })
+      .update({
+        is_featured: false,
+      })
+  },
+
+  /*parent() {
     return this.belongsTo(Page, 'parent_id')
   },
 
@@ -45,9 +171,9 @@ const Article = bookshelf.createModel({
       .query(qb => {
         qb.orderBy('id', 'asc')
       })
-  },
-}, {
-  getAll(ctx, where = {}, withRelated = [], orderBy = 'id', limitToday = false) {
+  },*/
+
+  /*getAll(ctx, where = {}, withRelated = [], orderBy = 'id', limitToday = false) {
     return this.query(qb => {
       this.baseQueryAll(ctx, qb, where, orderBy)
       if (limitToday) {
@@ -138,7 +264,12 @@ const Article = bookshelf.createModel({
         page: page,
         withRelated: ['files', 'media', 'banner', 'parent', 'staff'],
       })
-  },
+  },*/
 })
 
-export default Article
+const articleInstance = new Article()
+
+// Hook into includes for Page
+// Page.addInclude('news', articleInstance.includeHasMany('parent_id', 'pages.id'))
+
+export default articleInstance

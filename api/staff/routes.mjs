@@ -11,7 +11,7 @@ export default class StaffRoutes {
 
   /** GET: /api/staff */
   async getAllStaff(ctx) {
-    ctx.body = await this.Staff.getAll(ctx, { }, [])
+    ctx.body = await this.Staff.getAll(ctx, null, [])
   }
 
   /** GET: /api/staff/:id */
@@ -30,22 +30,14 @@ export default class StaffRoutes {
   async updateStaff(ctx) {
     await this.security.validUpdate(ctx)
 
-    let page = await this.Staff.getSingle(ctx.params.id)
+    let staff = await this.Staff.updateSingle(ctx, ctx.params.id, ctx.request.body)
 
-    page.set(ctx.request.body)
-
-    await page.save()
-
-    ctx.body = page
+    ctx.body = staff
   }
 
   /** DELETE: /api/staff/:id */
   async removeStaff(ctx) {
-    let page = await this.Staff.getSingle(ctx.params.id)
-
-    page.set({ is_deleted: true })
-
-    await page.save()
+    await this.Staff.updateSingle(ctx, ctx.params.id, { is_deleted: true })
 
     ctx.status = 204
   }

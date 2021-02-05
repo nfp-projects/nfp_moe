@@ -53,18 +53,8 @@ export default class FileRoutes {
     })
   }
 
-  async getAllFiles(ctx) {
-    ctx.body = await this.File.getAll(ctx)
-  }
-
   async removeFile(ctx) {
-    let file = await this.File.getSingle(ctx.params.id)
-    
-    file.set({
-      is_deleted: true,
-    })
-
-    await file.save()
+    await this.File.updateSingle(ctx, ctx.params.id, { is_deleted: true })
 
     ctx.status = 200
   }

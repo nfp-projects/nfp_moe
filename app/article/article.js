@@ -19,6 +19,7 @@ const Article = {
   },
 
   fetchArticle: function(vnode) {
+    this.error = ''
     this.path = m.route.param('id')
     this.showcomments = false
     this.article = {
@@ -73,58 +74,65 @@ const Article = {
     return (
       this.loading ?
         m('article.article', m('div.loading-spinner'))
-      : m('article.article', [
-          this.article.parent ? m('div.goback', ['« ', m(m.route.Link, { href: '/page/' + this.article.parent.path }, this.article.parent.name)]) : null,
-          m('header', m('h1', this.article.name)),
-          m('.fr-view', [
-            this.article.media
-              ? m('a.cover', {
-                  rel: 'noopener',
-                  href: this.article.media.link,
-                }, m('img', { src: imagePath, alt: 'Cover image for ' + this.article.name }))
-              : null,
-            this.article.description ? m.trust(this.article.description) : null,
-            (this.article.files && this.article.files.length
-              ? this.article.files.map(function(file) {
-                  return m(Fileinfo, { file: file })
-                })
-              : null),
-            m('div.entrymeta', [
-              'Posted ',
-              (this.article.parent ? 'in' : ''),
-              (this.article.parent ? m(m.route.Link, { href: '/page/' + this.article.parent.path }, this.article.parent.name) : null),
-              'at ' + (this.article.published_at.replace('T', ' ').split('.')[0]).substr(0, 16),
-              ' by ' + (this.article.staff && this.article.staff.fullname || 'Admin'),
+      : this.error
+        ? m('div.error-wrapper', m('div.error', {
+            onclick: function() {
+              vnode.state.error = ''
+              vnode.state.fetchArticle(vnode)
+            },
+          }, 'Article error: ' + this.error))
+        : m('article.article', [
+            this.article.parent ? m('div.goback', ['« ', m(m.route.Link, { href: '/page/' + this.article.parent.path }, this.article.parent.name)]) : null,
+            m('header', m('h1', this.article.name)),
+            m('.fr-view', [
+              this.article.media
+                ? m('a.cover', {
+                    rel: 'noopener',
+                    href: this.article.media.link,
+                  }, m('img', { src: imagePath, alt: 'Cover image for ' + this.article.name }))
+                : null,
+              this.article.description ? m.trust(this.article.description) : null,
+              (this.article.files && this.article.files.length
+                ? this.article.files.map(function(file) {
+                    return m(Fileinfo, { file: file })
+                  })
+                : null),
+              m('div.entrymeta', [
+                'Posted ',
+                (this.article.parent ? 'in' : ''),
+                (this.article.parent ? m(m.route.Link, { href: '/page/' + this.article.parent.path }, this.article.parent.name) : null),
+                'at ' + (this.article.published_at.replace('T', ' ').split('.')[0]).substr(0, 16),
+                ' by ' + (this.article.staff && this.article.staff.fullname || 'Admin'),
+              ]),
             ]),
-          ]),
-          Authentication.currentUser
-            ? m('div.admin-actions', [
-              m('span', 'Admin controls:'),
-              m(m.route.Link, { href: '/admin/articles/' + this.article.id }, 'Edit article'),
-            ])
-            : null,
-          this.showcomments
-            ? m('div.commentcontainer', [
-                m('div#disqus_thread', { oncreate: function() {
-                  let fullhost = window.location.protocol + '//' + window.location.host
-                  /*eslint-disable */
-                  window.disqus_config = function () {
-                    this.page.url = fullhost + '/article/' + vnode.state.article.path
-                    this.page.identifier = 'article-' + vnode.state.article.id
-                  };
-                  (function() { // DON'T EDIT BELOW THIS LINE
-                    var d = document, s = d.createElement('script');
-                    s.src = 'https://nfp-moe.disqus.com/embed.js';
-                    s.setAttribute('data-timestamp', +new Date());
-                    (d.head || d.body).appendChild(s);
-                  })()
-                  /*eslint-enable */
-                }}, m('div.loading-spinner')),
+            Authentication.currentUser
+              ? m('div.admin-actions', [
+                m('span', 'Admin controls:'),
+                m(m.route.Link, { href: '/admin/articles/' + this.article.id }, 'Edit article'),
               ])
-            : m('button.opencomments', {
-                onclick: function() { vnode.state.showcomments = true },
-              }, 'Open comment discussion'),
-        ])
+              : null,
+            this.showcomments
+              ? m('div.commentcontainer', [
+                  m('div#disqus_thread', { oncreate: function() {
+                    let fullhost = window.location.protocol + '//' + window.location.host
+                    /*eslint-disable */
+                    window.disqus_config = function () {
+                      this.page.url = fullhost + '/article/' + vnode.state.article.path
+                      this.page.identifier = 'article-' + vnode.state.article.id
+                    };
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                      var d = document, s = d.createElement('script');
+                      s.src = 'https://nfp-moe.disqus.com/embed.js';
+                      s.setAttribute('data-timestamp', +new Date());
+                      (d.head || d.body).appendChild(s);
+                    })()
+                    /*eslint-enable */
+                  }}, m('div.loading-spinner')),
+                ])
+              : m('button.opencomments', {
+                  onclick: function() { vnode.state.showcomments = true },
+                }, 'Open comment discussion'),
+          ])
     )
   },
 }

@@ -7,7 +7,7 @@ exports.Tree = Tree
 exports.getTree = function() {
   return common.sendRequest({
     method: 'GET',
-    url: '/api/pages?tree=true&includes=children&fields=id,name,path,children(id,name,path)',
+    url: '/api/pagetree',
   })
 }
 

@@ -10,6 +10,9 @@ exports.sendRequest = function(options, isPagination) {
   }
 
   options.extract = function(xhr) {
+    if (xhr.responseText && xhr.responseText.slice(0, 9) === '<!doctype') {
+      throw new Error('Expected JSON but got HTML (' + xhr.status + ': ' + this.url.split('?')[0] + ')')
+    }
     let out = null
     if (pagination && xhr.status < 300) {
       let headers = {}
